@@ -9,14 +9,13 @@ public class Visit implements Serializable {
     private int id;
     @ManyToOne
     private URL url;
-    private int visitCount;
     private String browser;
     private String ip;
     private String Os;
 
-    public Visit(URL url, int visitCount, String browser, String ip, String os) {
+    public Visit(URL url, String browser, String ip, String os) {
         this.url = url;
-        this.visitCount = visitCount;
+
         this.browser = browser;
         this.ip = ip;
         Os = os;
@@ -36,14 +35,6 @@ public class Visit implements Serializable {
 
     public void setUrl(URL url) {
         this.url = url;
-    }
-
-    public int getVisitCount() {
-        return visitCount;
-    }
-
-    public void setVisitCount(int visitCount) {
-        this.visitCount = visitCount;
     }
 
     public String getBrowser() {

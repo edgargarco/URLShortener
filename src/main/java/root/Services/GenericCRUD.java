@@ -6,7 +6,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Id;
 import javax.persistence.Persistence;
+import javax.persistence.criteria.CriteriaQuery;
 import java.lang.reflect.Field;
+import java.util.List;
 
 public class GenericCRUD<T> {
     private static EntityManagerFactory entityManagerFactory;
@@ -73,6 +75,49 @@ public class GenericCRUD<T> {
         }
 
     }
+
+    public void update(T entity){
+        EntityManager entityManager = getEntityManager();
+        entityManager.getTransaction().begin();
+        try{
+            entityManager.merge(entity);
+            entityManager.getTransaction().commit();
+        }catch (Exception e){
+            entityManager.getTransaction().rollback();
+            throw e;
+        }finally {
+            entityManager.close();
+        }
+    }
+
+    public void delete(Object entityID){
+        EntityManager entityManager = getEntityManager();
+        entityManager.getTransaction().begin();
+        try{
+            T entity = entityManager.find(entityClass,entityID);
+            entityManager.remove(entity);
+            entityManager.getTransaction().commit();
+        }catch (Exception e){
+            entityManager.getTransaction().rollback();
+            throw e;
+        }finally {
+            entityManager.close();
+        }
+    }
+
+    public List<T> findAll(){
+        EntityManager entityManager = getEntityManager();
+        try{
+            CriteriaQuery<T> criteriaQuery = entityManager.getCriteriaBuilder().createQuery(entityClass);
+            criteriaQuery.select(criteriaQuery.from(entityClass));
+            return entityManager.createQuery(criteriaQuery).getResultList();
+        }catch (Exception e){
+            throw e;
+        }finally {
+            entityManager.close();
+        }
+    }
+
 
 
 }

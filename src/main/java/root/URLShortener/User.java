@@ -2,7 +2,9 @@ package root.URLShortener;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 public class User implements Serializable {
@@ -11,6 +13,8 @@ public class User implements Serializable {
     private String name;
     private String password;
     private boolean administrator;
+    @OneToMany(mappedBy = "url")
+    private List<URL> urlList;
 
     public User(String username, String name, String password) {
         this.username = username;
@@ -48,5 +52,13 @@ public class User implements Serializable {
 
     public void setAdministrator(boolean administrator) {
         this.administrator = administrator;
+    }
+
+    public List<URL> getUrlList() {
+        return urlList;
+    }
+
+    public void setUrlList(List<URL> urlList) {
+        this.urlList = urlList;
     }
 }
