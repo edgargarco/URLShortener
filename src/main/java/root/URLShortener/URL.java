@@ -2,11 +2,10 @@ package root.URLShortener;
 
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
+import org.hibernate.annotations.Type;
+import root.Services.URLServices;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 
@@ -14,16 +13,26 @@ import java.util.List;
 public class URL implements Serializable {
     @Id
     private String hash;
+    @Type(type = "text")
     private String url;
-    @OneToOne
+    @ManyToOne
     private User user;
-    @OneToMany(mappedBy = "url")
-    @LazyCollection(LazyCollectionOption.TRUE)
+    @OneToMany(fetch=FetchType.LAZY,mappedBy = "url")
+
     private List<Visit> visits;
+
+    public URL(){
+
+    }
+    public URL(String url){
+        this.url = url;
+        this.setHash(URLServices.getInstance().urlHash(url));
+    }
 
     public URL(String url, User user) {
         this.url = url;
         this.user = user;
+        this.setHash(URLServices.getInstance().urlHash(url));
     }
 
     public String getHash() {

@@ -14,7 +14,9 @@ public class Authentication {
 
     public void authentication(){
         get("/login",(request,response)->{
-            return Template.renderFreemarker(null,"/login");
+
+                return Template.renderFreemarker(null,"/login.ftl");
+
         });
 
         post("/authenticate",(request, response) -> {
@@ -30,7 +32,7 @@ public class Authentication {
                     if (rememberMe){
                         BasicTextEncryptor basicTextEncryptor = new BasicTextEncryptor();
                         basicTextEncryptor.setPasswordCharArray(encryptPass.toCharArray());
-                        response.cookie("user",basicTextEncryptor.encrypt(user.getUsername()),600000,false);
+                        response.cookie("user",basicTextEncryptor.encrypt(user.getUsername()),30,false);
 
                     }
                     response.redirect("/");
