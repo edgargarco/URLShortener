@@ -83,13 +83,17 @@
                         <hr class="hr-light">
 
                         <!-- Description -->
+                        <form action="url" method="post">
                         <div class="input-group mb-3">
-                            <input type="text" class="form-control" placeholder="URL a recortar" aria-label="Recipient's username"
-                                   aria-describedby="button-addon2" name="url-to-shorter" id="urlInput">
+
+                               <input type="text" class="form-control" placeholder="URL a recortar" aria-label="Recipient's username"
+                                      aria-describedby="button-addon2" name="url-to-shorter" id="urlInput">
+
                             <div class="input-group-append">
-                                <button class="btn btn-md btn-outline-default m-0 px-3 py-2 z-depth-0 waves-effect " type="button" id="shorten-url">Recortar</button>
-                            </div>
+                                <button class="btn btn-md btn-outline-default m-0 px-3 py-2 z-depth-0 waves-effect " type="submit" id="shorten-url">Recortar</button>
+                            </div>URL
                         </div>
+                        </form>
                     </div>
 
                 </div>
@@ -176,6 +180,18 @@
 
         <hr class="my-5">
         <!--Section: Best Features-->
+        <section>
+            <div>
+                <ul id="list-url">
+                    <#if (url??)>
+                        <#list url as x>
+                            <li><span><a target="_blank" href="${x.hash}">${x.url}-----------------------</a></span><span><a>${x.hash}</a></span></li>
+                        </#list>
+                    </#if>
+
+                </ul>
+            </div>
+        </section>
 
 
     </div>

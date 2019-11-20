@@ -8,6 +8,7 @@ import root.Services.URLServices;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
+import java.util.zip.CRC32;
 
 @Entity
 public class URL implements Serializable {
@@ -17,8 +18,7 @@ public class URL implements Serializable {
     private String url;
     @ManyToOne
     private User user;
-    @OneToMany(fetch=FetchType.LAZY,mappedBy = "url")
-
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "url")
     private List<Visit> visits;
 
     public URL(){
@@ -26,13 +26,13 @@ public class URL implements Serializable {
     }
     public URL(String url){
         this.url = url;
-        this.setHash(URLServices.getInstance().urlHash(url));
+        this.setHash(urlHash(this.url));
     }
 
     public URL(String url, User user) {
         this.url = url;
         this.user = user;
-        this.setHash(URLServices.getInstance().urlHash(url));
+        this.setHash(urlHash(url));
     }
 
     public String getHash() {
@@ -59,12 +59,16 @@ public class URL implements Serializable {
         this.user = user;
     }
 
-    public List<Visit> getVisits() {
-        return visits;
-    }
+    public List<Visit> getVisits() {return visits;}
 
-    public void setVisits(List<Visit> visits) {
-        this.visits = visits;
+    public void setVisits(List<Visit> visits) {this.visits = visits;}
+
+    public String urlHash(String url){
+        CRC32 crc32 = new CRC32();
+        crc32.update(url.getBytes());
+        String hash = Long.toHexString(crc32.getValue());
+        System.out.println("2");
+        return (hash);
     }
 
 }

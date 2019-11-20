@@ -41,10 +41,5 @@ public class URLServices extends GenericCRUD<URL> {
         return super.findAll();
     }
 
-    public String urlHash(String url){
-        CRC32 crc32 = new CRC32();
-        crc32.update(url.getBytes());
-        String hash = Long.toHexString(crc32.getValue());
-        return (new String(hash));
-    }
+
 }

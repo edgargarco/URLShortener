@@ -1,8 +1,12 @@
 package root.controllers;
 import org.jasypt.util.text.BasicTextEncryptor;
 import root.Services.UserService;
+import root.URLShortener.URL;
 import root.URLShortener.User;
 import spark.Session;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static spark.Spark.*;
 public class Filter {
@@ -26,9 +30,6 @@ public class Filter {
             }
         });
 
-
-
-
-
     }
+
 }
