@@ -23,14 +23,14 @@ public class GenericCRUD<T> {
 
     public EntityManager getEntityManager(){return entityManagerFactory.createEntityManager();}
 
-    public T find(Object id){
-        EntityManager entityManager = getEntityManager();
+    public T find(Object id) {
+        EntityManager em = getEntityManager();
         try{
-            return entityManager.find(entityClass,id);
-        }catch (Exception e){
-            throw e;
-        }finally {
-            entityManager.close();
+            return em.find(entityClass, id);
+        } catch (Exception ex){
+            throw  ex;
+        } finally {
+            em.close();
         }
     }
 

@@ -7,6 +7,7 @@ import root.Services.URLServices;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.CRC32;
 
@@ -18,8 +19,8 @@ public class URL implements Serializable {
     private String url;
     @ManyToOne
     private User user;
-    @OneToMany(fetch = FetchType.LAZY,mappedBy = "url")
-    private List<Visit> visits;
+    @OneToMany(fetch = FetchType.EAGER,mappedBy = "url")
+    private List<Visit> visits = new ArrayList<>();
 
     public URL(){
 
@@ -62,6 +63,8 @@ public class URL implements Serializable {
     public List<Visit> getVisits() {return visits;}
 
     public void setVisits(List<Visit> visits) {this.visits = visits;}
+
+    public void addVisits(Visit visit){ visits.add(visit);}
 
     public String urlHash(String url){
         CRC32 crc32 = new CRC32();

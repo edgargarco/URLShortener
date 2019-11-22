@@ -2,6 +2,8 @@ package root.URLShortener;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
+
 @Entity
 public class Visit implements Serializable {
     @Id
@@ -12,13 +14,26 @@ public class Visit implements Serializable {
     private String browser;
     private String ip;
     private String Os;
+    private Date date;
 
-    public Visit(URL url, String browser, String ip, String os) {
+    public  Visit(){
+
+    }
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public Visit(URL url, String browser, String ip, String os,Date date) {
         this.url = url;
-
+        this.date = date;
         this.browser = browser;
         this.ip = ip;
         Os = os;
+
     }
 
     public int getId() {
@@ -60,4 +75,5 @@ public class Visit implements Serializable {
     public void setOs(String os) {
         Os = os;
     }
+
 }

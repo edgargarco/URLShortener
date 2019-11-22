@@ -53,9 +53,16 @@
                 </ul>
                 <!-- Links -->
 
-                <div class=" ">
-                    <a class="nav-item" style="color: white;" href="/login"><i class="fas fa-sign-in-alt fa-0x"></i> Login</a>
-                </div>
+               <#if !(user??) >
+                   <div class=" ">
+                       <a class="nav-item" style="color: white;" href="/login"><i class="fas fa-sign-in-alt fa-0x"></i> Login</a>
+                   </div>
+                   <#else >
+                       <div class=" ">
+                           <a class="nav-item" style="color: white;" href="/dashBoard"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+                       </div>
+               </#if>
+
 
             </div>
             <!-- Collapsible content -->
@@ -185,7 +192,7 @@
                 <ul id="list-url">
                     <#if (url??)>
                         <#list url as x>
-                            <li><span><a target="_blank" href="${x.hash}">${x.url}-----------------------</a></span><span><a>${x.hash}</a></span></li>
+                            <li><span><a target="_blank" href="${x.url}">${x.url}-----------------------</a></span><span><a target="_blank" href="link/${x.hash}">theApp.${x.hash}</a></span></li>
                         </#list>
                     </#if>
 

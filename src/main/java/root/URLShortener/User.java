@@ -1,9 +1,12 @@
 package root.URLShortener;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
+import javax.transaction.Transactional;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -19,6 +22,7 @@ public class User implements Serializable {
     private boolean administrator;
     @OneToMany(fetch=FetchType.EAGER,mappedBy = "user",cascade = CascadeType.ALL)
     private List<URL> urlList = new ArrayList<>();
+
 
     public User(){
 
@@ -70,9 +74,10 @@ public class User implements Serializable {
         this.urlList = urlList;
     }
 
+
+
     public void addURL(URL url){
+        urlList.add(url);
+    }
 
-
-
-        urlList.add(url); }
 }
