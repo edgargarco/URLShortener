@@ -15,10 +15,20 @@ public class Visit implements Serializable {
     private String ip;
     private String Os;
     private Date date;
+    private String device;
 
     public  Visit(){
 
     }
+
+    public String getDevice() {
+        return device;
+    }
+
+    public void setDevice(String device) {
+        this.device = device;
+    }
+
     public Date getDate() {
         return date;
     }
@@ -27,12 +37,13 @@ public class Visit implements Serializable {
         this.date = date;
     }
 
-    public Visit(URL url, String browser, String ip, String os,Date date) {
+    public Visit(URL url, String browser, String ip, String os,Date date,String device) {
         this.url = url;
         this.date = date;
         this.browser = browser;
         this.ip = ip;
-        Os = os;
+        this.Os = os;
+        this.device = device;
 
     }
 

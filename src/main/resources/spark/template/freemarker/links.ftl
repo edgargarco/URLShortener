@@ -197,8 +197,8 @@
                                 <tr>
                                 <td width="">${url.url}</td>
                                 <td width=""><a target="_blank" href="link/${url.hash}">${url.hash}</a></td>
-                                <td width="15%"><button type="button" class="btn btn-primary btn-sm px-3"><i class="fas fa-info-circle"><span class="ml-2">Info</span></i></button></td>
-                                <td width="15%"> <button type="button" class="btn btn-primary btn-sm px-3 ml-2" data-toggle="modal" data-target="#basicExampleModal"><i class="fas fa-trash"></i></button></td>
+                                    <td width="15%"><a href="/info/${url.hash}"> <button type="button" class="btn btn-primary btn-sm px-3"><i class="fas fa-info-circle"><span class="ml-2">Info</span></i></button></a></td>
+                                <td width="15%"><button type="button" class="btn btn-primary btn-sm px-3 ml-2" data-toggle="modal" data-target="#basicExampleModal"><i class="fas fa-trash"></i></button></td>
                             </tr>
                             </#list>
                             </#if>
