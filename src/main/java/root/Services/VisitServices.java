@@ -2,6 +2,9 @@ package root.Services;
 
 import root.URLShortener.Visit;
 
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import java.time.LocalDate;
 import java.util.List;
 
 public class VisitServices extends GenericCRUD<Visit> {
@@ -39,4 +42,19 @@ public class VisitServices extends GenericCRUD<Visit> {
     public List<Visit> findAll() {
         return super.findAll();
     }
+
+    public List<Visit> visitsByDates(String hash, LocalDate date){
+        EntityManager entityManager = getEntityManager();
+        System.out.println(hash+"hahs");
+        System.out.println(date+"date");
+
+        Query query = entityManager.createQuery("SELECT c FROM Visit c WHERE c.url.hash = :hash AND c.date = :date ORDER BY c.date ASC" );
+        query.setParameter("hash",hash);
+        query.setParameter("date",date);
+        List<Visit> list = query.getResultList();
+        entityManager.close();
+        return list;
+    }
+
+
 }
