@@ -80,4 +80,15 @@ public class User implements Serializable {
         urlList.add(url);
     }
 
+    public URL searchURL(User user,String hash){
+        URL urlAux = new URL();
+        for(URL url : user.getUrlList()){
+            if (url.getHash().equals(hash)){
+                urlAux = url;
+                break;
+            }
+        }
+        return urlAux;
+    }
+
 }

@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>URLShortener</title>
+    <title>DashBoard</title>
 
     <!-- Custom fonts for this template-->
     <link href="/MDB-Free/dashboard/startbootstrap/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -18,43 +18,16 @@
     <!-- Custom styles for this template-->
     <link href="/MDB-Free/dashboard/startbootstrap/css/sb-admin-2.min.css" rel="stylesheet">
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="/MDB-Free/dashboard/startbootstrap/googleChart/charts.js"></script>
+    <link href="/MDB-Free/dashboard/startbootstrap/calendar/dist/css/datepicker.min.css" rel="stylesheet" type="text/css">
+    <script src="/MDB-Free/dashboard/startbootstrap/calendar/dist/js/datepicker.min.js"></script>
+    <script src="/MDB-Free/dashboard/startbootstrap/calendar/dist/js/i18n/datepicker.en.js"></script>
+
 </head>
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-<script type="text/javascript">
 
-    // Load the Visualization API and the corechart package.
-    google.charts.load('current', {'packages':['corechart']});
-
-    // Set a callback to run when the Google Visualization API is loaded.
-    google.charts.setOnLoadCallback(drawChart);
-
-    // Callback that creates and populates a data table,
-    // instantiates the pie chart, passes in the data and
-    // draws it.
-    function drawChart() {
-
-        // Create the data table.
-        var data = new google.visualization.DataTable();
-        data.addColumn('string', 'Topping');
-        data.addColumn('number', 'Slices');
-        data.addRows([
-            ['Mushrooms', 3],
-            ['Onions', 1],
-            ['Olives', 1],
-            ['Zucchini', 1],
-            ['Pepperoni', 2]
-        ]);
-
-        // Set chart options
-        var options = {'title':'How Much Pizza I Ate Last Night',
-            'width':'100%',
-            'height':'100%'};
-
-        // Instantiate and draw our chart, passing in some options.
-        var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
-        chart.draw(data, options);
-    }
-</script>
 
 <body id="page-top">
 
@@ -65,7 +38,7 @@
     <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
         <!-- Sidebar - Brand -->
-        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
             <div class="sidebar-brand-icon rotate-n-15">
                 <i class="fas fa-laugh-wink"></i>
             </div>
@@ -77,7 +50,7 @@
 
         <!-- Nav Item - Dashboard -->
         <li class="nav-item active">
-            <a class="nav-link" href="index.html">
+            <a class="nav-link" href="/dashBoard">
                 <i class="fas fa-fw fa-tachometer-alt"></i>
                 <span>Dashboard</span></a>
         </li>
@@ -92,15 +65,16 @@
 
 
         <!-- Nav Item - Charts -->
+
         <li class="nav-item">
-            <a class="nav-link" href="register.html">
+            <a class="nav-link" href="#">
                 <i class="fas fa-fw fa-chart-area"></i>
                 <span>Registrar Usuario</span></a>
         </li>
 
         <!-- Nav Item - Tables -->
         <li class="nav-item">
-            <a class="nav-link" href="tables.html">
+            <a class="nav-link" href="#">
                 <i class="fas fa-fw fa-table"></i>
                 <span>Usuarios</span></a>
         </li>
@@ -174,7 +148,9 @@
                     <!-- Nav Item - User Information -->
                     <li class="nav-item dropdown no-arrow">
                         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="mr-2 d-none d-lg-inline text-gray-600 small">Valerie Luna</span>
+                            <#if user??>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">${user.name}</span>
+                            </#if>
                             <img class="img-profile rounded-circle" src="https://source.unsplash.com/QAB-WJcbgJk/60x60">
                         </a>
                         <!-- Dropdown - User Information -->
@@ -298,52 +274,37 @@
                 <!-- Content Row -->
 
                 <div class="row">
-
+                    <#if demographicsURL??>
+                        <input type="hidden" id="hashKEY" class="hashKEY" value="${demographicsURL.hash}"></input>
+                    </#if>
                     <!-- Area Chart -->
                     <div class="col-xl-8 col-lg-7">
                         <div class="card shadow mb-4">
                             <!-- Card Header - Dropdown -->
                             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                <h6 class="m-0 font-weight-bold text-primary">Earnings Overview</h6>
+                                <h6 class="m-0 font-weight-bold text-primary">Visitas el :</h6>
+
+                                <div class="md-form form-sm d-flex flex-row">
+                                    <input type='text' class='datepicker-here form-control form-control-sm mr-3' data-language='en' id="inputSMEx"/>
+                                    <a class="select-date" id="select-date" href="#"><i class="fas fa-search fa-2x"></i></a>
+                                </div>
+
 
                             </div>
                             <!-- Card Body -->
                             <div class="card-body">
-                                <div class="chart-area">
-                                    <div id="chart_div"></div>
-                                </div>
+
+                                    <canvas id="myChart" width="" height=""></canvas>
+
+
                             </div>
                         </div>
                     </div>
 
                     <!-- Pie Chart -->
-                    <div class="col-xl-4 col-lg-5">
-                        <div class="card shadow mb-4">
-                            <!-- Card Header - Dropdown -->
-                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                <h6 class="m-0 font-weight-bold text-primary">Revenue Sources</h6>
 
-                            </div>
-                            <!-- Card Body -->
-                            <div class="card-body">
-                                <div class="chart-pie pt-4 pb-2">
-                                    <canvas id=""></canvas>
-                                </div>
-                                <div class="mt-4 text-center small">
-                    <span class="mr-2">
-                      <i class="fas fa-circle text-primary"></i> Direct
-                    </span>
-                                    <span class="mr-2">
-                      <i class="fas fa-circle text-success"></i> Social
-                    </span>
-                                    <span class="mr-2">
-                      <i class="fas fa-circle text-info"></i> Referral
-                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
+
 
 
                 <!-- End of Main Content -->
@@ -399,11 +360,7 @@
         <script src="/MDB-Free/dashboard/startbootstrap/js/sb-admin-2.min.js"></script>
 
         <!-- Page level plugins -->
-        <script src="/MDB-Free/dashboard/startbootstrap/vendor/chart.js/Chart.min.js"></script>
 
-        <!-- Page level custom scripts -->
-        <script src="/MDB-Free/dashboard/startbootstrapjs/demo/chart-area-demo.js"></script>
-        <script src="/MDB-Free/dashboard/startbootstrap/js/demo/chart-pie-demo.js"></script>
 
 </body>
 

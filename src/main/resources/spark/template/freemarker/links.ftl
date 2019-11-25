@@ -30,7 +30,7 @@
     <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
         <!-- Sidebar - Brand -->
-        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
             <div class="sidebar-brand-icon rotate-n-15">
                 <i class="fas fa-laugh-wink"></i>
             </div>
@@ -42,7 +42,7 @@
 
         <!-- Nav Item - Dashboard -->
         <li class="nav-item active">
-            <a class="nav-link" href="index.html">
+            <a class="nav-link" href="/dashBoard">
                 <i class="fas fa-fw fa-tachometer-alt"></i>
                 <span>Dashboard</span></a>
         </li>
@@ -58,14 +58,14 @@
 
         <!-- Nav Item - Charts -->
         <li class="nav-item">
-            <a class="nav-link" href="register.html">
+            <a class="nav-link" href="#">
                 <i class="fas fa-fw fa-chart-area"></i>
                 <span>Registrar Usuario</span></a>
         </li>
 
         <!-- Nav Item - Tables -->
         <li class="nav-item">
-            <a class="nav-link" href="tables.html">
+            <a class="nav-link" href="#">
                 <i class="fas fa-fw fa-table"></i>
                 <span>Usuarios</span></a>
         </li>
@@ -165,7 +165,6 @@
                 </ul>
 
             </nav>
-            <!-- End of Topbar -->
 
             <!-- Begin Page Content -->
             <div class="container-fluid">
@@ -182,7 +181,7 @@
                             <!-- Table head -->
                             <thead class="blue-grey lighten-4">
                             <tr>
-                                <th>URL</th>
+
                                 <th>Short Link</th>
                                 <th>Detalles</th>
                                 <th>Borrar</th>
@@ -195,8 +194,8 @@
                             <#if urls?? >
                                 <#list urls as url>
                                 <tr>
-                                <td width="">${url.url}</td>
-                                <td width=""><a target="_blank" href="link/${url.hash}">${url.hash}</a></td>
+
+                                <td width="10%"><a target="_blank" href="link/${url.hash}">${url.hash}</a></td>
                                     <td width="15%"><a href="/info/${url.hash}"> <button type="button" class="btn btn-primary btn-sm px-3"><i class="fas fa-info-circle"><span class="ml-2">Info</span></i></button></a></td>
                                 <td width="15%"><button type="button" class="btn btn-primary btn-sm px-3 ml-2" data-toggle="modal" data-target="#basicExampleModal"><i class="fas fa-trash"></i></button></td>
                             </tr>
