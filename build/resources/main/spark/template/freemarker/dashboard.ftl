@@ -20,7 +20,9 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" type="text/javascript"></script>
+
     <script type="text/javascript" src="/MDB-Free/dashboard/startbootstrap/googleChart/charts.js"></script>
     <link href="/MDB-Free/dashboard/startbootstrap/calendar/dist/css/datepicker.min.css" rel="stylesheet" type="text/css">
     <script src="/MDB-Free/dashboard/startbootstrap/calendar/dist/js/datepicker.min.js"></script>
@@ -302,6 +304,23 @@
                     </div>
 
                     <!-- Pie Chart -->
+                    <div class="col-xl-4 col-lg-5">
+                        <div class="card shadow mb-4">
+                            <!-- Card Header - Dropdown -->
+                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                <h6 class="m-0 font-weight-bold text-primary">Qr Code</h6>
+
+                            </div>
+                            <!-- Card Body -->
+                            <input type="hidden" value="${demographicsURL.url}" class="url-qr" id="url-qr">
+                            <div class="card-body">
+                                <div class="chart-pie pt-4 pb-2">
+                                    <div id='qrcode'></div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
 
                 </div>
 
@@ -358,6 +377,14 @@
 
         <!-- Custom scripts for all pages-->
         <script src="/MDB-Free/dashboard/startbootstrap/js/sb-admin-2.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script type="text/javascript" src="/MDB-Free/src/jquery.qrcode.js"></script>
+        <script type="text/javascript" src="/MDB-Free/src/qrcode.js"></script>
+        <script>
+            // Initialize
+            var qr = $('input.url-qr').val();
+            jQuery('#qrcode').qrcode(qr);
+        </script>
 
         <!-- Page level plugins -->
 

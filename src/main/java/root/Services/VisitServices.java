@@ -56,5 +56,16 @@ public class VisitServices extends GenericCRUD<Visit> {
         return list;
     }
 
+    public boolean sanitizeDate(String date){
+        try {
+            Integer.parseInt(date.substring(6,10));
+            Integer.parseInt(date.substring(0,2));
+            Integer.parseInt(date.substring(3,5));
+            return true;
+        }catch (Exception e){
+            return false;
+        }
+    }
+
 
 }

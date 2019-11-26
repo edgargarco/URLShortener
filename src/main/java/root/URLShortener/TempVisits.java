@@ -5,17 +5,14 @@ import java.io.Serializable;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
-import java.util.Date;
-
 @Entity
-public class Visit implements Serializable {
+public class TempVisits implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @ManyToOne
-    private URL url;
+    private TempURL url;
     private String browser;
     private String ip;
     private String Os;
@@ -23,10 +20,10 @@ public class Visit implements Serializable {
     private LocalTime time;
     private String device;
 
-    public  Visit(){
+    public  TempVisits(){
 
     }
-    public Visit(URL url, String browser, String ip, String os, String device) throws ParseException {
+    public TempVisits(TempURL url, String browser, String ip, String os, String device) throws ParseException {
         this.url = url;
         this.date = date();
         this.time = time();
@@ -36,29 +33,11 @@ public class Visit implements Serializable {
         this.device = device;
 
     }
-
-    public LocalDate getDate() {
-        return date;
+    public LocalTime time( ) throws ParseException {
+        return LocalTime.now();
     }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
-
-    public LocalTime getTime() {
-        return time;
-    }
-
-    public void setTime(LocalTime time) {
-        this.time = time;
-    }
-
-    public String getDevice() {
-        return device;
-    }
-
-    public void setDevice(String device) {
-        this.device = device;
+    public LocalDate date() throws ParseException {
+        return LocalDate.now();
     }
 
     public int getId() {
@@ -69,11 +48,11 @@ public class Visit implements Serializable {
         this.id = id;
     }
 
-    public URL getUrl() {
+    public TempURL getUrl() {
         return url;
     }
 
-    public void setUrl(URL url) {
+    public void setUrl(TempURL url) {
         this.url = url;
     }
 
@@ -101,12 +80,27 @@ public class Visit implements Serializable {
         Os = os;
     }
 
-    public LocalTime time( ) throws ParseException {
-        return LocalTime.now();
-    }
-    public LocalDate date() throws ParseException {
-        return LocalDate.now();
+    public LocalDate getDate() {
+        return date;
     }
 
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
 
+    public LocalTime getTime() {
+        return time;
+    }
+
+    public void setTime(LocalTime time) {
+        this.time = time;
+    }
+
+    public String getDevice() {
+        return device;
+    }
+
+    public void setDevice(String device) {
+        this.device = device;
+    }
 }

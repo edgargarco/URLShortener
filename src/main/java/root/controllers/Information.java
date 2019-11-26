@@ -2,12 +2,8 @@ package root.controllers;
 
 import net.sf.uadetector.ReadableUserAgent;
 import org.json.JSONArray;
-import root.Services.URLServices;
-import root.Services.UserService;
-import root.Services.VisitServices;
-import root.URLShortener.URL;
-import root.URLShortener.User;
-import root.URLShortener.Visit;
+import root.Services.*;
+import root.URLShortener.*;
 import spark.Session;
 import root.controllers.UserAgent;
 import net.sf.uadetector.*;
@@ -27,25 +23,29 @@ import static spark.Spark.*;
 public class Information {
 
 
-
-
     public void informationControllers(){
+        get("/somethin",(request, response) -> {
+            return Template.renderFreemarker(null,"/qr.ftl");
+        });
         post("/getStatisctics",(request, response) -> {
             Session session = request.session(true);
             User user = session.attribute("user");
-            List<Visit> visits = VisitServices.getInstance().visitsByDates(request.queryParams("hash"),dates(request.queryParams("date")));
-            System.out.println("Visits size"+visits.size());
             int[] visitsPerHour = new int[24];
-            int visitsCount = 0 ;
-             for(int i = 0 ; i < 24 ; i++){
-                 for (int j = 0 ; j < visits.size() ; j++){
-                     if (visits.get(j).getTime().getHour() == i ){
-                         visitsCount++;
-                     }
-                 }
-                 visitsPerHour[i] = visitsCount;
-                 visitsCount = 0;
-             }
+            if (VisitServices.getInstance().sanitizeDate(request.queryParams("date"))){
+                List<Visit> visits = VisitServices.getInstance().visitsByDates(request.queryParams("hash"),dates(request.queryParams("date")));
+                if (visits != null){
+                    int visitsCount = 0 ;
+                    for(int i = 0 ; i < 24 ; i++){
+                        for (int j = 0 ; j < visits.size() ; j++){
+                            if (visits.get(j).getTime().getHour() == i ){
+                                visitsCount++;
+                            }
+                        }
+                        visitsPerHour[i] = visitsCount;
+                        visitsCount = 0;
+                    }
+                }
+            }
             JSONArray jsonArray = new JSONArray(visitsPerHour);
             return jsonArray;
         });
@@ -86,7 +86,8 @@ public class Information {
         });
 
         get("/link/:id",(request, response) -> {
-                String hash = request.params("id");
+            String hash = request.params("id");
+            if(request.session().attribute("user") != null){
                 URL url = URLServices.getInstance().find(hash);
                 UserAgentStringParser parser = UADetectorServiceFactory.getResourceModuleParser();
                 UserAgent userAgent = new UserAgent();
@@ -95,13 +96,22 @@ public class Information {
                 url.addVisits(visit);
                 VisitServices.getInstance().create(visit);
                 response.redirect(url.getUrl());
+            }else{
+                TempURL tempURL = TempURLServices.getInstance().find(hash);
+                UserAgentStringParser parser = UADetectorServiceFactory.getResourceModuleParser();
+                UserAgent userAgent = new UserAgent();
+                userAgent.printUa(parser.parse(request.userAgent()));
+                TempVisits tempVisits = new TempVisits(tempURL,userAgent.getBrowser(),request.ip(),userAgent.getOs(),userAgent.getDeviceType());
+                tempURL.addVisits(tempVisits);
+                TempVisitsServices.getInstance().create(tempVisits);
+                response.redirect(tempURL.getUrl());
+            }
             return "";
         });
 
         get("/registerUser",(request, response) -> {
             Map<String, Object> values = new HashMap<>();
             return Template.renderFreemarker(values,"/registration.ftl");
-
         });
         post("/register-user", (request, response) -> {
             Map<String, Object> values = new HashMap<>();
@@ -113,7 +123,6 @@ public class Information {
             }else{
                 values.put("error","User not found");
                 return Template.renderFreemarker(values,"/registration.ftl");
-
             }
 
         });
@@ -123,9 +132,7 @@ public class Information {
             User user = request.session().attribute("user");
             Map<String,Object> urlMap = new HashMap<>();
             String url = request.queryParams("url-to-shorter");
-
             List<URL> urlList = session.attribute("urls");
-
            if (URLServices.getInstance().checkURL(url)){
                if(urlList == null ){
                    urlList = new ArrayList<>();
@@ -138,18 +145,17 @@ public class Information {
                        request.session().attribute("urls",urlList);
                        urlMap.put("url",request.session().attribute("urls"));}
                }
-
                if(user != null){
                    URL urlAux = new URL(url,user);
                    user.addURL(urlAux);
                    URLServices.getInstance().create(urlAux);
+               }else{
+                   TempURL tempURL = new TempURL(url);
+                   TempURLServices.getInstance().create(tempURL);
                }
            }
-
          response.redirect("/");
             return "";
-
-
         });
     }
 
@@ -162,5 +168,6 @@ public class Information {
         LocalDate localDate = LocalDate.parse(formatDate);
         return localDate;
     }
+
 
 }

@@ -8,6 +8,8 @@
         <class>root.URLShortener.URL</class>
         <class>root.URLShortener.User</class>
         <class>root.URLShortener.Visit</class>
+        <class>root.URLShortener.TempURL</class>
+        <class>root.URLShortener.TempVisits</class>
         <properties>
             <property name="javax.persistence.jdbc.url" value="jdbc:h2:tcp://localhost/~/URL-Shortener" />
             <property name="javax.persistence.jdbc.driver" value="org.h2.Driver" />
@@ -15,7 +17,7 @@
             <property name="javax.persistence.jdbc.password" value="" />
             <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>
             <property name="hibernate.show_sql" value="false"/>
-            <property name="javax.persistence.schema-generation.database.action" value="create"/>
+            <property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>
         </properties>
     </persistence-unit>
 </persistence>
