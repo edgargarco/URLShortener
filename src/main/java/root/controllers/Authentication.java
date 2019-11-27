@@ -13,9 +13,14 @@ public class Authentication {
     public static final String encryptPass = "admin";
 
     public void authentication(){
-        get("/login",(request,response)->{
 
+        get("/login",(request,response)->{
+            if (request.session().attribute("user") == null){
                 return Template.renderFreemarker(null,"/login.ftl");
+            }else{
+                response.redirect("/");
+                return "";
+            }
 
         });
 
@@ -27,6 +32,7 @@ public class Authentication {
             User user = UserService.getInstance().find(username);
             if (user != null){
                 if (user.getPassword().equals(password)){
+                    request.session().invalidate();
                     Session session = request.session(true);
                     session.attribute("user",user);
                     if (rememberMe){
@@ -58,4 +64,5 @@ public class Authentication {
             return "";
         });
     }
+
 }
