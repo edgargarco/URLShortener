@@ -24,8 +24,21 @@ public class Information {
 
 
     public void informationControllers(){
-        get("/somethin",(request, response) -> {
-            return Template.renderFreemarker(null,"/qr.ftl");
+        get("/delete-link/:hash",(request, response) -> {
+            Session session = request.session(true);
+            User user = session.attribute("user");
+
+            if (user != null){
+                URL url = URLServices.getInstance().find(request.params("hash"));
+                if (url != null){
+                    VisitServices.getInstance().deleteVisits(request.params("hash"));
+                    URLServices.getInstance().delete(request.params("hash"));
+                    response.redirect("/dashBoard");
+                    return "";
+                }
+            }
+                response.redirect("/dashBoard");
+                return "";
         });
         post("/getStatisctics",(request, response) -> {
             Session session = request.session(true);
@@ -55,7 +68,7 @@ public class Information {
             String hash = request.params("id");
             User user = session.attribute("user");
             if (user != null){
-                urlMap.put("demographicsURL",URLServices.getInstance().find(hash));
+                urlMap.put("demographicsURL",URLServices.getInstance().findURLCustomMethod(hash));
                 urlMap.put("user",user);
                 return Template.renderFreemarker(urlMap,"/dashboard.ftl");
             }else{
@@ -70,7 +83,8 @@ public class Information {
 
             urlMap.put("user",user);
             if(user != null){
-                urlMap.put("urls",user.getUrlList());
+                urlMap.put("urls",user.urltoGet(user));
+
                 return Template.renderFreemarker(urlMap,"/links.ftl");
             }else{
                 response.redirect("/");
@@ -93,7 +107,7 @@ public class Information {
                 UserAgent userAgent = new UserAgent();
                 userAgent.printUa(parser.parse(request.userAgent()));
                 Visit visit = new Visit(url,userAgent.getBrowser(),request.ip(),userAgent.getOs(),userAgent.getDeviceType());
-                url.addVisits(visit);
+                //url.addVisits(visit);
                 VisitServices.getInstance().create(visit);
                 response.redirect(url.getUrl());
             }else{
@@ -147,7 +161,7 @@ public class Information {
                }
                if(user != null){
                    URL urlAux = new URL(url,user);
-                   user.addURL(urlAux);
+                   //user.addURL(urlAux);
                    URLServices.getInstance().create(urlAux);
                }else{
                    TempURL tempURL = new TempURL(url);

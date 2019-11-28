@@ -1,6 +1,11 @@
 package root.Services;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import root.URLShortener.URL;
+import root.URLShortener.User;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -8,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.Persistence;
 import javax.persistence.criteria.CriteriaQuery;
 import java.lang.reflect.Field;
+import java.sql.SQLException;
 import java.util.List;
 
 public class GenericCRUD<T> {
@@ -91,19 +97,22 @@ public class GenericCRUD<T> {
     }
 
     public void delete(Object entityID){
-        EntityManager entityManager = getEntityManager();
-        entityManager.getTransaction().begin();
-        try{
-            T entity = entityManager.find(entityClass,entityID);
-            entityManager.remove(entity);
-            entityManager.getTransaction().commit();
-        }catch (Exception e){
-            entityManager.getTransaction().rollback();
-            throw e;
-        }finally {
-            entityManager.close();
+        EntityManager em = getEntityManager();
+        em.getTransaction().begin();
+        try {
+            T entity = em.find(entityClass, entityID);
+            em.remove(entity);
+            em.getTransaction().commit();
+
+        }catch (Exception ex){
+            em.getTransaction().rollback();
+
+            throw  ex;
+        } finally {
+            em.close();
         }
     }
+
 
     public List<T> findAll(){
         EntityManager entityManager = getEntityManager();
@@ -117,6 +126,10 @@ public class GenericCRUD<T> {
             entityManager.close();
         }
     }
+
+
+
+
 
 
 

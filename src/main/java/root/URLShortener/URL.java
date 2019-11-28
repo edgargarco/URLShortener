@@ -1,5 +1,6 @@
 package root.URLShortener;
 
+import org.h2.engine.Session;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.annotations.Type;
@@ -19,7 +20,7 @@ public class URL implements Serializable {
     private String url;
     @ManyToOne
     private User user;
-    @OneToMany(fetch = FetchType.EAGER,mappedBy = "url")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "url")
     private List<Visit> visits = new ArrayList<>();
 
     public URL(){
@@ -64,7 +65,8 @@ public class URL implements Serializable {
 
     public void setVisits(List<Visit> visits) {this.visits = visits;}
 
-    public void addVisits(Visit visit){ visits.add(visit);}
+    public void addVisits(Visit visit){
+        visits.add(visit);}
 
     public String urlHash(String url){
         CRC32 crc32 = new CRC32();

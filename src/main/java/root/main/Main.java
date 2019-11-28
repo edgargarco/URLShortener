@@ -1,6 +1,7 @@
 package root.main;
 
 import root.Services.BoostrapService;
+import root.Services.URLServices;
 import root.controllers.Authentication;
 import root.controllers.Filter;
 import root.controllers.Information;
@@ -13,9 +14,9 @@ public class Main {
         BoostrapService.getInstance().defaultUser();
         //Public Resources
         staticFiles.location("/public");
+
         (new Filter()).filters();
         (new Authentication()).authentication();
         (new Information()).informationControllers();
-
     }
 }

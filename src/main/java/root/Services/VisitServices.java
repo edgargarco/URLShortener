@@ -43,11 +43,28 @@ public class VisitServices extends GenericCRUD<Visit> {
         return super.findAll();
     }
 
+
+    public void deleteVisits(String hash){
+        EntityManager entityManager = getEntityManager();
+        entityManager.getTransaction().begin();
+       try{
+           entityManager.flush();
+           entityManager.clear();
+           Query query = entityManager.createQuery("DELETE FROM Visit  c WHERE c.url.hash = :hash ");
+           query.setParameter("hash",hash);
+           query.executeUpdate();
+           entityManager.getTransaction().commit();
+       }catch (Exception e){
+           entityManager.getTransaction().rollback();
+           throw e;
+       }finally {
+           entityManager.close();
+       }
+
+    }
+
     public List<Visit> visitsByDates(String hash, LocalDate date){
         EntityManager entityManager = getEntityManager();
-        System.out.println(hash+"hahs");
-        System.out.println(date+"date");
-
         Query query = entityManager.createQuery("SELECT c FROM Visit c WHERE c.url.hash = :hash AND c.date = :date ORDER BY c.date ASC" );
         query.setParameter("hash",hash);
         query.setParameter("date",date);
