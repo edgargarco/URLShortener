@@ -26,15 +26,15 @@ public class URL implements Serializable {
     public URL(){
 
     }
-    public URL(String url){
+    public URL(String url,String diferentiator){
         this.url = url;
-        this.setHash(urlHash(this.url));
+        this.setHash(urlHash(this.url,diferentiator));
     }
 
     public URL(String url, User user) {
         this.url = url;
         this.user = user;
-        this.setHash(urlHash(url));
+        this.setHash(urlHash(url,user.getUsername()));
     }
 
     public String getHash() {
@@ -68,11 +68,11 @@ public class URL implements Serializable {
     public void addVisits(Visit visit){
         visits.add(visit);}
 
-    public String urlHash(String url){
+    public String urlHash(String url,String diferentiator){
+        String toHash = url+diferentiator;
         CRC32 crc32 = new CRC32();
-        crc32.update(url.getBytes());
-        String hash = Long.toHexString(crc32.getValue());
-        return (hash);
+        crc32.update(toHash.getBytes());
+        return (Long.toHexString(crc32.getValue()));
     }
 
 }

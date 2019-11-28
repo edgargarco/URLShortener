@@ -190,8 +190,8 @@
         <section>
             <div>
                 <ul id="list-url">
-                    <#if (url??)>
-                        <#list url as x>
+                    <#if (urls??)>
+                        <#list urls as x>
                             <li><span><a target="_blank" href="${x.url}">${x.url}-----------------------</a></span><span><a target="_blank" href="link/${x.hash}">theApp.${x.hash}</a></span></li>
                         </#list>
                     </#if>

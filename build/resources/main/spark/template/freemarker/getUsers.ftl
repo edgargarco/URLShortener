@@ -65,7 +65,7 @@
 
         <!-- Nav Item - Tables -->
         <li class="nav-item">
-            <a class="nav-link" href="/listUsers">
+            <a class="nav-link" href="#">
                 <i class="fas fa-fw fa-table"></i>
                 <span>Usuarios</span></a>
         </li>
@@ -170,7 +170,7 @@
             <div class="container-fluid">
 
                 <!-- Page Heading -->
-                <h1 class="h3 mb-4 text-gray-800">Your Short URL's</h1>
+                <h1 class="h3 mb-4 text-gray-800">Listado de usuarios</h1>
                 <div class="card">
 
                     <!--Card content-->
@@ -182,11 +182,12 @@
                             <thead class="blue-grey lighten-4">
                             <tr>
 
-                                <th>Short Link</th>
-                                <th>Detalles</th>
+                                <th>Nombre De Usuario</th>
+                                <th>Nombre Completo</th>
+                                <th>Administrador</th>
                                 <#if user??>
                                     <#if user.administrator == true >
-                                        <th>Borrar</th>
+                                        <th>Editar/Borrar</th>
                                     </#if>
                                 </#if>
 
@@ -196,19 +197,25 @@
 
                             <!-- Table body -->
                             <tbody>
-                            <#if urls?? >
-                                <#list urls as url>
-                                <tr>
+                            <#if users?? >
+                                <#list users as u>
+                                    <tr>
 
-                                <td width="10%"><a target="_blank" href="link/${url.hash}">${url.hash}</a></td>
-                                    <td width="15%"><a href="/info/${url.hash}"> <button type="button" class="btn btn-primary btn-sm px-3"><i class="fas fa-info-circle"><span class="ml-2">Info</span></i></button></a></td>
-                                    <#if user??>
-                                        <#if user.administrator == true >
-                                            <td width="15%"><a href="/delete-link/${url.hash}"><button type="button" class="btn btn-primary btn-sm px-3 ml-2" data-toggle="modal" data-target="#basicExampleModal"><i class="fas fa-trash"></i></button></a></td>
+                                        <td width=""><a target="_blank" href="#">${u.username}</a></td>
+                                        <td width=""><a target="_blank" href="#">${u.name}</a></td>
+                                        <#if u.isAdministrator() == true >
+                                            <td><i class="fas fa-check-double"></i></td>
+                                            <#else >
+                                                <td><i class="fas fa-minus-circle"></i></td>
                                         </#if>
-                                    </#if>
-                            </tr>
-                            </#list>
+                                        <#if user??>
+                                            <#if user.administrator == true >
+                                                <td width=""><a href=""> <button type="button" class="btn btn-primary btn-sm px-3"><i class="fas fa-info-circle"><span class="ml-2">Info</span></i></button></a></td>
+                                            <#else >
+                                            </#if>
+                                        </#if>
+                                    </tr>
+                                </#list>
                             </#if>
 
                             </tbody>

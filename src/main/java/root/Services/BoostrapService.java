@@ -34,7 +34,7 @@ public class BoostrapService {
     }
 
     public void defaultUser(){
-        User user = new User("admin","admin","admin");
+        User user = new User("admin","admin","admin",true);
         User auxUser = UserService.getInstance().find(user.getUsername());
         if(auxUser == null){
             UserService.getInstance().create(user);

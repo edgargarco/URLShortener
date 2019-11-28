@@ -24,15 +24,31 @@ public class Information {
 
 
     public void informationControllers(){
+
+        get("/listUsers",(request, response) -> {
+            Session session = request.session(true);
+            User user = session.attribute("user");
+            Map<String,Object> userMap = new HashMap<>();
+            userMap.put("users",UserService.getInstance().findAll());
+            userMap.put("user",user);
+            if (userMap == null){
+                response.redirect("/dashBoard");
+                return "";
+            }
+            return Template.renderFreemarker(userMap,"/getUsers.ftl");
+        });
+
         get("/delete-link/:hash",(request, response) -> {
             Session session = request.session(true);
             User user = session.attribute("user");
 
-            if (user != null){
+
+            if (user != null && user.isAdministrator()){
                 URL url = URLServices.getInstance().find(request.params("hash"));
                 if (url != null){
                     VisitServices.getInstance().deleteVisits(request.params("hash"));
                     URLServices.getInstance().delete(request.params("hash"));
+                    session.attribute("urls", user.urltoGet(user));
                     response.redirect("/dashBoard");
                     return "";
                 }
@@ -94,8 +110,10 @@ public class Information {
         get("/",(request, response) -> {
             Session session = request.session(true);
             Map<String,Object> urlMap = new HashMap<>();
-            urlMap.put("url",request.session().attribute("urls"));
-            urlMap.put("user",request.session().attribute("user"));
+            User user = request.session().attribute("user");
+
+            urlMap.put("urls",request.session().attribute("urls"));
+            urlMap.put("user",user);
             return Template.renderFreemarker(urlMap,"/index.ftl");
         });
 
@@ -103,22 +121,28 @@ public class Information {
             String hash = request.params("id");
             if(request.session().attribute("user") != null){
                 URL url = URLServices.getInstance().find(hash);
-                UserAgentStringParser parser = UADetectorServiceFactory.getResourceModuleParser();
-                UserAgent userAgent = new UserAgent();
-                userAgent.printUa(parser.parse(request.userAgent()));
-                Visit visit = new Visit(url,userAgent.getBrowser(),request.ip(),userAgent.getOs(),userAgent.getDeviceType());
-                //url.addVisits(visit);
-                VisitServices.getInstance().create(visit);
-                response.redirect(url.getUrl());
+                if(url != null){
+                    UserAgentStringParser parser = UADetectorServiceFactory.getResourceModuleParser();
+                    UserAgent userAgent = new UserAgent();
+                    userAgent.printUa(parser.parse(request.userAgent()));
+                    Visit visit = new Visit(url,userAgent.getBrowser(),request.ip(),userAgent.getOs(),userAgent.getDeviceType());
+                    //url.addVisits(visit);
+                    VisitServices.getInstance().create(visit);
+                    response.redirect(url.getUrl());
+                }
+
             }else{
                 TempURL tempURL = TempURLServices.getInstance().find(hash);
-                UserAgentStringParser parser = UADetectorServiceFactory.getResourceModuleParser();
-                UserAgent userAgent = new UserAgent();
-                userAgent.printUa(parser.parse(request.userAgent()));
-                TempVisits tempVisits = new TempVisits(tempURL,userAgent.getBrowser(),request.ip(),userAgent.getOs(),userAgent.getDeviceType());
-                tempURL.addVisits(tempVisits);
-                TempVisitsServices.getInstance().create(tempVisits);
-                response.redirect(tempURL.getUrl());
+                if(tempURL != null){
+                    UserAgentStringParser parser = UADetectorServiceFactory.getResourceModuleParser();
+                    UserAgent userAgent = new UserAgent();
+                    userAgent.printUa(parser.parse(request.userAgent()));
+                    TempVisits tempVisits = new TempVisits(tempURL,userAgent.getBrowser(),request.ip(),userAgent.getOs(),userAgent.getDeviceType());
+                    tempURL.addVisits(tempVisits);
+                    TempVisitsServices.getInstance().create(tempVisits);
+                    response.redirect(tempURL.getUrl());
+                }
+
             }
             return "";
         });
@@ -147,26 +171,29 @@ public class Information {
             Map<String,Object> urlMap = new HashMap<>();
             String url = request.queryParams("url-to-shorter");
             List<URL> urlList = session.attribute("urls");
+            boolean statusList = (urlList == null)?false:true;
+            URL urlCopy = new URL();
            if (URLServices.getInstance().checkURL(url)){
-               if(urlList == null ){
-                   urlList = new ArrayList<>();
-                   urlList.add((new URL(url)));
-                   request.session().attribute("urls",urlList);
-                   urlMap.put("url",request.session().attribute("urls"));
-               }else{
-                   if (URLServices.getInstance().checkURLExistence(urlList,url) == false){
-                       urlList.add((new URL(url)));
-                       request.session().attribute("urls",urlList);
-                       urlMap.put("url",request.session().attribute("urls"));}
-               }
-               if(user != null){
+
+               if (user != null){
                    URL urlAux = new URL(url,user);
-                   //user.addURL(urlAux);
                    URLServices.getInstance().create(urlAux);
+                   urlCopy = urlAux;
                }else{
                    TempURL tempURL = new TempURL(url);
                    TempURLServices.getInstance().create(tempURL);
                }
+               if (statusList){
+                   if (URLServices.getInstance().checkURLExistence(urlList,url) == false){
+                       urlList.add(urlCopy);
+                   }
+               }else{
+                   urlList = new ArrayList<>();
+                   urlList.add(urlCopy);
+               }
+               request.session().attribute("urls",urlList);
+               urlMap.put("url",request.session().attribute("urls"));
+
            }
          response.redirect("/");
             return "";

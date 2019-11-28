@@ -65,7 +65,7 @@
 
         <!-- Nav Item - Tables -->
         <li class="nav-item">
-            <a class="nav-link" href="#">
+            <a class="nav-link" href="/listUsers">
                 <i class="fas fa-fw fa-table"></i>
                 <span>Usuarios</span></a>
         </li>
@@ -184,7 +184,12 @@
 
                                 <th>Short Link</th>
                                 <th>Detalles</th>
-                                <th>Borrar</th>
+                                <#if user??>
+                                    <#if user.administrator == true >
+                                        <th>Borrar</th>
+                                    </#if>
+                                </#if>
+
                             </tr>
                             </thead>
                             <!-- Table head -->
@@ -197,7 +202,11 @@
 
                                 <td width="10%"><a target="_blank" href="link/${url.hash}">${url.hash}</a></td>
                                     <td width="15%"><a href="/info/${url.hash}"> <button type="button" class="btn btn-primary btn-sm px-3"><i class="fas fa-info-circle"><span class="ml-2">Info</span></i></button></a></td>
-                                <td width="15%"><a href="/delete-link/${url.hash}"><button type="button" class="btn btn-primary btn-sm px-3 ml-2" data-toggle="modal" data-target="#basicExampleModal"><i class="fas fa-trash"></i></button></a></td>
+                                    <#if user??>
+                                        <#if user.administrator == true >
+                                            <td width="15%"><a href="/delete-link/${url.hash}"><button type="button" class="btn btn-primary btn-sm px-3 ml-2" data-toggle="modal" data-target="#basicExampleModal"><i class="fas fa-trash"></i></button></a></td>
+                                        </#if>
+                                    </#if>
                             </tr>
                             </#list>
                             </#if>
