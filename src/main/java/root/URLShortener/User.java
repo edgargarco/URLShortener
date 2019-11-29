@@ -1,16 +1,19 @@
 package root.URLShortener;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
+
+
+
+import root.Services.URLServices;
 
 import javax.persistence.*;
-import javax.transaction.Transactional;
+import javax.persistence.Query;
+
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashSet;
+
+import java.util.Iterator;
 import java.util.List;
+
 import java.util.Set;
 
 @Entity
@@ -20,7 +23,7 @@ public class User implements Serializable {
     private String name;
     private String password;
     private boolean administrator;
-    @OneToMany(fetch=FetchType.EAGER,mappedBy = "user",cascade = CascadeType.ALL)
+    @OneToMany(fetch=FetchType.LAZY,mappedBy = "user")
     private List<URL> urlList = new ArrayList<>();
 
 
@@ -32,6 +35,13 @@ public class User implements Serializable {
         this.username = username;
         this.name = name;
         this.password = password;
+        this.administrator = false;
+    }
+    public User(String username, String name, String password,boolean admin) {
+        this.username = username;
+        this.name = name;
+        this.password = password;
+        this.administrator = admin;
     }
 
     public String getUsername() {
@@ -74,6 +84,10 @@ public class User implements Serializable {
         this.urlList = urlList;
     }
 
+    public List<URL> urltoGet(User user){
+        //This method was implemented to recover url using a lazy load
+        return URLServices.getInstance().findAllUrlByHash(user);
+    }
 
 
     public void addURL(URL url){

@@ -2,6 +2,8 @@ package root.Services;
 
 import root.URLShortener.User;
 
+
+
 public class UserService extends GenericCRUD<User> {
     private static UserService instance;
     private UserService(){ super(User.class); }
@@ -12,6 +14,8 @@ public class UserService extends GenericCRUD<User> {
         }
         return instance;
     }
+
+
 
 
 

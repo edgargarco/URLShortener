@@ -1,5 +1,6 @@
 package root.URLShortener;
 
+import org.h2.engine.Session;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.annotations.Type;
@@ -19,21 +20,21 @@ public class URL implements Serializable {
     private String url;
     @ManyToOne
     private User user;
-    @OneToMany(fetch = FetchType.EAGER,mappedBy = "url")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "url")
     private List<Visit> visits = new ArrayList<>();
 
     public URL(){
 
     }
-    public URL(String url){
+    public URL(String url,String diferentiator){
         this.url = url;
-        this.setHash(urlHash(this.url));
+        this.setHash(urlHash(this.url,diferentiator));
     }
 
     public URL(String url, User user) {
         this.url = url;
         this.user = user;
-        this.setHash(urlHash(url));
+        this.setHash(urlHash(url,user.getUsername()));
     }
 
     public String getHash() {
@@ -64,13 +65,14 @@ public class URL implements Serializable {
 
     public void setVisits(List<Visit> visits) {this.visits = visits;}
 
-    public void addVisits(Visit visit){ visits.add(visit);}
+    public void addVisits(Visit visit){
+        visits.add(visit);}
 
-    public String urlHash(String url){
+    public String urlHash(String url,String diferentiator){
+        String toHash = url+diferentiator;
         CRC32 crc32 = new CRC32();
-        crc32.update(url.getBytes());
-        String hash = Long.toHexString(crc32.getValue());
-        return (hash);
+        crc32.update(toHash.getBytes());
+        return (Long.toHexString(crc32.getValue()));
     }
 
 }
