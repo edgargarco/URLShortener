@@ -150,6 +150,11 @@ public class Information {
             User user = session.attribute("user");
             if (user != null){
                 urlMap.put("demographicsURL",URLServices.getInstance().findURLCustomMethod(hash));
+                urlMap.put("LinuxCant",VisitServices.getInstance().getByOs(hash,"Linux"));
+                urlMap.put("WindowsCant",VisitServices.getInstance().getByOs(hash,"Windows"));
+                urlMap.put("IOSCant",VisitServices.getInstance().getByOs(hash,"iOS"));
+                urlMap.put("AndroidCant",VisitServices.getInstance().getByOs(hash,"Android"));
+                urlMap.put("ips",VisitServices.getInstance().getIPS(hash));
                 urlMap.put("user",user);
                 return Template.renderFreemarker(urlMap,"/dashboard.ftl");
             }else{
@@ -158,6 +163,11 @@ public class Information {
                     for (TempURL tempURL : tempURLS){
                         if (tempURL.getHash().equals(hash)){
                             urlMap.put("demographicsURL",TempURLServices.getInstance().find(hash));
+                            urlMap.put("LinuxCant",TempVisitsServices.getInstance().getByOs(hash,"Linux"));
+                            urlMap.put("WindowsCant",TempVisitsServices.getInstance().getByOs(hash,"Windows"));
+                            urlMap.put("IOSCant",TempVisitsServices.getInstance().getByOs(hash,"iOS"));
+                            urlMap.put("AndroidCant",TempVisitsServices.getInstance().getByOs(hash,"Android"));
+                            urlMap.put("ips",TempVisitsServices.getInstance().getIPS(hash));
                             return Template.renderFreemarker(urlMap,"/dashboard.ftl");
                         }
                     }
@@ -177,7 +187,8 @@ public class Information {
 
             urlMap.put("user",user);
             if(user != null){
-                urlMap.put("urls",user.urltoGet(user));
+                List<URL> urlList = user.urltoGet(user);
+                urlMap.put("urls",urlList);
                 return Template.renderFreemarker(urlMap,"/links.ftl");
             }else{
 
@@ -196,8 +207,9 @@ public class Information {
             return Template.renderFreemarker(urlMap,"/index.ftl");
         });
 
-        get("/l",(request, response) -> {
-            String hash = request.queryParams("id");
+        get("/link/:id",(request, response) -> {
+            String hash = request.params("id");
+            System.out.println(hash);
             if(request.session().attribute("user") != null){
                 URL url = URLServices.getInstance().find(hash);
                 if(url != null){

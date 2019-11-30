@@ -183,17 +183,115 @@
                 <div class="row">
 
                     <!-- Earnings (Monthly) Card Example -->
+                    <div class="col-xl-3 col-lg-4">
+                        <#if demographicsURL?? >
+                            <div class=" mb-4">
+                                <div class="card border-left-primary shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Usuarios Linux</div>
+                                                <#if LinuxCant??>
+                                                    <div class="h5 mb-0 font-weight-bold text-gray-800">${LinuxCant}</div>
+
+                                                </#if>
+
+                                            </div>
+                                            <div class="col-auto">
+                                                <i class="fas fa-glasses fa-2x text-gray-300"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </#if>
+                    </div>
+
+                    <!-- Earnings (Monthly) Card Example -->
+                    <div class="col-xl-3 col-lg-4">
+                        <#if demographicsURL?? >
+                            <div class=" mb-4">
+                                <div class="card border-left-primary shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Usuarios Windows</div>
+                                                <#if WindowsCant??>
+                                                    <div class="h5 mb-0 font-weight-bold text-gray-800">${WindowsCant}</div>
+
+                                                </#if>
+
+                                            </div>
+                                            <div class="col-auto">
+                                                <i class="fas fa-glasses fa-2x text-gray-300"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </#if>
+                    </div>
 
 
                     <!-- Earnings (Monthly) Card Example -->
+                    <div class="col-xl-3 col-lg-4">
+                        <#if demographicsURL?? >
+                            <div class=" mb-4">
+                                <div class="card border-left-primary shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
 
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Usuarios IOS</div>
+                                                <#if IOSCant??>
+                                                    <div class="h5 mb-0 font-weight-bold text-gray-800">${IOSCant}</div>
 
-                    <!-- Earnings (Monthly) Card Example -->
+                                                </#if>
+
+                                            </div>
+                                            <div class="col-auto">
+                                                <i class="fas fa-glasses fa-2x text-gray-300"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </#if>
+                    </div>
+
+                    <div class="col-xl-3 col-lg-4">
+                        <#if demographicsURL?? >
+                            <div class=" mb-4">
+                                <div class="card border-left-primary shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Usuarios Android</div>
+                                                <#if AndroidCant??>
+                                                    <div class="h5 mb-0 font-weight-bold text-gray-800">${AndroidCant}</div>
+
+                                                </#if>
+
+                                            </div>
+                                            <div class="col-auto">
+                                                <i class="fas fa-glasses fa-2x text-gray-300"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </#if>
+                    </div>
 
 
                     <!-- Pending Requests Card Example -->
 
                 </div>
+
+
 
                 <!-- Content Row -->
 
@@ -244,6 +342,15 @@
                                 </div>
                             </div>
                         </#if>
+                        <div>
+
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#basicExampleModal">
+                                Informaciones sobre Ips
+                            </button>
+
+
+                        </div>
+
                         <div class="card shadow mb-4 mt-4">
                             <!-- Card Header - Dropdown -->
                             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
@@ -309,6 +416,48 @@
             </div>
         </div>
 
+        <div class="modal fade" id="basicExampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Lista de Ips</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th scope="col">Ip publica</th>
+                                <th scope="col">Dispositivo</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <#if ips??>
+                                <#list ips as ip>
+                                    <tr>
+                                        <th scope="row">${ip.ip}</th>
+                                        <td>${ip.device}</td>
+
+                                    </tr>
+                                </#list>
+                            </#if>
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
         <!-- Bootstrap core JavaScript-->
         <script src="/MDB-Free/dashboard/startbootstrap/vendor/jquery/jquery.min.js"></script>
         <script src="/MDB-Free/dashboard/startbootstrap/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -324,7 +473,7 @@
         <script>
             // Initialize
             var qr = $('input.url-qr').val();
-            jQuery('#qrcode').qrcode("smart-la-vega.technology/l?id="+qr);
+            jQuery('#qrcode').qrcode("smart-la-vega.technology/link/"+qr);
         </script>
 
         <!-- Page level plugins -->

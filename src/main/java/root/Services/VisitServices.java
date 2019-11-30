@@ -73,6 +73,31 @@ public class VisitServices extends GenericCRUD<Visit> {
         return list;
     }
 
+    public int getByOs ( String hash, String os){
+        EntityManager entityManager = getEntityManager();
+        Query query = entityManager.createQuery("SELECT COUNT (c.id) FROM Visit c WHERE c.url.hash = :hash AND c.Os = :os" );
+        query.setParameter("hash",hash);
+        query.setParameter("os",os);
+        Integer result = Integer.parseInt(query.getSingleResult().toString());
+
+        System.out.println("El resultado"+result);
+
+        entityManager.close();
+        return result;
+    }
+
+    public List<Object> getIPS(String hash){
+        EntityManager entityManager = getEntityManager();
+        Query query = entityManager.createQuery("SELECT c FROM Visit c WHERE c.url.hash=:hash" );
+        query.setParameter("hash",hash);
+        List<Object> list = query.getResultList();
+        System.out.println("KLK");
+
+        entityManager.close();
+        return list;
+
+    }
+
     public boolean sanitizeDate(String date){
         try {
             Integer.parseInt(date.substring(6,10));

@@ -189,7 +189,7 @@
                                 <#list urls as url>
                                 <tr>
 
-                                <td width="10%"><a target="_blank" href="/${url.hash}">smart-la-vega.technology/${url.hash}</a></td>
+                                <td width="10%"><a target="_blank" href="/link/${url.hash}">smart-la-vega.technology/link/${url.hash}</a></td>
                                     <td width="15%"><a href="/info/${url.hash}"> <button type="button" class="btn btn-primary btn-sm px-3"><i class="fas fa-info-circle"><span class="ml-2">Info</span></i></button></a></td>
                                     <#if user??>
                                         <#if user.administrator == true >

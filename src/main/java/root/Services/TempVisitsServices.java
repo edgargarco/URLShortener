@@ -43,5 +43,28 @@ public class TempVisitsServices extends GenericCRUD<TempVisits> {
         }
     }
 
+    public int getByOs ( String hash, String os){
+        EntityManager entityManager = getEntityManager();
+        Query query = entityManager.createQuery("SELECT COUNT (c.id) FROM TempVisits c WHERE c.url.hash = :hash AND c.Os = :os" );
+        query.setParameter("hash",hash);
+        query.setParameter("os",os);
+        Integer result = Integer.parseInt(query.getSingleResult().toString());
+
+        System.out.println("El resultado"+result);
+
+        entityManager.close();
+        return result;
+    }
+
+    public List<TempVisits> getIPS(String hash){
+        EntityManager entityManager = getEntityManager();
+        Query query = entityManager.createQuery("SELECT c FROM TempVisits c WHERE c.url.hash = :hash " );
+        query.setParameter("hash",hash);
+        List<TempVisits> list = query.getResultList();
+        entityManager.close();
+        return list;
+
+    }
+
 
 }

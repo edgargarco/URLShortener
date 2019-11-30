@@ -141,7 +141,7 @@
                         <#list urls as x>
                             <tr class=" ">
                                 <td><a class="urls-section-list" target="_blank" href="${x.url}" style="font-size: 18px; color: blue;">${x.url}</a></td>
-                                <td><a href="/l?id=${x.hash}" target="_blank" style="font-size: 22px;"><span class="badge badge-primary badge-pill" >smart-la-vega.technology/${x.hash}</span></a></td>
+                                <td><a href="/link/${x.hash}" target="_blank" style="font-size: 22px;"><span class="badge badge-primary badge-pill" >smart-la-vega.technology/link/${x.hash}</span></a></td>
                                 <td><button type="button" class="btn btn-sm btn-primary" id="copy"><i class="fas fa-copy"></i>Copiar</button></td>
                             </tr>
                         </#list>
