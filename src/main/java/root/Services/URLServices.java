@@ -3,6 +3,7 @@ package root.Services;
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import root.URLShortener.TempURL;
 import root.URLShortener.URL;
 import root.URLShortener.User;
 import root.URLShortener.Visit;
@@ -66,13 +67,22 @@ public class URLServices extends GenericCRUD<URL> {
     }
 
 
-    public boolean checkURLExistence(List<URL> urls,String url){
+    public boolean checkURLExistence(List<Object> urls,String url){
         boolean state = false;
-        for (URL auxUrl: urls){
-            if (auxUrl.getUrl().equals(url)){
-                state = true;
-                break;
+
+        for (Object auxUrl: urls){
+            if (auxUrl instanceof URL){
+                if (((URL)auxUrl).getUrl().equals(url)){
+                    state = true;
+                    break;
+                }
+            }else {
+                if (((TempURL)auxUrl).getUrl().equals(url)){
+                    state = true;
+                    break;
+                }
             }
+
         }
         return state;
     }

@@ -15,7 +15,7 @@ public class Filter {
             User user = request.session().attribute("user");
             if (user == null){
                 if (request.cookie("user") != null){
-                    System.out.println("Montro");
+
                     String username = request.cookie("user");
                     BasicTextEncryptor  basicTextEncryptor = new BasicTextEncryptor();
                     basicTextEncryptor.setPasswordCharArray(Authentication.encryptPass.toCharArray());

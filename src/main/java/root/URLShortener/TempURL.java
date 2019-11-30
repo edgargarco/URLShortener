@@ -22,9 +22,9 @@ public class TempURL implements Serializable {
     public TempURL(){
 
     }
-    public TempURL(String url){
+    public TempURL(String url,String identifier){
         this.url = url;
-        this.setHash(urlHash(this.url));
+        this.setHash(urlHash(this.url,identifier));
     }
 
     public String getHash() {
@@ -51,10 +51,11 @@ public class TempURL implements Serializable {
         this.visits = visits;
     }
     public void addVisits(TempVisits visit){ visits.add(visit);}
-    public String urlHash(String url){
-        String toHash = url+"djdjd";
+    public String urlHash(String url,String identifier){
+        System.out.println("Identifier"+identifier);
+        String toHash = url+identifier;
         CRC32 crc32 = new CRC32();
-        crc32.update(url.getBytes());
+        crc32.update(toHash.getBytes());
         String hash = Long.toHexString(crc32.getValue());
         return (hash);
     }

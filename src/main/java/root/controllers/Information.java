@@ -29,6 +29,7 @@ public class Information {
         get("/deleteUser/:id", (request, response) -> {
             Session session = request.session();
             User user = session.attribute("user");
+            System.out.println(request.params("id"));
             if (user.isAdministrator()){
                 UserService.getInstance().delete(request.params("id"));
             }
@@ -91,30 +92,50 @@ public class Information {
                 return "";
         });
         post("/getStatisctics",(request, response) -> {
-            Session session = request.session(true);
+            Session session = request.session();
             User user = session.attribute("user");
             int[] visitsPerHour = new int[24];
-            if (VisitServices.getInstance().sanitizeDate(request.queryParams("date"))){
-                List<Visit> visits = VisitServices.getInstance().visitsByDates(request.queryParams("hash"),dates(request.queryParams("date")));
-                if (visits != null){
-                    int visitsCount = 0 ;
-                    for(int i = 0 ; i < 24 ; i++){
-                        for (int j = 0 ; j < visits.size() ; j++){
-                            if (visits.get(j).getTime().getHour() == i ){
-                                visitsCount++;
-                            }
-                        }
-                        visitsPerHour[i] = visitsCount;
-                        visitsCount = 0;
-                    }
-                }
-            }
+           if (user != null){
+               if (VisitServices.getInstance().sanitizeDate(request.queryParams("date"))){
+                   List<Visit> visits = VisitServices.getInstance().visitsByDates(request.queryParams("hash"),dates(request.queryParams("date")));
+                   if (visits != null){
+                       int visitsCount = 0 ;
+                       for(int i = 0 ; i < 24 ; i++){
+                           for (int j = 0 ; j < visits.size() ; j++){
+                               if (visits.get(j).getTime().getHour() == i ){
+                                   visitsCount++;
+                               }
+                           }
+                           visitsPerHour[i] = visitsCount;
+                           visitsCount = 0;
+                       }
+                   }
+               }
+           }else{
+               if (VisitServices.getInstance().sanitizeDate(request.queryParams("date"))){
+                   List<TempVisits> tempVisits = TempVisitsServices.getInstance().visitsByDates(request.queryParams("hash"),dates(request.queryParams("date")));
+                   if (tempVisits != null){
+                       int visitsCount = 0 ;
+                       for(int i = 0 ; i < 24 ; i++){
+                           for (int j = 0 ; j < tempVisits.size() ; j++){
+                               if (tempVisits.get(j).getTime().getHour() == i ){
+                                   visitsCount++;
+                               }
+                           }
+                           visitsPerHour[i] = visitsCount;
+                           visitsCount = 0;
+                       }
+                   }
+               }
+
+
+           }
             JSONArray jsonArray = new JSONArray(visitsPerHour);
             return jsonArray;
         });
         get("/info/:id",(request, response) -> {
             Map<String,Object> urlMap = new HashMap<>();
-            Session session = request.session(true);
+            Session session = request.session();
             String hash = request.params("id");
             User user = session.attribute("user");
             if (user != null){
@@ -122,30 +143,44 @@ public class Information {
                 urlMap.put("user",user);
                 return Template.renderFreemarker(urlMap,"/dashboard.ftl");
             }else{
-                response.redirect("/");
+                List<TempURL> tempURLS = request.session().attribute("urls");
+                if (tempURLS != null){
+                    for (TempURL tempURL : tempURLS){
+                        if (tempURL.getHash().equals(hash)){
+                            urlMap.put("demographicsURL",TempURLServices.getInstance().find(hash));
+                            return Template.renderFreemarker(urlMap,"/dashboard.ftl");
+                        }
+                    }
+                }else{
+                    return Template.renderFreemarker(urlMap,"/links.ftl");
+
+                }
+
+
             }
             return "";
         });
         get("/dashBoard", (request, response) -> {
-            Session session = request.session(true);
+            Session session = request.session();
             Map<String,Object> urlMap = new HashMap<>();
             User user = session.attribute("user");
 
             urlMap.put("user",user);
             if(user != null){
                 urlMap.put("urls",user.urltoGet(user));
-
                 return Template.renderFreemarker(urlMap,"/links.ftl");
             }else{
-                response.redirect("/");
-                return "";
+
+                urlMap.put("urls",session.attribute("urls"));
+                return Template.renderFreemarker(urlMap,"/links.ftl");
+                //response.redirect("/");
+
             }
         });
         get("/",(request, response) -> {
             Session session = request.session(true);
             Map<String,Object> urlMap = new HashMap<>();
             User user = request.session().attribute("user");
-
             urlMap.put("urls",request.session().attribute("urls"));
             urlMap.put("user",user);
             return Template.renderFreemarker(urlMap,"/index.ftl");
@@ -160,7 +195,6 @@ public class Information {
                     UserAgent userAgent = new UserAgent();
                     userAgent.printUa(parser.parse(request.userAgent()));
                     Visit visit = new Visit(url,userAgent.getBrowser(),request.ip(),userAgent.getOs(),userAgent.getDeviceType());
-                    //url.addVisits(visit);
                     VisitServices.getInstance().create(visit);
                     response.redirect(url.getUrl());
                 }
@@ -204,31 +238,40 @@ public class Information {
             User user = request.session().attribute("user");
             Map<String,Object> urlMap = new HashMap<>();
             String url = request.queryParams("url-to-shorter");
-            List<URL> urlList = session.attribute("urls");
+            List<Object> urlList = session.attribute("urls");
             boolean statusList = (urlList == null)?false:true;
             URL urlCopy = new URL();
-           if (URLServices.getInstance().checkURL(url)){
+            if (user != null){
+                if (URLServices.getInstance().checkURL(url)){
+                        URL urlAux = new URL(url,user);
+                        URLServices.getInstance().create(urlAux);
+                    if (statusList){
+                        if (URLServices.getInstance().checkURLExistence(urlList,url) == false){
+                            urlList.add(urlCopy);
+                        }
+                    }else{
+                        urlList = new ArrayList<>();
+                        urlList.add(urlAux);
+                    }
+                }
+                request.session().attribute("urls",urlList);
+                urlMap.put("url",request.session().attribute("urls"));
+            }else {
+                TempURL tempURL = new TempURL(url,request.cookies().toString());
+                TempURLServices.getInstance().create(tempURL);
+                if (statusList){
+                    if (URLServices.getInstance().checkURLExistence(urlList,url) == false){
+                        urlList.add(tempURL);
+                    }
+                }else{
+                    urlList = new ArrayList<>();
+                    urlList.add(tempURL);
+                }
+                request.session().attribute("urls",urlList);
+                urlMap.put("url",request.session().attribute("urls"));
+            }
 
-               if (user != null){
-                   URL urlAux = new URL(url,user);
-                   URLServices.getInstance().create(urlAux);
-                   urlCopy = urlAux;
-               }else{
-                   TempURL tempURL = new TempURL(url);
-                   TempURLServices.getInstance().create(tempURL);
-               }
-               if (statusList){
-                   if (URLServices.getInstance().checkURLExistence(urlList,url) == false){
-                       urlList.add(urlCopy);
-                   }
-               }else{
-                   urlList = new ArrayList<>();
-                   urlList.add(urlCopy);
-               }
-               request.session().attribute("urls",urlList);
-               urlMap.put("url",request.session().attribute("urls"));
 
-           }
          response.redirect("/");
             return "";
         });

@@ -3,7 +3,7 @@ $(document).on('click','#select-date',function () {
     var date = $('input.datepicker-here').val()
     $.post('/getStatisctics',{hash:hash,date:date},function (data) {
         var visitsPerHour = JSON.parse(data);
-        alert(visitsPerHour[0])
+
         chart(visitsPerHour);
     })
 

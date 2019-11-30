@@ -45,7 +45,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Features</a>
+                        <a class="nav-link" href="/dashBoard">Features</a>
                     </li>
 
 
@@ -98,7 +98,7 @@
 
                             <div class="input-group-append">
                                 <button class="btn btn-md btn-outline-default m-0 px-3 py-2 z-depth-0 waves-effect " type="submit" id="shorten-url">Recortar</button>
-                            </div>URL
+                            </div>
                         </div>
                         </form>
                     </div>
@@ -120,6 +120,30 @@
 <!--Main layout-->
 <main class="mt-1">
     <div class="container">
+
+        <section>
+            <#if (urls??)>
+            <div class="card">
+                <div class="card-body">
+                    <table class="table table-borderless" id="tableLinks">
+                        <tbody>
+                        <#list urls as x>
+                            <tr class=" ">
+                                <td><a class="urls-section-list" target="_blank" href="${x.url}" style="font-size: 18px; color: blue;">${x.url}</a></td>
+                                <td><a href="link/${x.hash}" target="_blank" style="font-size: 22px;"><span class="badge badge-primary badge-pill" >link/${x.hash}</span></a></td>
+                                <td><button type="button" class="btn btn-sm btn-primary" id="copy"><i class="fas fa-copy"></i>Copiar</button></td>
+                            </tr>
+                        </#list>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+                <hr class="my-5">
+            </#if>
+        </section>
+
 
         <!--Section: Best Features-->
         <!--Section: Best Features-->
@@ -187,18 +211,7 @@
 
         <hr class="my-5">
         <!--Section: Best Features-->
-        <section>
-            <div>
-                <ul id="list-url">
-                    <#if (urls??)>
-                        <#list urls as x>
-                            <li><span><a target="_blank" href="${x.url}">${x.url}-----------------------</a></span><span><a target="_blank" href="link/${x.hash}">theApp.${x.hash}</a></span></li>
-                        </#list>
-                    </#if>
 
-                </ul>
-            </div>
-        </section>
 
 
     </div>
@@ -231,6 +244,16 @@
 <script type="text/javascript" src="/MDB-Free/js/mdb.min.js"></script>
 <!-- Your custom scripts (optional) -->
 <script type="text/javascript" src="/MDB-Free/ajax/ajax.js"></script>
+
+<script>
+    var a = document.getElementsByClassName("urls-section-list");
+    var i;
+    for (i = 0; i < a.length; i++) {
+        if (a[i].innerText.length > 70) {
+            a[i].innerText = a[i].innerText.slice(0, 67) + "...";
+        };
+    };
+</script>
 
 </body>
 </html>

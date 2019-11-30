@@ -20,7 +20,7 @@ public class URL implements Serializable {
     private String url;
     @ManyToOne
     private User user;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "url")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "url",cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Visit> visits = new ArrayList<>();
 
     public URL(){

@@ -23,7 +23,7 @@ public class User implements Serializable {
     private String name;
     private String password;
     private boolean administrator;
-    @OneToMany(fetch=FetchType.LAZY,mappedBy = "user")
+    @OneToMany(fetch=FetchType.LAZY,mappedBy = "user", cascade = CascadeType.ALL,orphanRemoval = true)
     private List<URL> urlList = new ArrayList<>();
 
 

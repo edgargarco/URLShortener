@@ -63,14 +63,16 @@
                 <span>Registrar Usuario</span></a>
         </li>
 
-        <!-- Nav Item - Tables -->
-       <#if user.isAdministrator() == true>
-            <li class="nav-item">
-            <a class="nav-link" href="/listUsers">
-                <i class="fas fa-fw fa-table"></i>
-                <span>Usuarios</span></a>
-        </li>
-       </#if>
+      <#if user??>
+          <!-- Nav Item - Tables -->
+          <#if user.isAdministrator() == true>
+              <li class="nav-item">
+                  <a class="nav-link" href="/listUsers">
+                      <i class="fas fa-fw fa-table"></i>
+                      <span>Usuarios</span></a>
+              </li>
+          </#if>
+      </#if>
 
         <!-- Divider -->
         <hr class="sidebar-divider d-none d-md-block">

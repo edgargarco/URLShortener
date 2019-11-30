@@ -21,13 +21,22 @@ $(document).ready(function () {
     })
 
     $("#tableUSERS tbody tr button#deleteUser").on('click',function () {
-
         var curRow = $(this).closest('tr');
         var username = curRow.find('td:eq(0)').text();
         $('strong#userID').text(username);
         $('a#delete-user').attr("href","/deleteUser/"+username);
+    })
 
-
+    $("#tableLinks tbody tr button#copy").on('click',function () {
+        var curRow = $(this).closest('tr');
+        var link = curRow.find('td:eq(1)').text();
+        alert(link)
+        var textArea = document.createElement("textarea");
+        textArea.value = link;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand("Copy");
+        textArea.remove();
     })
 
 
