@@ -12,10 +12,7 @@ import net.sf.uadetector.service.UADetectorServiceFactory;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Date.*;
 
 
@@ -199,8 +196,8 @@ public class Information {
             return Template.renderFreemarker(urlMap,"/index.ftl");
         });
 
-        get("/link/:id",(request, response) -> {
-            String hash = request.params("id");
+        get("/l",(request, response) -> {
+            String hash = request.queryParams("id");
             if(request.session().attribute("user") != null){
                 URL url = URLServices.getInstance().find(hash);
                 if(url != null){

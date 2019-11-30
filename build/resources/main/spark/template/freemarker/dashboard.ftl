@@ -324,7 +324,7 @@
         <script>
             // Initialize
             var qr = $('input.url-qr').val();
-            jQuery('#qrcode').qrcode("smart-la-vega.technology/link/"+qr);
+            jQuery('#qrcode').qrcode("smart-la-vega.technology/"+qr);
         </script>
 
         <!-- Page level plugins -->
