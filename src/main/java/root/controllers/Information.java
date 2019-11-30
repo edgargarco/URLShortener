@@ -27,16 +27,13 @@ public class Information {
             Session session = request.session();
             Map<String, Object> values = new HashMap<>();
             User user = session.attribute("user");
+            System.out.println(request.params("id"));
 
             if (user.isAdministrator()){
                 User auxUser = UserService.getInstance().find(request.params("id"));
                 if (auxUser.getUsername().equals("admin")){
                     request.session().attribute("error","Usuario administrador no puede ser Eliminado");
                     response.redirect("/listUsers");
-                }else if(auxUser.getUsername().equals(request.params("id"))){
-                    request.session().removeAttribute("error");
-                    UserService.getInstance().delete(request.params("id"));
-                    response.redirect("/closeSession");
                 }else{
                     request.session().removeAttribute("error");
                     UserService.getInstance().delete(request.params("id"));
