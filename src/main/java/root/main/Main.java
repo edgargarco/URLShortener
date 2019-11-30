@@ -7,9 +7,12 @@ import root.controllers.Filter;
 import root.controllers.Information;
 
 import static spark.Spark.staticFiles;
+import static spark.Spark.*;
 
 public class Main {
     public static void main(String[] args) {
+
+
         BoostrapService.getInstance().startDB();
         BoostrapService.getInstance().defaultUser();
         //Public Resources
@@ -19,4 +22,5 @@ public class Main {
         (new Authentication()).authentication();
         (new Information()).informationControllers();
     }
+
 }

@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'application'
+    id 'com.github.johnrengelman.shadow' version '4.0.4'
 }
 
 group 'URLShortener'
@@ -11,6 +12,12 @@ mainClassName = 'root.main.Main'
 
 repositories {
     mavenCentral()
+}
+
+shadowJar {
+    baseName = 'URLSHORTENER'
+    classifier = null
+    version = null
 }
 
 dependencies {
@@ -37,3 +44,5 @@ dependencies {
 // https://mvnrepository.com/artifact/net.sf.uadetector/uadetector-resources
     compile group: 'net.sf.uadetector', name: 'uadetector-resources', version: '2014.10'
 }
+
+
