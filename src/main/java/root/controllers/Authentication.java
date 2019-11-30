@@ -44,10 +44,10 @@ public class Authentication {
                     response.redirect("/");
                     halt();
                 }else {
-                    val.put("incorrectPassword","Contraseña incorrecta!");
+                    val.put("error","Contraseña incorrecta!");
                 }
             }else{
-                val.put("userNotFound", "Nombre de usuario invalido!");
+                val.put("error", "Nombre de usuario invalido!");
             }
             val.put("username", username);
             val.put("password", password);

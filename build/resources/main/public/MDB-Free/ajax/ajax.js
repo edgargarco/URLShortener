@@ -1,7 +1,7 @@
 $(document).ready(function () {
     //alert(":J")
     $("#tableUSERS tbody tr button#editUser").on('click',function () {
-        alert("HOLA")
+
         var curRow = $(this).closest('tr');
         var username = curRow.find('td:eq(0)').text();
         var name = curRow.find('td:eq(1)').text();
@@ -30,7 +30,7 @@ $(document).ready(function () {
     $("#tableLinks tbody tr button#copy").on('click',function () {
         var curRow = $(this).closest('tr');
         var link = curRow.find('td:eq(1)').text();
-        alert(link)
+
         var textArea = document.createElement("textarea");
         textArea.value = link;
         document.body.appendChild(textArea);

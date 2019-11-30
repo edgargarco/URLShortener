@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Blank</title>
+    <title>DashBoard URL</title>
 
     <!-- Custom fonts for this template-->
     <link href="/MDB-Free/dashboard/startbootstrap/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -57,11 +57,7 @@
 
 
         <!-- Nav Item - Charts -->
-        <li class="nav-item">
-            <a class="nav-link" href="#">
-                <i class="fas fa-fw fa-chart-area"></i>
-                <span>Registrar Usuario</span></a>
-        </li>
+
 
       <#if user??>
           <!-- Nav Item - Tables -->
@@ -193,7 +189,7 @@
                                 <#list urls as url>
                                 <tr>
 
-                                <td width="10%"><a target="_blank" href="link/${url.hash}">${url.hash}</a></td>
+                                <td width="10%"><a target="_blank" href="link/${url.hash}">smart-la-vega.technology/link/${url.hash}</a></td>
                                     <td width="15%"><a href="/info/${url.hash}"> <button type="button" class="btn btn-primary btn-sm px-3"><i class="fas fa-info-circle"><span class="ml-2">Info</span></i></button></a></td>
                                     <#if user??>
                                         <#if user.administrator == true >

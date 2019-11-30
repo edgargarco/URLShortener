@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>DashBoard</title>
+    <title>DashBoard URL</title>
 
     <!-- Custom fonts for this template-->
     <link href="/MDB-Free/dashboard/startbootstrap/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -68,11 +68,7 @@
 
         <!-- Nav Item - Charts -->
 
-        <li class="nav-item">
-            <a class="nav-link" href="#">
-                <i class="fas fa-fw fa-chart-area"></i>
-                <span>Registrar Usuario</span></a>
-        </li>
+
 
         <!-- Nav Item - Tables -->
        <#if user??>
@@ -256,7 +252,7 @@
                             </div>
                             <!-- Card Body -->
                            <#if demographicsURL??>
-                                <input type="hidden" value="${demographicsURL.url}" class="url-qr" id="url-qr">
+                                <input type="hidden" value="${demographicsURL.hash}" class="url-qr" id="url-qr">
                            </#if>
                             <div class="card-body">
                                 <div class="chart-pie pt-4 pb-2">
@@ -328,7 +324,7 @@
         <script>
             // Initialize
             var qr = $('input.url-qr').val();
-            jQuery('#qrcode').qrcode(qr);
+            jQuery('#qrcode').qrcode("smart-la-vega.technology/link/"+qr);
         </script>
 
         <!-- Page level plugins -->

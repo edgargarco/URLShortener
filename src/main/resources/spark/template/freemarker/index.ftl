@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Material Design for Bootstrap</title>
+    <title>URL Shortener</title>
     <!-- MDB icon -->
-    <link rel="icon" href="img/mdb-favicon.ico" type="image/x-icon">
+    <link rel="icon" href="https://www.google.com/url?sa=i&source=images&cd=&ved=2ahUKEwiz-I6c8JHmAhUwhuAKHRzQCDIQjRx6BAgBEAQ&url=https%3A%2F%2Fdesign.docuware.com%2Fnode%2F145&psig=AOvVaw31uCWHeuMbybvs1953aZSk&ust=1575201281308651" type="image/x-icon">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
     <!-- Bootstrap core CSS -->
@@ -21,7 +21,7 @@
 <!--Main Navigation-->
 <header>
     <!--Navbar-->
-    <nav class="navbar navbar-expand-lg navbar-dark   fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top"  >
 
         <div class="container">
 
@@ -44,9 +44,11 @@
                             <span class="sr-only">(current)</span>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/dashBoard">Features</a>
-                    </li>
+                    <#if !(user??)>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/dashBoard">DashBoard Temporal</a>
+                        </li>
+                    </#if>
 
 
 
@@ -61,6 +63,9 @@
                        <div class=" ">
                            <a class="nav-item" style="color: white;" href="/dashBoard"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
                        </div>
+                       <div class="ml-4">
+                           <a class="nav-item" style="color: white;" href=""><i class="fas fa-user"></i> ${user.name}</a>
+                       </div>
                </#if>
 
 
@@ -71,6 +76,12 @@
 
     </nav>
     <!--/.Navbar-->
+    <script>
+        window.onscroll = () => {
+            const nav = document.querySelector('.navbar');
+            if(this.scrollY <= 275) nav.className = 'navbar navbar-expand-lg navbar-dark fixed-top'; else nav.className = ' navbar navbar-expand-lg navbar-dark fixed-top  bg-primary';
+        };
+    </script>
     <!--Mask-->
     <!--Mask-->
     <div id="intro" class="view">
@@ -130,7 +141,7 @@
                         <#list urls as x>
                             <tr class=" ">
                                 <td><a class="urls-section-list" target="_blank" href="${x.url}" style="font-size: 18px; color: blue;">${x.url}</a></td>
-                                <td><a href="link/${x.hash}" target="_blank" style="font-size: 22px;"><span class="badge badge-primary badge-pill" >link/${x.hash}</span></a></td>
+                                <td><a href="/link/${x.hash}" target="_blank" style="font-size: 22px;"><span class="badge badge-primary badge-pill" >smart-la-vega.technology/link/${x.hash}</span></a></td>
                                 <td><button type="button" class="btn btn-sm btn-primary" id="copy"><i class="fas fa-copy"></i>Copiar</button></td>
                             </tr>
                         </#list>
@@ -221,10 +232,10 @@
 
 <!--Footer-->
 <!-- Footer -->
-<footer class="page-footer font-small blue pt-4">
+<footer class="page-footer font-small bg-primary pt-4">
 
-    <div class=" text-center py-3">© 2018 Copyright:
-        <a href="https://mdbootstrap.com/education/bootstrap/"> MDBootstrap.com</a>
+    <div class=" text-center py-3">© 2019 Copyright:
+        <a href="https://mdbootstrap.com/education/bootstrap/"> SmartLaVega</a>
     </div>
     <!-- Copyright -->
 

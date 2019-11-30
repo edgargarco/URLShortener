@@ -17,7 +17,12 @@
         <div class="illustration"><i class="icon ion-ios-locked-outline"></i></div>
         <div class="form-group"><input class="form-control" type="text" name="username" placeholder="Email"></div>
         <div class="form-group"><input class="form-control" type="password" name="password" placeholder="Password"></div>
-        <div class="form-group"><button class="btn btn-primary btn-block" type="submit">Log In</button></div><span class="forgot" href="#">Aun no estas registrado? <a style="color: white;" href="/registerUser">Registrate gratis!</a></span><a class="forgot" href="#">Forgot your email or password?</a></form>
+        <#if (error??) >
+            <div class="alert alert-danger" role="alert">
+                ${error}
+            </div>
+        </#if>
+        <div class="form-group"><button class="btn btn-primary btn-block" type="submit">Log In</button></div><span class="forgot" href="#">Aun no estas registrado? <a style="color: white;" href="/registerUser">Registrate gratis!</a></span> </form>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>

@@ -28,12 +28,26 @@ public class Information {
 
         get("/deleteUser/:id", (request, response) -> {
             Session session = request.session();
+            Map<String, Object> values = new HashMap<>();
             User user = session.attribute("user");
-            System.out.println(request.params("id"));
+
             if (user.isAdministrator()){
-                UserService.getInstance().delete(request.params("id"));
+                User auxUser = UserService.getInstance().find(request.params("id"));
+                if (auxUser.getUsername().equals("admin")){
+                    request.session().attribute("error","Usuario administrador no puede ser Eliminado");
+                    response.redirect("/listUsers");
+                }else if(auxUser.getUsername().equals(request.params("id"))){
+                    request.session().removeAttribute("error");
+                    UserService.getInstance().delete(request.params("id"));
+                    response.redirect("/closeSession");
+                }else{
+                    request.session().removeAttribute("error");
+                    UserService.getInstance().delete(request.params("id"));
+                    response.redirect("/listUsers");
+                }
+
             }
-            response.redirect("/listUsers");
+
             return "";
         });
 
@@ -49,7 +63,7 @@ public class Information {
                 user.setPassword(password);
                 user.setAdministrator(isAdmin);
                 UserService.getInstance().update(user);
-                response.redirect("/listUsers");
+
             }
             response.redirect("/listUsers");
             return "";
@@ -63,14 +77,13 @@ public class Information {
             List<User> users = UserService.getInstance().findAll();
             userMap.put("users",users);
             userMap.put("user",user);
+            userMap.put("error",request.session().attribute("error"));
             if (user != null){
                 return Template.renderFreemarker(userMap,"/getUsers.ftl");
             }else {
                 response.redirect("/dashBoard");
                 return "";
             }
-
-
         });
 
         get("/delete-link/:hash",(request, response) -> {
@@ -223,7 +236,8 @@ public class Information {
             Map<String, Object> values = new HashMap<>();
             User user = UserService.getInstance().find(request.queryParams("username"));
             if(user == null){
-                UserService.getInstance().create((new User(request.queryParams("username"),request.queryParams("name"),request.queryParams("password"))));;
+                UserService.getInstance().create((new User(request.queryParams("username"),request.queryParams("name"),request.queryParams("password"))));
+                request.session().attribute("user",UserService.getInstance().find(request.queryParams("username")));
                 response.redirect("/");
                 return "";
             }else{
