@@ -199,7 +199,7 @@
 
                                             </div>
                                             <div class="col-auto">
-                                                <i class="fas fa-glasses fa-2x text-gray-300"></i>
+                                                <i class="fab fa-linux fa-2x text-gray-300"></i>
                                             </div>
                                         </div>
                                     </div>
@@ -225,7 +225,7 @@
 
                                             </div>
                                             <div class="col-auto">
-                                                <i class="fas fa-glasses fa-2x text-gray-300"></i>
+                                                <i class="fab fa-windows fa-2x text-gray-300"></i>
                                             </div>
                                         </div>
                                     </div>
@@ -252,7 +252,7 @@
 
                                             </div>
                                             <div class="col-auto">
-                                                <i class="fas fa-glasses fa-2x text-gray-300"></i>
+                                                <i class="fab fa-apple fa-2x text-gray-300"></i>
                                             </div>
                                         </div>
                                     </div>
@@ -277,7 +277,7 @@
 
                                             </div>
                                             <div class="col-auto">
-                                                <i class="fas fa-glasses fa-2x text-gray-300"></i>
+                                                <i class="fab fa-android fa-2x text-gray-300"></i>
                                             </div>
                                         </div>
                                     </div>
