@@ -67,9 +67,8 @@ public class URLServices extends GenericCRUD<URL> {
     }
 
 
-    public boolean checkURLExistence(List<Object> urls,String url){
+    public boolean checkURLExistence(List<Object> urls, String url){
         boolean state = false;
-
         for (Object auxUrl: urls){
             if (auxUrl instanceof URL){
                 if (((URL)auxUrl).getUrl().equals(url)){
@@ -82,7 +81,6 @@ public class URLServices extends GenericCRUD<URL> {
                     break;
                 }
             }
-
         }
         return state;
     }

@@ -16,12 +16,13 @@ public class TempURL implements Serializable {
     private String hash;
     @Type(type = "text")
     private String url;
-    @OneToMany(fetch = FetchType.EAGER,mappedBy = "url")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "url")
     private List<TempVisits> visits = new ArrayList<>();
 
     public TempURL(){
 
     }
+
     public TempURL(String url,String identifier){
         this.url = url;
         this.setHash(urlHash(this.url,identifier));
@@ -50,7 +51,9 @@ public class TempURL implements Serializable {
     public void setVisits(List<TempVisits> visits) {
         this.visits = visits;
     }
+
     public void addVisits(TempVisits visit){ visits.add(visit);}
+
     public String urlHash(String url,String identifier){
         System.out.println("Identifier"+identifier);
         String toHash = url+identifier;

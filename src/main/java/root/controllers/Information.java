@@ -1,52 +1,86 @@
 package root.controllers;
 
-import net.sf.uadetector.ReadableUserAgent;
 import org.json.JSONArray;
 import root.Services.*;
 import root.URLShortener.*;
 import spark.Session;
-import root.controllers.UserAgent;
 import net.sf.uadetector.*;
 import net.sf.uadetector.service.UADetectorServiceFactory;
 
-import java.sql.Date;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.Date.*;
-
 
 import static spark.Spark.*;
-public class Information {
 
+public class Information {
+    public static String domain = "localhost:4567";
 
     public void informationControllers(){
+        get("/",(request, response) -> {
+            Map<String, Object> urlMap = new HashMap<>();
+            urlMap.put("domain", domain);
+            urlMap.put("urls", request.session().attribute("urls"));
+            urlMap.put("user", request.session().attribute("user"));
+            return Template.renderFreemarker(urlMap,"/index.ftl");
+        });
 
+        post("/url",(request, response) -> {
+            Session session = request.session();
+            User user = session.attribute("user");
+            String url = request.queryParams("url-to-shorter");
+            List<Object> urlList = session.attribute("urls");
+            boolean statusList = (urlList == null)?false:true;
+            if (user != null){
+                if (URLServices.getInstance().checkURL(url)){
+                    URL urlAux = new URL(url, user);
+                    URLServices.getInstance().create(urlAux);
+                    if (statusList){
+                        if (!URLServices.getInstance().checkURLExistence(urlList, url)){
+                            urlList.add(urlAux);
+                        }
+                    } else {
+                        urlList = new ArrayList<>();
+                        urlList.add(urlAux);
+                    }
+                }
+            } else {
+                TempURL tempURL = new TempURL(url, request.cookies().toString());
+                TempURLServices.getInstance().create(tempURL);
+                if (statusList){
+                    if (!URLServices.getInstance().checkURLExistence(urlList, url)){
+                        urlList.add(tempURL);
+                    }
+                }else{
+                    urlList = new ArrayList<>();
+                    urlList.add(tempURL);
+                }
+            }
+            session.attribute("urls", urlList);
+            response.redirect("/");
+            return "";
+        });
 
         get("/deleteUser/:id", (request, response) -> {
-            Session session = request.session();
-            Map<String, Object> values = new HashMap<>();
-            User user = session.attribute("user");
-            System.out.println(request.params("id"));
-
+            User user = request.session().attribute("user");
             if (user.isAdministrator()){
                 User auxUser = UserService.getInstance().find(request.params("id"));
                 if (auxUser.getUsername().equals("admin")){
-                    request.session().attribute("error","Usuario administrador no puede ser Eliminado");
-                    response.redirect("/listUsers");
+                    request.session().attribute("error","Usuario administrador no puede ser eliminado");
                 }else{
                     request.session().removeAttribute("error");
-                    UserService.getInstance().delete(request.params("id"));
-                    response.redirect("/listUsers");
+                    UserService.getInstance().delete(auxUser.getUsername());
+                    System.out.println("Usuario " + auxUser.getUsername() + " eliminado del sistema por " + user.getUsername() +"!");
                 }
-
+                response.redirect("/listUsers");
+            } else {
+                //401 Unathorized
+                response.status(401);
+                return Template.renderFreemarker(message("Stoop!", "401", "You aren't administrator!", "Go to homepage", "/"),"/message.ftl");
             }
-
             return "";
         });
 
         post("/editUser",(request, response) -> {
-            Map<String, Object> values = new HashMap<>();
             String name = request.queryParams("name");
             String username = request.queryParams("username");
             String password = request.queryParams("password");
@@ -57,7 +91,6 @@ public class Information {
                 user.setPassword(password);
                 user.setAdministrator(isAdmin);
                 UserService.getInstance().update(user);
-
             }
             response.redirect("/listUsers");
             return "";
@@ -83,8 +116,6 @@ public class Information {
         get("/delete-link/:hash",(request, response) -> {
             Session session = request.session(true);
             User user = session.attribute("user");
-
-
             if (user != null && user.isAdministrator()){
                 URL url = URLServices.getInstance().find(request.params("hash"));
                 if (url != null){
@@ -95,9 +126,10 @@ public class Information {
                     return "";
                 }
             }
-                response.redirect("/dashBoard");
-                return "";
+            response.redirect("/dashBoard");
+            return "";
         });
+
         post("/getStatisctics",(request, response) -> {
             Session session = request.session();
             User user = session.attribute("user");
@@ -140,8 +172,10 @@ public class Information {
             JSONArray jsonArray = new JSONArray(visitsPerHour);
             return jsonArray;
         });
+
         get("/info/:id",(request, response) -> {
             Map<String,Object> urlMap = new HashMap<>();
+            urlMap.put("domain", domain);
             Session session = request.session();
             String hash = request.params("id");
             User user = session.attribute("user");
@@ -170,135 +204,82 @@ public class Information {
                     }
                 }else{
                     return Template.renderFreemarker(urlMap,"/links.ftl");
-
                 }
-
-
             }
             return "";
         });
+
         get("/dashBoard", (request, response) -> {
             Session session = request.session();
-            Map<String,Object> urlMap = new HashMap<>();
+            Map<String, Object> urlMap = new HashMap<>();
+            urlMap.put("domain", domain);
             User user = session.attribute("user");
-
             urlMap.put("user",user);
             if(user != null){
                 List<URL> urlList = user.urltoGet(user);
-                urlMap.put("urls",urlList);
-                return Template.renderFreemarker(urlMap,"/links.ftl");
+                urlMap.put("urls", urlList);
             }else{
-
-                urlMap.put("urls",session.attribute("urls"));
-                return Template.renderFreemarker(urlMap,"/links.ftl");
-                //response.redirect("/");
-
+                urlMap.put("urls", session.attribute("urls"));
             }
-        });
-        get("/",(request, response) -> {
-            Session session = request.session(true);
-            Map<String,Object> urlMap = new HashMap<>();
-            User user = request.session().attribute("user");
-            urlMap.put("urls",request.session().attribute("urls"));
-            urlMap.put("user",user);
-            return Template.renderFreemarker(urlMap,"/index.ftl");
-        });
-
-        get("/link/:id",(request, response) -> {
-            String hash = request.params("id");
-            System.out.println(hash);
-            if(request.session().attribute("user") != null){
-                URL url = URLServices.getInstance().find(hash);
-                if(url != null){
-                    UserAgentStringParser parser = UADetectorServiceFactory.getResourceModuleParser();
-                    UserAgent userAgent = new UserAgent();
-                    userAgent.printUa(parser.parse(request.userAgent()));
-                    Visit visit = new Visit(url,userAgent.getBrowser(),request.ip(),userAgent.getOs(),userAgent.getDeviceType());
-                    VisitServices.getInstance().create(visit);
-                    response.redirect(url.getUrl());
-                }
-
-            }else{
-                TempURL tempURL = TempURLServices.getInstance().find(hash);
-                if(tempURL != null){
-                    UserAgentStringParser parser = UADetectorServiceFactory.getResourceModuleParser();
-                    UserAgent userAgent = new UserAgent();
-                    userAgent.printUa(parser.parse(request.userAgent()));
-                    TempVisits tempVisits = new TempVisits(tempURL,userAgent.getBrowser(),request.ip(),userAgent.getOs(),userAgent.getDeviceType());
-                    tempURL.addVisits(tempVisits);
-                    TempVisitsServices.getInstance().create(tempVisits);
-                    response.redirect(tempURL.getUrl());
-                }
-
-            }
-            return "";
+            return Template.renderFreemarker(urlMap,"/links.ftl");
         });
 
         get("/registerUser",(request, response) -> {
-            Map<String, Object> values = new HashMap<>();
-            return Template.renderFreemarker(values,"/registration.ftl");
+            return Template.renderFreemarker(null,"/registration.ftl");
         });
+
         post("/register-user", (request, response) -> {
             Map<String, Object> values = new HashMap<>();
-            User user = UserService.getInstance().find(request.queryParams("username"));
+            String username = request.queryParams("username");
+            String name = request.queryParams("name");
+            String password = request.queryParams("password");
+            values.put("username", username);
+            values.put("name", name);
+            values.put("password", password);
+            User user = UserService.getInstance().find(username);
             if(user == null){
-                UserService.getInstance().create((new User(request.queryParams("username"),request.queryParams("name"),request.queryParams("password"))));
-                request.session().attribute("user",UserService.getInstance().find(request.queryParams("username")));
-                response.redirect("/");
-                return "";
-            }else{
-                values.put("error","User not found");
+                if (!username.equals("") && !name.equals("") && !password.equals("")) {
+                    UserService.getInstance().create((new User(username, name, password)));
+                    request.session().attribute("user", UserService.getInstance().find(request.queryParams("username")));
+                    response.redirect("/");
+                } else {
+                    values.put("complete","Bad credentials");
+                    return Template.renderFreemarker(values,"/registration.ftl");
+                }
+            } else {
+                values.put("error","User found");
                 return Template.renderFreemarker(values,"/registration.ftl");
             }
-
-        });
-
-        post("/url",(request, response) -> {
-            Session session = request.session();
-            User user = request.session().attribute("user");
-            Map<String,Object> urlMap = new HashMap<>();
-            String url = request.queryParams("url-to-shorter");
-            List<Object> urlList = session.attribute("urls");
-            boolean statusList = (urlList == null)?false:true;
-            URL urlCopy = new URL();
-            if (user != null){
-                if (URLServices.getInstance().checkURL(url)){
-                        URL urlAux = new URL(url,user);
-                        URLServices.getInstance().create(urlAux);
-                    if (statusList){
-                        if (URLServices.getInstance().checkURLExistence(urlList,url) == false){
-                            urlList.add(urlCopy);
-                        }
-                    }else{
-                        urlList = new ArrayList<>();
-                        urlList.add(urlAux);
-                    }
-                }
-                request.session().attribute("urls",urlList);
-                urlMap.put("url",request.session().attribute("urls"));
-            }else {
-                TempURL tempURL = new TempURL(url,request.cookies().toString());
-                TempURLServices.getInstance().create(tempURL);
-                if (statusList){
-                    if (URLServices.getInstance().checkURLExistence(urlList,url) == false){
-                        urlList.add(tempURL);
-                    }
-                }else{
-                    urlList = new ArrayList<>();
-                    urlList.add(tempURL);
-                }
-                request.session().attribute("urls",urlList);
-                urlMap.put("url",request.session().attribute("urls"));
-            }
-
-
-         response.redirect("/");
             return "";
         });
-    }
 
-    public boolean chechListSession(List<URL> urls){
-        return (urls == null) ? false:true;
+        //This controller needs to be the last one
+        get("/:id",(request, response) -> {
+            String hash = request.params("id");
+            URL url = URLServices.getInstance().find(hash);
+            UserAgentStringParser parser = UADetectorServiceFactory.getResourceModuleParser();
+            UserAgent userAgent = new UserAgent();
+            userAgent.printUa(parser.parse(request.userAgent()));
+            String urlResponse = "";
+            if (url == null) {
+                TempURL tempURL = TempURLServices.getInstance().find(hash);
+                if(tempURL != null){
+                    TempVisits tempVisits = new TempVisits(tempURL,userAgent.getBrowser(),request.ip(),userAgent.getOs(),userAgent.getDeviceType());
+                    TempVisitsServices.getInstance().create(tempVisits);
+                    urlResponse = tempURL.getUrl();
+                } else {
+                    //404 NOT FOUND
+                    response.status(404);
+                    return Template.renderFreemarker(message("Oops!", "404", "The Page can't be found", "Go to homepage", "/"),"/message.ftl");
+                }
+            } else {
+                Visit visit = new Visit(url,userAgent.getBrowser(),request.ip(),userAgent.getOs(),userAgent.getDeviceType());
+                VisitServices.getInstance().create(visit);
+                urlResponse = url.getUrl();
+            }
+            response.redirect(urlResponse);
+            return "";
+        });
     }
 
     public LocalDate dates(String date){
@@ -307,5 +288,13 @@ public class Information {
         return localDate;
     }
 
-
+    public Map<String, Object> message(String adv, String status, String errorMessage, String buttonMessage, String returnPath) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("adv", adv);
+        map.put("code", status);
+        map.put("error", errorMessage);
+        map.put("button", buttonMessage);
+        map.put("returnPath", returnPath);
+        return map;
+    }
 }

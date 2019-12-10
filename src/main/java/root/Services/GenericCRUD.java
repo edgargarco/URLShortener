@@ -1,19 +1,11 @@
 package root.Services;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import root.URLShortener.URL;
-import root.URLShortener.User;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Id;
 import javax.persistence.Persistence;
 import javax.persistence.criteria.CriteriaQuery;
 import java.lang.reflect.Field;
-import java.sql.SQLException;
 import java.util.List;
 
 public class GenericCRUD<T> {
@@ -53,7 +45,6 @@ public class GenericCRUD<T> {
                 }catch (IllegalAccessException e){
                     e.printStackTrace();
                 }
-
             }
         }
         return null;
@@ -66,7 +57,7 @@ public class GenericCRUD<T> {
                 System.out.println("La entidad a guardar existe, no creada.");
                 return;
             }
-        }catch (IllegalArgumentException ie){
+        } catch (IllegalArgumentException ie){
             System.out.println("Parametro ilegal.");
         }
         entityManager.getTransaction().begin();
@@ -79,7 +70,6 @@ public class GenericCRUD<T> {
         }finally {
             entityManager.close();
         }
-
     }
 
     public void update(T entity){
@@ -103,16 +93,13 @@ public class GenericCRUD<T> {
             T entity = em.find(entityClass, entityID);
             em.remove(entity);
             em.getTransaction().commit();
-
         }catch (Exception ex){
             em.getTransaction().rollback();
-
             throw  ex;
         } finally {
             em.close();
         }
     }
-
 
     public List<T> findAll(){
         EntityManager entityManager = getEntityManager();
@@ -126,11 +113,4 @@ public class GenericCRUD<T> {
             entityManager.close();
         }
     }
-
-
-
-
-
-
-
 }

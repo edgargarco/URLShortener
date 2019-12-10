@@ -34,7 +34,7 @@ public class URL implements Serializable {
     public URL(String url, User user) {
         this.url = url;
         this.user = user;
-        this.setHash(urlHash(url,user.getUsername()));
+        this.setHash(urlHash(url, user.getUsername()));
     }
 
     public String getHash() {

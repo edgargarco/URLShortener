@@ -17,36 +17,37 @@ public class Authentication {
         get("/login",(request,response)->{
             if (request.session().attribute("user") == null){
                 return Template.renderFreemarker(null,"/login.ftl");
-            }else{
-                response.redirect("/");
-                return "";
             }
-
+            response.redirect("/");
+            return "";
         });
 
         post("/authenticate",(request, response) -> {
-            Map<String,Object> val = new HashMap<>();
+            Map<String, Object> val = new HashMap<>();
             String username = request.queryParams("username");
             String password = request.queryParams("password");
             Boolean rememberMe = (request.queryParams("remember") == null) ?false:true;
             User user = UserService.getInstance().find(username);
             if (user != null){
                 if (user.getPassword().equals(password)){
-                    request.session().invalidate();
+                    if (request.session() != null) {
+                        request.session().invalidate();
+                    }
                     Session session = request.session(true);
-                    session.attribute("user",user);
+                    session.attribute("user", user);
                     if (rememberMe){
                         BasicTextEncryptor basicTextEncryptor = new BasicTextEncryptor();
                         basicTextEncryptor.setPasswordCharArray(encryptPass.toCharArray());
                         response.cookie("user",basicTextEncryptor.encrypt(user.getUsername()),30,false);
-
                     }
+                    System.out.println("Usuario " + user.getUsername() + " a entrado al sistema!");
                     response.redirect("/");
-                    halt();
                 }else {
+                    System.out.println("Usuario " + user.getUsername() + " ingreso una contraseña incorrecta!");
                     val.put("error","Contraseña incorrecta!");
                 }
             }else{
+                System.out.println("Intento de iniciar sesion con usuario " + username + " y password " + password);
                 val.put("error", "Nombre de usuario invalido!");
             }
             val.put("username", username);
@@ -64,5 +65,4 @@ public class Authentication {
             return "";
         });
     }
-
 }

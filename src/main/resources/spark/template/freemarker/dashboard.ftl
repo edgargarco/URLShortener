@@ -473,7 +473,7 @@
         <script>
             // Initialize
             var qr = $('input.url-qr').val();
-            jQuery('#qrcode').qrcode("smart-la-vega.technology/link/"+qr);
+            jQuery('#qrcode').qrcode("${domain}/"+qr);
         </script>
 
         <!-- Page level plugins -->

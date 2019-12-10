@@ -21,7 +21,6 @@ public class BoostrapService {
             Server.createTcpServer("-tcpPort", "9092", "-tcpAllowOthers", "-tcpDaemon").start();
         }catch (SQLException e){
             System.out.println("Problem Starting DB...\n"+ e.getMessage());
-
         }
     }
 
@@ -40,6 +39,4 @@ public class BoostrapService {
             UserService.getInstance().create(user);
         }
     }
-
-
 }

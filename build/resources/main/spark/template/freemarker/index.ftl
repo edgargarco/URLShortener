@@ -101,7 +101,7 @@
                         <hr class="hr-light">
 
                         <!-- Description -->
-                        <form action="url" method="post">
+                        <form action="/url" method="post">
                         <div class="input-group mb-3">
 
                                <input type="text" class="form-control" placeholder="URL a recortar" aria-label="Recipient's username"
@@ -141,7 +141,7 @@
                         <#list urls as x>
                             <tr class=" ">
                                 <td><a class="urls-section-list" target="_blank" href="${x.url}" style="font-size: 18px; color: blue;">${x.url}</a></td>
-                                <td><a href="/link/${x.hash}" target="_blank" style="font-size: 22px;"><span class="badge badge-primary badge-pill" >smart-la-vega.technology/link/${x.hash}</span></a></td>
+                                <td><a href="/${x.hash}" target="_blank" style="font-size: 22px;"><span class="badge badge-primary badge-pill" >${domain}/${x.hash}</span></a></td>
                                 <td><button type="button" class="btn btn-sm btn-primary" id="copy"><i class="fas fa-copy"></i>Copiar</button></td>
                             </tr>
                         </#list>
@@ -172,7 +172,8 @@
                     <!-- Description -->
                     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quasi voluptate hic provident nulla repellat
                         facere esse molestiae ipsa labore porro minima quam quaerat rem, natus repudiandae debitis est
-                        sit pariatur.</p>
+                        sit pariatur.
+                    </p>
 
                 </div>
                 <!--Grid column-->
