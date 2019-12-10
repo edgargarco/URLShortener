@@ -3,6 +3,7 @@ package root.controllers;
 import org.json.JSONArray;
 import root.Services.*;
 import root.URLShortener.*;
+import spark.Redirect;
 import spark.Session;
 import net.sf.uadetector.*;
 import net.sf.uadetector.service.UADetectorServiceFactory;
@@ -80,15 +81,15 @@ public class Information {
             return "";
         });
 
-        post("/editUser",(request, response) -> {
+        post("/editUser", (request, response) -> {
             String name = request.queryParams("name");
             String username = request.queryParams("username");
             String password = request.queryParams("password");
             Boolean isAdmin = (request.queryParams("materialUncheckedAdmin") == null)?false:Boolean.parseBoolean(request.queryParams("materialUncheckedAdmin"));
             if (!username.equals("admin")){
                 User user =  UserService.getInstance().find(username);
-                user.setName(name);
-                user.setPassword(password);
+                user.setName((!name.equals(""))?name:user.getName());
+                user.setPassword((!password.equals(""))?password:user.getPassword());
                 user.setAdministrator(isAdmin);
                 UserService.getInstance().update(user);
             }
@@ -96,35 +97,33 @@ public class Information {
             return "";
         });
 
-
         get("/listUsers",(request, response) -> {
-            Session session = request.session();
-            User user = session.attribute("user");
-            Map<String,Object> userMap = new HashMap<>();
+            User user = request.session().attribute("user");
+            Map<String, Object> userMap = new HashMap<>();
             List<User> users = UserService.getInstance().findAll();
-            userMap.put("users",users);
-            userMap.put("user",user);
-            userMap.put("error",request.session().attribute("error"));
+            userMap.put("users", users);
+            userMap.put("user", user);
+            userMap.put("error", request.session().attribute("error"));
             if (user != null){
                 return Template.renderFreemarker(userMap,"/getUsers.ftl");
-            }else {
-                response.redirect("/dashBoard");
-                return "";
             }
+            response.redirect("/dashBoard");
+            return "";
         });
 
         get("/delete-link/:hash",(request, response) -> {
-            Session session = request.session(true);
-            User user = session.attribute("user");
+            User user = request.session().attribute("user");
             if (user != null && user.isAdministrator()){
                 URL url = URLServices.getInstance().find(request.params("hash"));
                 if (url != null){
                     VisitServices.getInstance().deleteVisits(request.params("hash"));
                     URLServices.getInstance().delete(request.params("hash"));
-                    session.attribute("urls", user.urltoGet(user));
-                    response.redirect("/dashBoard");
-                    return "";
+                    request.session().attribute("urls", user.urltoGet(user));
                 }
+            } else {
+                //401 Unathorized
+                response.status(401);
+                return Template.renderFreemarker(message("Stoop!", "401", "You aren't administrator!", "Go to dashboard", "/dashBoard"),"/message.ftl");
             }
             response.redirect("/dashBoard");
             return "";
@@ -210,16 +209,15 @@ public class Information {
         });
 
         get("/dashBoard", (request, response) -> {
-            Session session = request.session();
             Map<String, Object> urlMap = new HashMap<>();
-            urlMap.put("domain", domain);
-            User user = session.attribute("user");
+            User user = request.session().attribute("user");
             urlMap.put("user",user);
+            urlMap.put("domain", domain);
             if(user != null){
                 List<URL> urlList = user.urltoGet(user);
                 urlMap.put("urls", urlList);
             }else{
-                urlMap.put("urls", session.attribute("urls"));
+                urlMap.put("urls", request.session().attribute("urls"));
             }
             return Template.renderFreemarker(urlMap,"/links.ftl");
         });
@@ -240,7 +238,9 @@ public class Information {
             if(user == null){
                 if (!username.equals("") && !name.equals("") && !password.equals("")) {
                     UserService.getInstance().create((new User(username, name, password)));
-                    request.session().attribute("user", UserService.getInstance().find(request.queryParams("username")));
+                    user = UserService.getInstance().find(request.queryParams("username"));
+                    request.session(true).attribute("user", user);
+                    System.out.println("Usuario " + user.getUsername() + " a entrado al sistema!");
                     response.redirect("/");
                 } else {
                     values.put("complete","Bad credentials");

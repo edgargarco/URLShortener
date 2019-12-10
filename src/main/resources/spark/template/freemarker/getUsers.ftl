@@ -32,7 +32,7 @@
     <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
         <!-- Sidebar - Brand -->
-        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/app">
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
             <div class="sidebar-brand-icon rotate-n-15">
                 <i class="fas fa-laugh-wink"></i>
             </div>
@@ -292,7 +292,7 @@
                     <label for="inputMDEx" class="name-input">Nombre completo</label>
                 </div>
                 <div class="md-form">
-                    <input type="password" id=" " class="form-control password-input" name="password" required>
+                    <input type="password" id=" " class="form-control password-input" name="password">
                     <label for="inputMDEx" class="password-input">Password</label>
                 </div>
 

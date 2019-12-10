@@ -15,8 +15,8 @@
     <form method="post" action="/authenticate">
         <h2 class="sr-only">Login Form</h2>
         <div class="illustration"><i class="icon ion-ios-locked-outline"></i></div>
-        <div class="form-group"><input class="form-control" type="text" name="username" placeholder="Email"></div>
-        <div class="form-group"><input class="form-control" type="password" name="password" placeholder="Password"></div>
+        <div class="form-group"><input class="form-control" type="text" name="username" placeholder="Username" value="<#if (username??)>${username}</#if>" required></div>
+        <div class="form-group"><input class="form-control" type="password" name="password" placeholder="Password" value="<#if (password??)>${password}</#if>" required></div>
         <#if (error??) >
             <div class="alert alert-danger" role="alert">
                 ${error}

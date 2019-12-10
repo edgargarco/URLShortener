@@ -15,9 +15,9 @@
     <form method="post" action="/register-user">
         <h2 class="sr-only">Registro de usuario</h2>
         <div class="illustration"><i class="icon ion-ios-locked-outline"></i></div>
-        <div class="form-group"><input class="form-control" type="text" name="username" placeholder="Username" value="<#if (username??)>${username}</#if>"></div>
-        <div class="form-group"><input class="form-control" type="text" name="name" placeholder="Nombre Completo" value="<#if (name??)>${name}</#if>"></div>
-        <div class="form-group"><input class="form-control" type="password" name="password" placeholder="Password" value="<#if (password??)>${password}</#if>"></div>
+        <div class="form-group"><input class="form-control" type="text" name="username" placeholder="Username" value="<#if (username??)>${username}</#if>" required></div>
+        <div class="form-group"><input class="form-control" type="text" name="name" placeholder="Nombre Completo" value="<#if (name??)>${name}</#if>" required></div>
+        <div class="form-group"><input class="form-control" type="password" name="password" placeholder="Password" value="<#if (password??)>${password}</#if>" required></div>
         <#if (error??) >
             <div class="alert alert-danger" role="alert">
                 Usuario ha sido tomado!

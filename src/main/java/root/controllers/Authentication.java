@@ -1,4 +1,5 @@
 package root.controllers;
+
 import org.jasypt.util.text.BasicTextEncryptor;
 import root.Services.UserService;
 import root.URLShortener.User;
@@ -46,7 +47,7 @@ public class Authentication {
                     System.out.println("Usuario " + user.getUsername() + " ingreso una contraseña incorrecta!");
                     val.put("error","Contraseña incorrecta!");
                 }
-            }else{
+            } else {
                 System.out.println("Intento de iniciar sesion con usuario " + username + " y password " + password);
                 val.put("error", "Nombre de usuario invalido!");
             }
