@@ -13,7 +13,7 @@ import java.util.*;
 import static spark.Spark.*;
 
 public class Information {
-    public static String domain = "localhost:4567";
+    public static final String domain = "localhost:4567";
 
     public void informationControllers(){
         get("/",(request, response) -> {
