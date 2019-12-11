@@ -1,5 +1,8 @@
 package root.URLShortener;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.google.gson.annotations.Expose;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.text.ParseException;
@@ -13,8 +16,10 @@ import java.util.Date;
 public class Visit implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Expose
     private int id;
     @ManyToOne
+    @JsonBackReference
     private URL url;
     private String browser;
     private String ip;

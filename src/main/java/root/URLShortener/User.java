@@ -1,8 +1,6 @@
 package root.URLShortener;
 
-
-
-
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import root.Services.URLServices;
 
 import javax.persistence.*;
@@ -24,6 +22,7 @@ public class User implements Serializable {
     private String password;
     private boolean administrator;
     @OneToMany(fetch=FetchType.LAZY,mappedBy = "user", cascade = CascadeType.ALL,orphanRemoval = true)
+    @JsonBackReference
     private List<URL> urlList = new ArrayList<>();
 
 

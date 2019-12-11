@@ -59,8 +59,6 @@ public class URLServices extends GenericCRUD<URL> {
         return query.getResultList();
     }
 
-
-
     public void deleteURL(String hash){
         EntityManager entityManager = getEntityManager();
         Query query = entityManager.createQuery("DELETE FROM URL  c WHERE c.hash = :hash ");

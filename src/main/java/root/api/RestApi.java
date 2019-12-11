@@ -1,11 +1,20 @@
 package root.api;
 
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.util.JsonGeneratorDelegate;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import root.Services.URLServices;
 import root.Services.UserService;
+import root.URLShortener.URL;
 import root.URLShortener.User;
 import root.controllers.Information;
 
+import javax.persistence.EntityManager;
+import java.util.List;
 
 import static spark.Spark.*;
 import static spark.Spark.halt;
@@ -41,8 +50,22 @@ public class RestApi {
                 response.type("application/json");
             }));
 
+            path("/url", () -> {
 
-
+                get("/:username", (request, response) -> {
+                    String username = request.params("username");
+                    User user = UserService.getInstance().find(username);
+                    if (user != null) {
+                        ObjectMapper objectMapper = new ObjectMapper();
+                        List<URL> urls = user.urltoGet(user);
+                        String json = objectMapper.writeValueAsString(urls);
+                        System.out.println(json);
+                        return json;
+                    } else {
+                        return "Este usuario no existe!";
+                    }
+                });
+            });
         });
     }
 }

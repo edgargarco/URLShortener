@@ -1,10 +1,8 @@
 package root.URLShortener;
 
-import org.h2.engine.Session;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.google.gson.annotations.Expose;
 import org.hibernate.annotations.Type;
-import root.Services.URLServices;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -19,8 +17,10 @@ public class URL implements Serializable {
     @Type(type = "text")
     private String url;
     @ManyToOne
+    @JsonManagedReference
     private User user;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "url",cascade = CascadeType.ALL,orphanRemoval = true)
+    @JsonManagedReference
     private List<Visit> visits = new ArrayList<>();
 
     public URL(){
