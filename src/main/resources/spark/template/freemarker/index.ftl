@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="/MDB-Free/css/mdb.min.css">
     <!-- Your custom styles (optional) -->
     <link rel="stylesheet" href="/MDB-Free/css/style.css">
+    <script src="https://cdn.jsdelivr.net/combine/npm/react@16/umd/react.production.min.js,npm/react-dom@16/umd/react-dom.production.min.js,npm/styled-components@4/dist/styled-components.min.js,npm/@microlink/mql@latest/dist/mql.min.js,npm/@microlink/vanilla@latest/dist/microlink.min.js"></script>
 </head>
 <body>
 
@@ -104,9 +105,7 @@
                         <form action="/url" method="post">
                         <div class="input-group mb-3">
 
-                               <input type="text" class="form-control" placeholder="URL a recortar" aria-label="Recipient's username"
-                                      aria-describedby="button-addon2" name="url-to-shorter" id="urlInput">
-
+                               <input type="text" class="form-control preview" placeholder="URL a recortar" aria-label="Recipient's username" aria-describedby="button-addon2" name="url-to-shorter" id="urlInput">
                             <div class="input-group-append">
                                 <button class="btn btn-md btn-outline-default m-0 px-3 py-2 z-depth-0 waves-effect " type="submit" id="shorten-url">Recortar</button>
                             </div>
@@ -140,9 +139,9 @@
                         <tbody>
                         <#list urls as x>
                             <tr class=" ">
-                                <td><a class="urls-section-list" target="_blank" href="${x.url}" style="font-size: 18px; color: blue;">${x.url}</a></td>
+                                <td><a class="urls-section-list link-previews" target="_blank" href="${x.url}" style="font-size: 18px; color: blue;">${x.url}</a></td>
                                 <td><a href="/${x.hash}" target="_blank" style="font-size: 22px;"><span class="badge badge-primary badge-pill" >${domain}/${x.hash}</span></a></td>
-                                <td><button type="button" class="btn btn-sm btn-primary" id="copy"><i class="fas fa-copy"></i>Copiar</button></td>
+                                <td><button type="button" class="btn btn-sm btn-primary" id="copy"><i class="fas fa-copy"></i> Copiar</button></td>
                             </tr>
                         </#list>
                         </tbody>
@@ -265,6 +264,15 @@
             a[i].innerText = a[i].innerText.slice(0, 67) + "...";
         };
     };
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function (event) {
+        // Example 2
+        // Replace all elements with `link-preview` class
+        // for microlink cards
+        microlink('.link-previews')
+    })
 </script>
 
 </body>

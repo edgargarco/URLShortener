@@ -3,7 +3,6 @@ package root.controllers;
 import org.json.JSONArray;
 import root.Services.*;
 import root.URLShortener.*;
-import spark.Redirect;
 import spark.Session;
 import net.sf.uadetector.*;
 import net.sf.uadetector.service.UADetectorServiceFactory;
@@ -14,12 +13,14 @@ import java.util.*;
 import static spark.Spark.*;
 
 public class Information {
-    public static final String domain = "localhost:4567";
+    public static final String DOMAIN = "localhost:4567";
+    public final static int UNAUTHORIZED = 401;
+    public final static int NOT_FOUND = 404;
 
     public void informationControllers(){
         get("/",(request, response) -> {
             Map<String, Object> urlMap = new HashMap<>();
-            urlMap.put("domain", domain);
+            urlMap.put("domain", DOMAIN);
             urlMap.put("urls", request.session().attribute("urls"));
             urlMap.put("user", request.session().attribute("user"));
             return Template.renderFreemarker(urlMap,"/index.ftl");
@@ -75,8 +76,8 @@ public class Information {
                 response.redirect("/listUsers");
             } else {
                 //401 Unathorized
-                response.status(401);
-                return Template.renderFreemarker(message("Stoop!", "401", "You aren't administrator!", "Go to homepage", "/"),"/message.ftl");
+                response.status(UNAUTHORIZED);
+                return Template.renderFreemarker(message("Stoop!", UNAUTHORIZED + "", "You aren't administrator!", "Go to homepage", "/"),"/message.ftl");
             }
             return "";
         });
@@ -122,8 +123,8 @@ public class Information {
                 }
             } else {
                 //401 Unathorized
-                response.status(401);
-                return Template.renderFreemarker(message("Stoop!", "401", "You aren't administrator!", "Go to dashboard", "/dashBoard"),"/message.ftl");
+                response.status(UNAUTHORIZED);
+                return Template.renderFreemarker(message("Stoop!", UNAUTHORIZED + "", "You aren't administrator!", "Go to dashboard", "/dashBoard"),"/message.ftl");
             }
             response.redirect("/dashBoard");
             return "";
@@ -174,7 +175,7 @@ public class Information {
 
         get("/info/:id",(request, response) -> {
             Map<String,Object> urlMap = new HashMap<>();
-            urlMap.put("domain", domain);
+            urlMap.put("domain", DOMAIN);
             Session session = request.session();
             String hash = request.params("id");
             User user = session.attribute("user");
@@ -212,7 +213,7 @@ public class Information {
             Map<String, Object> urlMap = new HashMap<>();
             User user = request.session().attribute("user");
             urlMap.put("user",user);
-            urlMap.put("domain", domain);
+            urlMap.put("domain", DOMAIN);
             if(user != null){
                 List<URL> urlList = user.urltoGet(user);
                 urlMap.put("urls", urlList);
@@ -222,9 +223,7 @@ public class Information {
             return Template.renderFreemarker(urlMap,"/links.ftl");
         });
 
-        get("/registerUser",(request, response) -> {
-            return Template.renderFreemarker(null,"/registration.ftl");
-        });
+        get("/registerUser",(request, response) -> Template.renderFreemarker(null,"/registration.ftl"));
 
         post("/register-user", (request, response) -> {
             Map<String, Object> values = new HashMap<>();
@@ -269,8 +268,8 @@ public class Information {
                     urlResponse = tempURL.getUrl();
                 } else {
                     //404 NOT FOUND
-                    response.status(404);
-                    return Template.renderFreemarker(message("Oops!", "404", "The Page can't be found", "Go to homepage", "/"),"/message.ftl");
+                    response.status(NOT_FOUND);
+                    return Template.renderFreemarker(message("Oops!", NOT_FOUND + "", "The Page can't be found", "Go to homepage", "/"),"/message.ftl");
                 }
             } else {
                 Visit visit = new Visit(url,userAgent.getBrowser(),request.ip(),userAgent.getOs(),userAgent.getDeviceType());
