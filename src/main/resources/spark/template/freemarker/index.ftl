@@ -16,6 +16,12 @@
     <!-- Your custom styles (optional) -->
     <link rel="stylesheet" href="/MDB-Free/css/style.css">
     <script src="https://cdn.jsdelivr.net/combine/npm/react@16/umd/react.production.min.js,npm/react-dom@16/umd/react-dom.production.min.js,npm/styled-components@4/dist/styled-components.min.js,npm/@microlink/mql@latest/dist/mql.min.js,npm/@microlink/vanilla@latest/dist/microlink.min.js"></script>
+    <style>
+        .microlink-card {
+            font-family: 'Nitti, "Microsoft YaHei", 微软雅黑, monospace';
+            max-width: 100%;
+        }
+    </style>
 </head>
 <body>
 
@@ -91,7 +97,7 @@
 
             <div class="container-fluid d-flex align-items-center justify-content-center h-100 ">
 
-                <div class="row   justify-content-center text-center w-50">
+                <div class="row justify-content-center text-center w-50">
 
                     <div class="col-md-12">
 
@@ -103,13 +109,16 @@
 
                         <!-- Description -->
                         <form action="/url" method="post">
-                        <div class="input-group mb-3">
+                            <div class="input-group">
+                                <input type="text" class="form-control preview" placeholder="URL a recortar" aria-label="Recipient's username" aria-describedby="button-addon2" name="url-to-shorter" id="urlInput">
+                                <div class="input-group-append">
+                                    <button class="btn btn-md btn-outline-default m-0 px-3 py-2 z-depth-0 waves-effect " type="submit" id="shorten-url">Recortar</button>
+                                </div>
 
-                               <input type="text" class="form-control preview" placeholder="URL a recortar" aria-label="Recipient's username" aria-describedby="button-addon2" name="url-to-shorter" id="urlInput">
-                            <div class="input-group-append">
-                                <button class="btn btn-md btn-outline-default m-0 px-3 py-2 z-depth-0 waves-effect " type="submit" id="shorten-url">Recortar</button>
                             </div>
-                        </div>
+                            <div class="input-group">
+                                <a href="" id="previewLink"></a>
+                            </div>
                         </form>
                     </div>
 
@@ -271,8 +280,18 @@
         // Example 2
         // Replace all elements with `link-preview` class
         // for microlink cards
-        microlink('.link-previews')
+        microlink('.link-previews', {
+            size: 'small'
+        })
     })
+</script>
+
+<script>
+    document.getElementById('urlInput').addEventListener('input', function (e) {
+        var preview = document.getElementById('previewLink');
+        preview.href = e.srcElement.value;
+        microlink('#previewLink')
+    });
 </script>
 
 </body>
