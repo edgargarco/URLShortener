@@ -20,27 +20,33 @@ public class Information {
     public void informationControllers(){
 
         get("/listAllUrl",(request, response) -> {
-            if (request.session().attribute("user") != null){
+            User user = request.session().attribute("user");
+            if (user != null && user.isAdministrator()){
                 List<URL> urlList = URLServices.getInstance().findAll();
+                List<TempURL> tempURLS = TempURLServices.getInstance().findAll();
                 Map<String,Object> urlMap = new HashMap<>();
-                urlMap.put("urls",urlList);
+                urlMap.put("urlsUsers", urlList);
+                urlMap.put("tempUrls", tempURLS);
                 urlMap.put("domain", DOMAIN);
-                urlMap.put("user", request.session().attribute("user")); 
-                return Template.renderFreemarker(urlMap,"allURL.ftl");
+                urlMap.put("user", user);
+                return Template.renderFreemarker(urlMap,"/allURL.ftl");
             }else {
                 response.redirect("/dashBoard");
                 return "";
             }
-
-
         });
-
 
         get("/",(request, response) -> {
             Map<String, Object> urlMap = new HashMap<>();
+            User user = request.session().attribute("user");
             urlMap.put("domain", DOMAIN);
-            urlMap.put("urls", request.session().attribute("urls"));
-            urlMap.put("user", request.session().attribute("user"));
+            if (user != null) {
+                List<URL> urls = user.urltoGet(user);
+                urlMap.put("urls", (urls.size() > 0)?urls:null);
+                urlMap.put("user", user);
+            } else {
+                urlMap.put("urls", request.session().attribute("urls"));
+            }
             return Template.renderFreemarker(urlMap,"/index.ftl");
         });
 
@@ -132,19 +138,24 @@ public class Information {
 
         get("/delete-link/:hash",(request, response) -> {
             User user = request.session().attribute("user");
+            String hash = request.params("hash");
             if (user != null && user.isAdministrator()){
-                URL url = URLServices.getInstance().find(request.params("hash"));
+                URL url = URLServices.getInstance().find(hash);
                 if (url != null){
-                    VisitServices.getInstance().deleteVisits(request.params("hash"));
-                    URLServices.getInstance().delete(request.params("hash"));
-                    request.session().attribute("urls", user.urltoGet(user));
+                    VisitServices.getInstance().deleteVisits(hash);
+                    URLServices.getInstance().delete(hash);
+                } else {
+                    TempURL tempURL = TempURLServices.getInstance().find(hash);
+                    if (tempURL != null) {
+                        TempURLServices.getInstance().delete(hash);
+                    }
                 }
             } else {
                 //401 Unathorized
                 response.status(UNAUTHORIZED);
                 return Template.renderFreemarker(message("Stoop!", UNAUTHORIZED + "", "You aren't administrator!", "Go to dashboard", "/dashBoard"),"/message.ftl");
             }
-            response.redirect("/dashBoard");
+            response.redirect(request.headers("referer"));
             return "";
         });
 

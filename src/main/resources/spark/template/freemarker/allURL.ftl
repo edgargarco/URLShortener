@@ -165,7 +165,7 @@
             <div class="container-fluid">
 
                 <!-- Page Heading -->
-                <h1 class="h3 mb-4 text-gray-800">Your Short URL's</h1>
+                <h1 class="h3 mb-4 text-gray-800">Short URL's</h1>
                 <div class="card">
 
                     <!--Card content-->
@@ -192,8 +192,8 @@
 
                             <!-- Table body -->
                             <tbody>
-                            <#if urls?? >
-                                <#list urls as url>
+                            <#if urlsUsers?? >
+                                <#list urlsUsers as url>
                                     <tr>
 
                                         <td width="10%"><a target="_blank" href="/${url.hash}">${domain}/${url.hash}</a></td>
@@ -209,6 +209,22 @@
                                 </#list>
                             </#if>
 
+                            <#if tempUrls?? >
+                                <#list tempUrls as url>
+                                    <tr>
+
+                                        <td width="10%"><a target="_blank" href="/${url.hash}">${domain}/${url.hash}</a></td>
+                                        <td width="15%"><a href="/info/${url.hash}"> <button type="button" class="btn btn-primary btn-sm px-3"><i class="fas fa-info-circle"><span class="ml-2">Info</span></i></button></a></td>
+                                        <td width="10%">N/A</td>
+
+                                        <#if user??>
+                                            <#if user.administrator == true >
+                                                <td width="15%"><a href="/delete-link/${url.hash}"><button type="button" class="btn btn-primary btn-sm px-3 ml-2" data-toggle="modal" data-target="#basicExampleModal"><i class="fas fa-trash"></i></button></a></td>
+                                            </#if>
+                                        </#if>
+                                    </tr>
+                                </#list>
+                            </#if>
                             </tbody>
                             <!-- Table body -->
                         </table>

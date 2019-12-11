@@ -2,10 +2,7 @@ package root.URLShortener;
 
 import org.hibernate.annotations.Type;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +13,7 @@ public class TempURL implements Serializable {
     private String hash;
     @Type(type = "text")
     private String url;
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "url")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "url", cascade = CascadeType.REMOVE)
     private List<TempVisits> visits = new ArrayList<>();
 
     public TempURL(){
