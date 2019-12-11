@@ -1,11 +1,13 @@
 package root.controllers;
 
+import io.jsonwebtoken.security.Keys;
 import org.json.JSONArray;
 import root.Services.*;
 import root.URLShortener.*;
 import spark.Session;
 import net.sf.uadetector.*;
 import net.sf.uadetector.service.UADetectorServiceFactory;
+import io.jsonwebtoken.*;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -13,9 +15,11 @@ import java.util.*;
 import static spark.Spark.*;
 
 public class Information {
+    public final static String KEY = "asd12D1234dfr123@#4Fsdcasdd5g78a";
     public static final String DOMAIN = "localhost:4567";
     public final static int UNAUTHORIZED = 401;
     public final static int NOT_FOUND = 404;
+    public final static int FORBIDDEN = 403;
 
     public void informationControllers(){
 

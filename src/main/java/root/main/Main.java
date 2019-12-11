@@ -2,6 +2,7 @@ package root.main;
 
 import root.Services.BoostrapService;
 import root.Services.URLServices;
+import root.api.RestApi;
 import root.controllers.Authentication;
 import root.controllers.Filter;
 import root.controllers.Information;
@@ -17,6 +18,7 @@ public class Main {
         staticFiles.location("/public");
         (new Filter()).filters();
         (new Authentication()).authentication();
+        (new RestApi()).restApis();
         (new Information()).informationControllers();
     }
 }

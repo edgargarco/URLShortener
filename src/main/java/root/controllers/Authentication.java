@@ -1,10 +1,20 @@
 package root.controllers;
 
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
 import org.jasypt.util.text.BasicTextEncryptor;
 import root.Services.UserService;
 import root.URLShortener.User;
+import root.api.ErrorApi;
+import root.api.JSONUtils;
+import root.api.JWT;
 import spark.Session;
 
+import javax.crypto.SecretKey;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,7 +24,6 @@ public class Authentication {
     public static final String encryptPass = "admin";
 
     public void authentication(){
-
         get("/login",(request,response)->{
             if (request.session().attribute("user") == null){
                 return Template.renderFreemarker(null,"/login.ftl");
@@ -22,6 +31,20 @@ public class Authentication {
             response.redirect("/");
             return "";
         });
+
+        // /login?username=xxxx&password=xxxx
+        post("/login", (request, response) -> {
+            response.type("application/json");
+            String username = request.queryParamOrDefault("username", "");
+            String password = request.queryParamOrDefault("password", "");
+            User user = UserService.getInstance().find(username);
+            if(user != null && user.getPassword().equals(password)) {
+                return generateJWT(user);
+            }else{
+                response.status(Information.UNAUTHORIZED);
+                return new ErrorApi(Information.UNAUTHORIZED, "Bad credentials, access deny!");
+            }
+        }, JSONUtils.json());
 
         post("/authenticate",(request, response) -> {
             Map<String, Object> val = new HashMap<>();
@@ -65,5 +88,23 @@ public class Authentication {
             }
             return "";
         });
+    }
+
+    private static JWT generateJWT(User user){
+        //Generating the key
+        SecretKey secretKey = Keys.hmacShaKeyFor(Information.KEY.getBytes());
+        //Valid date
+        LocalDateTime localDateTime = LocalDateTime.now().plusMinutes(15);
+
+        //Generate the JWT (frame)
+        String jwt = Jwts.builder()
+                .setIssuer("PUCMM-PW-GROUP-4")
+                .setSubject("URL Shortener API's")
+                .setExpiration(Date.from(localDateTime.toInstant(ZoneOffset.ofHours(-4))))
+                .claim("username", user.getUsername())
+                .claim("admin", user.isAdministrator())
+                .signWith(secretKey)
+                .compact();
+        return new JWT(jwt);
     }
 }
