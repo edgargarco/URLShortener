@@ -18,6 +18,24 @@ public class Information {
     public final static int NOT_FOUND = 404;
 
     public void informationControllers(){
+
+        get("/listAllUrl",(request, response) -> {
+            if (request.session().attribute("user") != null){
+                List<URL> urlList = URLServices.getInstance().findAll();
+                Map<String,Object> urlMap = new HashMap<>();
+                urlMap.put("urls",urlList);
+                urlMap.put("domain", DOMAIN);
+                urlMap.put("user", request.session().attribute("user")); 
+                return Template.renderFreemarker(urlMap,"allURL.ftl");
+            }else {
+                response.redirect("/dashBoard");
+                return "";
+            }
+
+
+        });
+
+
         get("/",(request, response) -> {
             Map<String, Object> urlMap = new HashMap<>();
             urlMap.put("domain", DOMAIN);

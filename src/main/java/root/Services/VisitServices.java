@@ -80,7 +80,6 @@ public class VisitServices extends GenericCRUD<Visit> {
         query.setParameter("os",os);
         Integer result = Integer.parseInt(query.getSingleResult().toString());
 
-        System.out.println("El resultado"+result);
 
         entityManager.close();
         return result;
@@ -91,8 +90,6 @@ public class VisitServices extends GenericCRUD<Visit> {
         Query query = entityManager.createQuery("SELECT c FROM Visit c WHERE c.url.hash=:hash" );
         query.setParameter("hash",hash);
         List<Object> list = query.getResultList();
-        System.out.println("KLK");
-
         entityManager.close();
         return list;
 

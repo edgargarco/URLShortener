@@ -47,7 +47,9 @@ public class URLServices extends GenericCRUD<URL> {
 
     @Override
     public List<URL> findAll() {
-        return super.findAll();
+        EntityManager entityManager = getEntityManager();
+        Query query = entityManager.createQuery("SELECT u FROM URL u");
+        return query.getResultList();
     }
 
     public List<URL> findAllUrlByHash(User user){

@@ -14,11 +14,9 @@
     <!-- Custom fonts for this template-->
     <link href="/MDB-Free/dashboard/startbootstrap/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
     <!-- Custom styles for this template-->
     <link href="/MDB-Free/dashboard/startbootstrap/css/sb-admin-2.min.css" rel="stylesheet">
-    <script src="/MDB-Free/ajax/ajax.js" type="text/javascript"></script>
 
 </head>
 
@@ -58,21 +56,24 @@
 
 
 
+        <!-- Nav Item - Charts -->
 
 
-        <!-- Nav Item - Tables -->
-        <#if user.isAdministrator() == true>
-            <li class="nav-item">
-                <a class="nav-link" href="/listUsers">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>Usuarios</span></a>
-            </li>
+        <#if user??>
+            <!-- Nav Item - Tables -->
+            <#if user.isAdministrator() == true>
+                <li class="nav-item">
+                    <a class="nav-link" href="/listUsers">
+                        <i class="fas fa-fw fa-table"></i>
+                        <span>Usuarios</span></a>
+                </li>
 
-            <li class="nav-item">
-                <a class="nav-link" href="/listAllUrl">
-                    <i class="fas fa-list-ol"></i>
-                    <span>Listado URL</span></a>
-            </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/listAllUrl">
+                        <i class="fas fa-list-ol"></i>
+                        <span>Listado URL</span></a>
+                </li>
+            </#if>
         </#if>
 
         <!-- Divider -->
@@ -149,7 +150,7 @@
                         <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
 
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                            <a class="dropdown-item" href="/closeSession" data-toggle="modal" data-target="#logoutModal">
                                 <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                 Logout
                             </a>
@@ -164,29 +165,24 @@
             <div class="container-fluid">
 
                 <!-- Page Heading -->
-                <h1 class="h3 mb-4 text-gray-800">Listado de usuarios</h1>
-                <#if (error??) >
-                    <div class="alert alert-danger" role="alert">
-                        ${error}
-                    </div>
-                </#if>
+                <h1 class="h3 mb-4 text-gray-800">Your Short URL's</h1>
                 <div class="card">
 
                     <!--Card content-->
                     <div class="card-body">
 
                         <!-- Table  -->
-                        <table class="table table-hover" id="tableUSERS">
+                        <table class="table table-hover">
                             <!-- Table head -->
                             <thead class="blue-grey lighten-4">
                             <tr>
 
-                                <th>Nombre De Usuario</th>
-                                <th>Nombre Completo</th>
-                                <th>Administrador</th>
+                                <th>Short Link</th>
+                                <th>Detalles</th>
                                 <#if user??>
                                     <#if user.administrator == true >
-                                        <th>Editar/Borrar</th>
+                                        <th>Usuario</th>
+                                        <th>Borrar</th>
                                     </#if>
                                 </#if>
 
@@ -196,21 +192,17 @@
 
                             <!-- Table body -->
                             <tbody>
-                            <#if users?? >
-                                <#list users as u>
+                            <#if urls?? >
+                                <#list urls as url>
                                     <tr>
 
-                                        <td  ><a target="_blank" href="" id="">${u.username}</a></td>
-                                        <td  ><a target="_blank" href="">${u.name}</a></td>
-                                        <#if u.isAdministrator() == true >
-                                            <td  ><i class="fas fa-check-double"></i></td>
-                                            <#else >
-                                                <td  ><i class="fas fa-minus-circle"></i></td>
-                                        </#if>
+                                        <td width="10%"><a target="_blank" href="/${url.hash}">${domain}/${url.hash}</a></td>
+                                        <td width="15%"><a href="/info/${url.hash}"> <button type="button" class="btn btn-primary btn-sm px-3"><i class="fas fa-info-circle"><span class="ml-2">Info</span></i></button></a></td>
+                                        <td width="10%">${url.user.username}</td>
+
                                         <#if user??>
                                             <#if user.administrator == true >
-                                                <td id=""><button type="button" class="btn btn-primary btn-sm px-3 editUser" id="editUser" data-toggle="modal" data-target="#RegisterUserModal"><i class="far fa-edit" id="12"></i></button><button type="button" id="deleteUser" class="btn btn-primary btn-sm px-3 ml-2" data-toggle="modal" data-target="#modalConfirmDelete"><i class="fas fa-trash-alt"> </i></button></td>
-                                            <#else >
+                                                <td width="15%"><a href="/delete-link/${url.hash}"><button type="button" class="btn btn-primary btn-sm px-3 ml-2" data-toggle="modal" data-target="#basicExampleModal"><i class="fas fa-trash"></i></button></a></td>
                                             </#if>
                                         </#if>
                                     </tr>
@@ -272,91 +264,6 @@
     </div>
 </div>
 
-<!--UPDATE USER-->
-<form action="/editUser" method="post">
-<div class="modal fade" id="RegisterUserModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-     aria-hidden="true">
-
-    <!-- Change class .modal-sm to change the size of the modal -->
-    <div class="modal-dialog modal-md" role="document">
-
-
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title w-100" id="titleModalRegister-update">Modificar Usuario</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="md-form">
-                    <input type="text" id=" " class="form-control input-full-name-modal-register-update" name="username" readonly>
-                    <label for="inputMDEx" class="input-full-name-modal-register-update">Nombre de usuario</label>
-                </div>
-                <div class="md-form">
-                    <input type="text" id=" " class="form-control name-input" name="name" required>
-                    <label for="inputMDEx" class="name-input">Nombre completo</label>
-                </div>
-                <div class="md-form">
-                    <input type="password" id=" " class="form-control password-input" name="password">
-                    <label for="inputMDEx" class="password-input">Password</label>
-                </div>
-
-                <!-- Material unchecked -->
-                <div class="d-flex p-2 col-example">
-                    <div class="form-check mr-auto">
-                        <input type="checkbox" class="form-check-input" id="materialUncheckedAdmin" name="materialUncheckedAdmin">
-                        <label class="form-check-label" for="materialUnchecked">Administrador</label>
-                    </div>
-
-                </div>
-
-
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn- btn-sm" data-dismiss="modal">Cancelar</button>
-                <button type="submit" class="btn btn-primary btn-sm">Salvar</button>
-            </div>
-        </div>
-    </div>
-</div>
-</form>
-
-<!--Modal confirm delete-->
-<!--Modal: modalConfirmDelete-->
-<div class="modal fade" id="modalConfirmDelete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog modal-sm modal-notify modal-danger" role="document">
-        <!--Content-->
-        <div class="modal-content text-center">
-            <!--Header-->
-            <div class="modal-header d-flex justify-content-center">
-                <p class="heading" id="confirmTitle">Eliminar usuario</p>
-            </div>
-
-            <!--Body-->
-            <div class="modal-body">
-
-                <i class="fas fa-times fa-4x animated rotateIn"></i>
-                <div class="row">
-                    <div class="col">
-                        <span id="messageDelete">Seguro de eleminar el usuario <strong id="userID"></strong> </span>
-                    </div>
-                </div>
-
-
-            </div>
-
-            <!--Footer-->
-            <div class="modal-footer flex-center">
-                <a class="btn  btn-outline-danger" type="submit" id="delete-user">Si!</a>
-                <a type="button" class="btn  btn-danger waves-effect" data-dismiss="modal" style="color: white;">Cancelar</a>
-            </div>
-        </div>
-        <!--/.Content-->
-    </div>
-</div>
-<!-- Start your project here-->
 <!-- Bootstrap core JavaScript-->
 <script src="/MDB-Free/dashboard/startbootstrap/vendor/jquery/jquery.min.js"></script>
 <script src="/MDB-Free/dashboard/startbootstrap/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>

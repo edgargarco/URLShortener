@@ -9,7 +9,12 @@ $(document).on('click','#select-date',function () {
 
 })
  var y = 0;
-$(document).ready(function () {chart(y)})
+$(document).ready(function () {
+    chart(y)
+
+
+
+})
 function chart(info) {
     var x;
     if (typeof info === 'undefined') {

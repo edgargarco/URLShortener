@@ -37,7 +37,8 @@ public class UserAgent {
     public void printUa(ReadableUserAgent agent){
         setBrowser(agent.getType().getName());
         OperatingSystem operatingSystem = agent.getOperatingSystem();
-        setOs(operatingSystem.getName());
+        String[] tempOs = operatingSystem.getName().split(" ");
+        setOs(tempOs[0]);
         ReadableDeviceCategory category = agent.getDeviceCategory();
         setDeviceType(category.getName());
         System.out.println(getBrowser() +" "+ getOs() +" "+ getDeviceType());

@@ -28,6 +28,10 @@
     <script src="/MDB-Free/dashboard/startbootstrap/calendar/dist/js/datepicker.min.js"></script>
     <script src="/MDB-Free/dashboard/startbootstrap/calendar/dist/js/i18n/datepicker.en.js"></script>
 
+
+    <link type="text/css" rel="stylesheet" href="css/lightslider.css" />
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+
 </head>
 
 
@@ -64,19 +68,18 @@
             Servicios
         </div>
 
-
-
-        <!-- Nav Item - Charts -->
-
-
-
-        <!-- Nav Item - Tables -->
        <#if user??>
            <#if user.isAdministrator() == true>
                <li class="nav-item">
                    <a class="nav-link" href="/listUsers">
                        <i class="fas fa-fw fa-table"></i>
                        <span>Usuarios</span></a>
+               </li>
+
+               <li class="nav-item">
+                   <a class="nav-link" href="/listAllUrl">
+                       <i class="fas fa-list-ol"></i>
+                       <span>Listado URL</span></a>
                </li>
            </#if>
        </#if>
@@ -179,7 +182,8 @@
                     <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
                 </div>
 
-                <!-- Content Row -->
+
+
                 <div class="row">
 
                     <!-- Earnings (Monthly) Card Example -->
@@ -285,10 +289,6 @@
                             </div>
                         </#if>
                     </div>
-
-
-                    <!-- Pending Requests Card Example -->
-
                 </div>
 
 
@@ -354,15 +354,22 @@
                         <div class="card shadow mb-4 mt-4">
                             <!-- Card Header - Dropdown -->
                             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                <#if demographicsURL??>
+                                    <input type="hidden" value="${demographicsURL.hash}" class="url-qr" id="url-qr">
+                                </#if>
                                 <h6 class="m-0 font-weight-bold text-primary">Qr Code</h6>
 
                             </div>
                             <!-- Card Body -->
-                           <#if demographicsURL??>
-                                <input type="hidden" value="${demographicsURL.hash}" class="url-qr" id="url-qr">
-                           </#if>
+
                             <div class="card-body">
-                                <div class="chart-pie pt-4 pb-2">
+                                <style>
+                                    .chart-pie{
+                                        text-align: center;
+                                        display: block;
+                                    }
+                                </style>
+                                <div class="chart-pie pt-4 pb-2" >
                                     <div id='qrcode'></div>
                                 </div>
 

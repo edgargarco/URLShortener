@@ -67,6 +67,12 @@
                     <i class="fas fa-fw fa-table"></i>
                     <span>Usuarios</span></a>
             </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="/listAllUrl">
+                    <i class="fas fa-list-ol"></i>
+                    <span>Listado URL</span></a>
+            </li>
         </#if>
 
         <!-- Divider -->
