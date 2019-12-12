@@ -16,6 +16,8 @@ import static spark.Spark.*;
 import static spark.Spark.halt;
 
 public class RestApi {
+    private final int expiredJWT = 1000;
+
     public void restApis() {
         path("/rest", () -> {
 
@@ -36,7 +38,7 @@ public class RestApi {
                                 .setSigningKey(Keys.hmacShaKeyFor(Information.KEY.getBytes()))
                                 .parseClaimsJws(jwt).getBody();
                     }catch (ExpiredJwtException | MalformedJwtException | SignatureException e){ //Excepciones comunes
-                        halt(Information.FORBIDDEN, JSONUtils.toJson(new ErrorApi(Information.FORBIDDEN, e.getMessage())));
+                        halt(Information.FORBIDDEN, JSONUtils.toJson(new ErrorApi(expiredJWT, e.getMessage())));
                     }
                     System.out.println("JWT received: " + claims.toString());
                     String username = claims.get("username").toString();
@@ -86,6 +88,8 @@ public class RestApi {
                         URLServices.getInstance().create(urlObj);
                         ObjectMapper objectMapper = new ObjectMapper();
                         URLServices.getInstance().getEntityManager().detach(urlObj);
+                        Statistics statistics = urlObj.createStatistics();
+                        urlObj.setStatistics(statistics);
                         urlObj.setHash(Information.DOMAIN + "/" + urlObj.getHash());
                         json = objectMapper.writeValueAsString(urlObj);
                     } else {

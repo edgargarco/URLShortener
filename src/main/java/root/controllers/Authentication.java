@@ -94,7 +94,7 @@ public class Authentication {
         //Generating the key
         SecretKey secretKey = Keys.hmacShaKeyFor(Information.KEY.getBytes());
         //Valid date
-        LocalDateTime localDateTime = LocalDateTime.now().plusMinutes(15);
+        LocalDateTime localDateTime = LocalDateTime.now().plusMinutes(3);
 
         //Generate the JWT (frame)
         String jwt = Jwts.builder()
