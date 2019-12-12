@@ -1,5 +1,6 @@
 package root.URLShortener;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.google.gson.annotations.Expose;
 import org.hibernate.annotations.Type;
@@ -18,18 +19,18 @@ public class URL implements Serializable {
     @Type(type = "text")
     private String url;
     @ManyToOne
-    @JsonManagedReference
+    @JsonIgnore
     private User user;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "url",cascade = CascadeType.ALL,orphanRemoval = true)
-    @JsonManagedReference
+    @JsonIgnore
     private List<Visit> visits = new ArrayList<>();
     @Transient
     private Statistics statistics;
 
-
     public URL(){
 
     }
+
     public URL(String url,String diferentiator){
         this.url = url;
         this.setHash(urlHash(this.url,diferentiator));

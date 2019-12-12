@@ -1,19 +1,15 @@
 package root.api;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.util.JsonGeneratorDelegate;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import root.Services.URLServices;
 import root.Services.UserService;
+import root.URLShortener.Statistics;
 import root.URLShortener.URL;
 import root.URLShortener.User;
 import root.controllers.Information;
 
-import javax.persistence.EntityManager;
 import java.util.List;
 
 import static spark.Spark.*;
@@ -26,23 +22,31 @@ public class RestApi {
             before("/*", (request, response) ->{
                 //Header for the token
                 String header = "Authorization";
+                String prefix = "Bearer ";
 
                 //Verifying if the header exists
                 String jwt = request.headers(header);
-                if(jwt == null){
-                    halt(Information.FORBIDDEN, "Bad request! You can't access!");
+                if(jwt == null || !jwt.startsWith(prefix)){
+                    halt(Information.FORBIDDEN, JSONUtils.toJson(new ErrorApi(Information.FORBIDDEN, "Bad request! You can't access!")));
                 } else {
+                    jwt = jwt.replace(prefix, "");
                     Claims claims = null;
                     try {
                         claims = Jwts.parser()
                                 .setSigningKey(Keys.hmacShaKeyFor(Information.KEY.getBytes()))
                                 .parseClaimsJws(jwt).getBody();
                     }catch (ExpiredJwtException | MalformedJwtException | SignatureException e){ //Excepciones comunes
-                        halt(Information.FORBIDDEN, e.getMessage());
+                        halt(Information.FORBIDDEN, JSONUtils.toJson(new ErrorApi(Information.FORBIDDEN, e.getMessage())));
                     }
                     System.out.println("JWT received: " + claims.toString());
                     String username = claims.get("username").toString();
                     Boolean isAdmin = Boolean.parseBoolean(claims.get("admin").toString());
+                    if (!isAdmin) {
+                        String usernameParam = request.queryParams("username");
+                        if (!usernameParam.equals(username)) {
+                            halt(Information.UNAUTHORIZED, JSONUtils.toJson(new ErrorApi(Information.UNAUTHORIZED, "You aren't administrator, you can only consume your own data.")));
+                        }
+                    }
                 }
             });
 
@@ -52,18 +56,42 @@ public class RestApi {
 
             path("/url", () -> {
 
-                get("/:username", (request, response) -> {
-                    String username = request.params("username");
-                    User user = UserService.getInstance().find(username);
+                get("/", (request, response) -> {
+                    String username = request.queryParamOrDefault("username", "");
+                    User user = UserService.getInstance().find(username.trim());
                     if (user != null) {
                         ObjectMapper objectMapper = new ObjectMapper();
                         List<URL> urls = user.urltoGet(user);
+                        urls.forEach((URL url) -> {
+                            URLServices.getInstance().getEntityManager().detach(url);
+                            Statistics statistics = url.createStatistics();
+                            url.setStatistics(statistics);
+                            url.setHash(Information.DOMAIN + "/" + url.getHash());
+                        });
                         String json = objectMapper.writeValueAsString(urls);
-                        System.out.println(json);
                         return json;
                     } else {
-                        return "Este usuario no existe!";
+                        return JSONUtils.toJson(new ErrorApi(Information.NOT_FOUND,"Este usuario no existe!"));
                     }
+                });
+
+                // /create?username=xxxx&url=xxxx
+                put("/create",  (request, response) -> {
+                    String username = request.queryParamOrDefault("username", "");
+                    String url = request.queryParamOrDefault("url", "");
+                    String json = "";
+                    User user = UserService.getInstance().find(username);
+                    if (user != null) {
+                        URL urlObj = new URL(url, user);
+                        URLServices.getInstance().create(urlObj);
+                        ObjectMapper objectMapper = new ObjectMapper();
+                        URLServices.getInstance().getEntityManager().detach(urlObj);
+                        urlObj.setHash(Information.DOMAIN + "/" + urlObj.getHash());
+                        json = objectMapper.writeValueAsString(urlObj);
+                    } else {
+                        json = JSONUtils.toJson(new ErrorApi(Information.NOT_FOUND,"Usuario no existe!"));
+                    }
+                    return json;
                 });
             });
         });

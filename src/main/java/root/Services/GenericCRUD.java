@@ -53,8 +53,10 @@ public class GenericCRUD<T> {
     public void create(T entity){
         EntityManager entityManager = getEntityManager();
         try {
-            if (entityManager.find(entityClass, getCampValue(entity)) != null) {
+            T temp = entityManager.find(entityClass, getCampValue(entity));
+            if (temp != null) {
                 System.out.println("La entidad a guardar existe, no creada.");
+                entity = temp;
                 return;
             }
         } catch (IllegalArgumentException ie){
