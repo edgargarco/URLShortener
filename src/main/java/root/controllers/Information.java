@@ -213,12 +213,14 @@ public class Information {
             String hash = request.params("id");
             User user = session.attribute("user");
             if (user != null){
-                urlMap.put("demographicsURL",URLServices.getInstance().findURLCustomMethod(hash));
-                urlMap.put("LinuxCant",VisitServices.getInstance().getByOs(hash,"Linux"));
-                urlMap.put("WindowsCant",VisitServices.getInstance().getByOs(hash,"Windows"));
-                urlMap.put("IOSCant",VisitServices.getInstance().getByOs(hash,"iOS"));
-                urlMap.put("AndroidCant",VisitServices.getInstance().getByOs(hash,"Android"));
-                urlMap.put("ips",VisitServices.getInstance().getIPS(hash));
+                URL url = URLServices.getInstance().findURLCustomMethod(hash);
+                url.setStatistics(new Statistics(VisitServices.getInstance().getByOs(hash,"Linux"),VisitServices.getInstance().getByOs(hash,"Windows"),VisitServices.getInstance().getByOs(hash,"iOS"),VisitServices.getInstance().getByOs(hash,"Android"),VisitServices.getInstance().getIPS(hash)));
+                urlMap.put("demographicsURL",url);
+                urlMap.put("LinuxCant",url.getStatistics().getLinuxUser());
+                urlMap.put("WindowsCant",url.getStatistics().getWindowsUser());
+                urlMap.put("IOSCant",url.getStatistics().getiOSUser());
+                urlMap.put("AndroidCant",url.getStatistics().getAndroidUser());
+                urlMap.put("ips",url.getStatistics().getIps());
                 urlMap.put("user",user);
                 return Template.renderFreemarker(urlMap,"/dashboard.ftl");
             }else{
@@ -226,12 +228,13 @@ public class Information {
                 if (tempURLS != null){
                     for (TempURL tempURL : tempURLS){
                         if (tempURL.getHash().equals(hash)){
-                            urlMap.put("demographicsURL",TempURLServices.getInstance().find(hash));
-                            urlMap.put("LinuxCant",TempVisitsServices.getInstance().getByOs(hash,"Linux"));
-                            urlMap.put("WindowsCant",TempVisitsServices.getInstance().getByOs(hash,"Windows"));
-                            urlMap.put("IOSCant",TempVisitsServices.getInstance().getByOs(hash,"iOS"));
-                            urlMap.put("AndroidCant",TempVisitsServices.getInstance().getByOs(hash,"Android"));
-                            urlMap.put("ips",TempVisitsServices.getInstance().getIPS(hash));
+                            tempURL.setStatistics(new Statistics(TempVisitsServices.getInstance().getByOs(hash,"Linux"),TempVisitsServices.getInstance().getByOs(hash,"Windows"),TempVisitsServices.getInstance().getByOs(hash,"iOS"),TempVisitsServices.getInstance().getByOs(hash,"Android"),TempVisitsServices.getInstance().getIPS(hash)));
+                            urlMap.put("demographicsURL",tempURL);
+                            urlMap.put("LinuxCant",tempURL.getStatistics().getLinuxUser());
+                            urlMap.put("WindowsCant",tempURL.getStatistics().getWindowsUser());
+                            urlMap.put("IOSCant",tempURL.getStatistics().getiOSUser());
+                            urlMap.put("AndroidCant",tempURL.getStatistics().getAndroidUser());
+                            urlMap.put("ips",tempURL.getStatistics().getIps());
                             return Template.renderFreemarker(urlMap,"/dashboard.ftl");
                         }
                     }

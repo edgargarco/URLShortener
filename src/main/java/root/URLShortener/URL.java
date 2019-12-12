@@ -22,6 +22,9 @@ public class URL implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "url",cascade = CascadeType.ALL,orphanRemoval = true)
     @JsonManagedReference
     private List<Visit> visits = new ArrayList<>();
+    @Transient
+    private Statistics statistics;
+
 
     public URL(){
 
@@ -35,6 +38,14 @@ public class URL implements Serializable {
         this.url = url;
         this.user = user;
         this.setHash(urlHash(url, user.getUsername()));
+    }
+
+    public Statistics getStatistics() {
+        return statistics;
+    }
+
+    public void setStatistics(Statistics statistics) {
+        this.statistics = statistics;
     }
 
     public String getHash() {

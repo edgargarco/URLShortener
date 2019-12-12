@@ -16,6 +16,9 @@ public class TempURL implements Serializable {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "url", cascade = CascadeType.REMOVE)
     private List<TempVisits> visits = new ArrayList<>();
 
+    @Transient
+    private Statistics statistics;
+
     public TempURL(){
 
     }
@@ -23,6 +26,14 @@ public class TempURL implements Serializable {
     public TempURL(String url,String identifier){
         this.url = url;
         this.setHash(urlHash(this.url,identifier));
+    }
+
+    public Statistics getStatistics() {
+        return statistics;
+    }
+
+    public void setStatistics(Statistics statistics) {
+        this.statistics = statistics;
     }
 
     public String getHash() {

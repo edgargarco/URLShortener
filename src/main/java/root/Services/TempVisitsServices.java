@@ -21,9 +21,6 @@ public class TempVisitsServices extends GenericCRUD<TempVisits> {
 
     public List<TempVisits> visitsByDates(String hash, LocalDate date){
         EntityManager entityManager = getEntityManager();
-        System.out.println(hash+"hahs");
-        System.out.println(date+"date");
-
         Query query = entityManager.createQuery("SELECT c FROM TempVisits c WHERE c.url.hash = :hash AND c.date = :date ORDER BY c.date ASC" );
         query.setParameter("hash",hash);
         query.setParameter("date",date);
@@ -49,18 +46,15 @@ public class TempVisitsServices extends GenericCRUD<TempVisits> {
         query.setParameter("hash",hash);
         query.setParameter("os",os);
         Integer result = Integer.parseInt(query.getSingleResult().toString());
-
-        System.out.println("El resultado"+result);
-
         entityManager.close();
         return result;
     }
 
-    public List<TempVisits> getIPS(String hash){
+    public List<Object> getIPS(String hash){
         EntityManager entityManager = getEntityManager();
         Query query = entityManager.createQuery("SELECT c FROM TempVisits c WHERE c.url.hash = :hash " );
         query.setParameter("hash",hash);
-        List<TempVisits> list = query.getResultList();
+        List<Object> list = query.getResultList();
         entityManager.close();
         return list;
 
