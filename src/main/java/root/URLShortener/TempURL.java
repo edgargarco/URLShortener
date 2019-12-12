@@ -1,6 +1,7 @@
 package root.URLShortener;
 
 import org.hibernate.annotations.Type;
+import root.Services.TempVisitsServices;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -69,5 +70,8 @@ public class TempURL implements Serializable {
         crc32.update(toHash.getBytes());
         String hash = Long.toHexString(crc32.getValue());
         return (hash);
+    }
+    public Statistics createStatistics(){
+        return (new Statistics(TempVisitsServices.getInstance().getByOs(hash,"Linux"),TempVisitsServices.getInstance().getByOs(hash,"Windows"),TempVisitsServices.getInstance().getByOs(hash,"iOS"),TempVisitsServices.getInstance().getByOs(hash,"Android"),TempVisitsServices.getInstance().getIPS(hash)));
     }
 }

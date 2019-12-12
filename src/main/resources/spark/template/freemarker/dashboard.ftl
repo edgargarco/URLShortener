@@ -29,8 +29,7 @@
     <script src="/MDB-Free/dashboard/startbootstrap/calendar/dist/js/i18n/datepicker.en.js"></script>
 
 
-    <link type="text/css" rel="stylesheet" href="css/lightslider.css" />
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+
 
 </head>
 

@@ -214,13 +214,13 @@ public class Information {
             User user = session.attribute("user");
             if (user != null){
                 URL url = URLServices.getInstance().findURLCustomMethod(hash);
-                url.setStatistics(new Statistics(VisitServices.getInstance().getByOs(hash,"Linux"),VisitServices.getInstance().getByOs(hash,"Windows"),VisitServices.getInstance().getByOs(hash,"iOS"),VisitServices.getInstance().getByOs(hash,"Android"),VisitServices.getInstance().getIPS(hash)));
+                Statistics statistics = url.createStatistics();
                 urlMap.put("demographicsURL",url);
-                urlMap.put("LinuxCant",url.getStatistics().getLinuxUser());
-                urlMap.put("WindowsCant",url.getStatistics().getWindowsUser());
-                urlMap.put("IOSCant",url.getStatistics().getiOSUser());
-                urlMap.put("AndroidCant",url.getStatistics().getAndroidUser());
-                urlMap.put("ips",url.getStatistics().getIps());
+                urlMap.put("LinuxCant",statistics.getLinuxUser());
+                urlMap.put("WindowsCant",statistics.getWindowsUser());
+                urlMap.put("IOSCant",statistics.getiOSUser());
+                urlMap.put("AndroidCant",statistics.getAndroidUser());
+                urlMap.put("ips",statistics.getIps());
                 urlMap.put("user",user);
                 return Template.renderFreemarker(urlMap,"/dashboard.ftl");
             }else{
@@ -228,13 +228,13 @@ public class Information {
                 if (tempURLS != null){
                     for (TempURL tempURL : tempURLS){
                         if (tempURL.getHash().equals(hash)){
-                            tempURL.setStatistics(new Statistics(TempVisitsServices.getInstance().getByOs(hash,"Linux"),TempVisitsServices.getInstance().getByOs(hash,"Windows"),TempVisitsServices.getInstance().getByOs(hash,"iOS"),TempVisitsServices.getInstance().getByOs(hash,"Android"),TempVisitsServices.getInstance().getIPS(hash)));
+                            Statistics statistics = tempURL.createStatistics();
                             urlMap.put("demographicsURL",tempURL);
-                            urlMap.put("LinuxCant",tempURL.getStatistics().getLinuxUser());
-                            urlMap.put("WindowsCant",tempURL.getStatistics().getWindowsUser());
-                            urlMap.put("IOSCant",tempURL.getStatistics().getiOSUser());
-                            urlMap.put("AndroidCant",tempURL.getStatistics().getAndroidUser());
-                            urlMap.put("ips",tempURL.getStatistics().getIps());
+                            urlMap.put("LinuxCant",statistics.getLinuxUser());
+                            urlMap.put("WindowsCant",statistics.getWindowsUser());
+                            urlMap.put("IOSCant",statistics.getiOSUser());
+                            urlMap.put("AndroidCant",statistics.getAndroidUser());
+                            urlMap.put("ips",statistics.getIps());
                             return Template.renderFreemarker(urlMap,"/dashboard.ftl");
                         }
                     }

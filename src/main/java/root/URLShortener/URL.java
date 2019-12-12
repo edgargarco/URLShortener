@@ -3,6 +3,7 @@ package root.URLShortener;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.google.gson.annotations.Expose;
 import org.hibernate.annotations.Type;
+import root.Services.VisitServices;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -84,6 +85,10 @@ public class URL implements Serializable {
         CRC32 crc32 = new CRC32();
         crc32.update(toHash.getBytes());
         return (Long.toHexString(crc32.getValue()));
+    }
+
+    public Statistics createStatistics(){
+        return (new Statistics(VisitServices.getInstance().getByOs(hash,"Linux"),VisitServices.getInstance().getByOs(hash,"Windows"),VisitServices.getInstance().getByOs(hash,"iOS"),VisitServices.getInstance().getByOs(hash,"Android"),VisitServices.getInstance().getIPS(hash)));
     }
 
 }
