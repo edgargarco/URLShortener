@@ -11,6 +11,7 @@
         <class>root.URLShortener.TempURL</class>
         <class>root.URLShortener.TempVisits</class>
         <class>root.URLShortener.IpDevice</class>
+        <class>root.URLShortener.Browser</class>
 
         <properties>
             <property name="javax.persistence.jdbc.url" value="jdbc:h2:tcp://localhost/~/URL-Shortener" />

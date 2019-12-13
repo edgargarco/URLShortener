@@ -1,5 +1,10 @@
 package root.Services;
 
+import org.hibernate.SQLQuery;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
+import root.URLShortener.Browser;
 import root.URLShortener.IpDevice;
 import root.URLShortener.Visit;
 
@@ -107,6 +112,15 @@ public class VisitServices extends GenericCRUD<Visit> {
         }catch (Exception e){
             return false;
         }
+    }
+
+    public List<Browser> listBrowser(String hash){
+        EntityManager entityManager = getEntityManager();
+        Query query = entityManager.createQuery("SELECT c.browser,count(*) FROM Visit c WHERE c.url.hash =:hash GROUP BY c.browser");
+        query.setParameter("hash",hash);
+        List<Browser> list = query.getResultList();
+        entityManager.close();
+        return list;
     }
 
 

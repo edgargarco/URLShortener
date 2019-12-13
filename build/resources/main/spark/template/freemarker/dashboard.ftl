@@ -331,7 +331,7 @@
                                         <div class="row no-gutters align-items-center">
                                             <div class="col mr-2">
                                                 <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total de visitas</div>
-                                                <div class="h5 mb-0 font-weight-bold text-gray-800">${demographicsURL.visits?size}</div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800">${demographicsURL.getVisits()?size}</div>
                                             </div>
                                             <div class="col-auto">
                                                 <i class="fas fa-glasses fa-2x text-gray-300"></i>

@@ -37,12 +37,10 @@ public class IpDevice   {
     }
 
     public List<IpDevice> createIpDeviceList(List<Visit> visits){
-
         List<IpDevice> list = new ArrayList<>();
         if (visits!=null){
             for (int i = 0;i<visits.size();i++){
                     list.add((new IpDevice(visits.get(i).getIp(),visits.get(i).getDevice())));
-
             }
         }
         return list;

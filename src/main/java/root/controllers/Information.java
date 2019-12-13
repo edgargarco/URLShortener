@@ -220,6 +220,10 @@ public class Information {
                 urlMap.put("AndroidCant",statistics.getAndroidUser());
                 urlMap.put("ips",(new IpDevice()).createIpDeviceList(statistics.getIps()));
                 urlMap.put("user",user);
+                List<Browser> browsers = VisitServices.getInstance().listBrowser(hash);
+                for (int i = 0;i<browsers.size();i++){
+                    System.out.println(browsers.get(i).getBrowser());
+                }
                 return Template.renderFreemarker(urlMap,"/dashboard.ftl");
             }else{
                 List<TempURL> tempURLS = request.session().attribute("urls");
