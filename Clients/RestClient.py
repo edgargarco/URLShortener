@@ -75,6 +75,7 @@ def showUrl(urlJson):
     print("\n" + "-" * 140 + "\n") 
     print("Original URL: " + urlJson["url"])
     print("Shorter URL: " + urlJson["hash"])
+    print("Creation Date: " + str(urlJson["creationDate"]["year"]) + "/" + str(urlJson["creationDate"]["monthValue"]) + "/" + str(urlJson["creationDate"]["dayOfMonth"]))
     if urlJson["actualImage"] != None:
         fh = open("image.jpeg", "wb")
         fh.write(urlJson["actualImage"].decode('base64'))
@@ -122,6 +123,8 @@ def functionality(command):
         print("\nBad selection...")
         pauseProgram()
 
+#15 seconds to wait for responses
+unirest.timeout(15)
 
 while(command != "4"):
     clearShell()

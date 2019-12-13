@@ -1,5 +1,7 @@
 package root.URLShortener;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.List;
 
 public class Statistics {
@@ -8,6 +10,7 @@ public class Statistics {
     private int iOSUser;
     private int androidUser;
     private List<Visit> ips;
+    @JsonIgnore
     private List<TempVisits> tempIps;
 
 

@@ -1,13 +1,12 @@
 package root.URLShortener;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.google.gson.annotations.Expose;
 import org.hibernate.annotations.Type;
 import root.Services.VisitServices;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.CRC32;
@@ -21,6 +20,7 @@ public class URL implements Serializable {
     @ManyToOne
     @JsonIgnore
     private User user;
+    private LocalDateTime creationDate;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "url",cascade = CascadeType.ALL,orphanRemoval = true)
     @JsonIgnore
     private List<Visit> visits = new ArrayList<>();
@@ -35,13 +35,15 @@ public class URL implements Serializable {
 
     public URL(String url,String diferentiator){
         this.url = url;
-        this.setHash(urlHash(this.url,diferentiator));
+        this.hash = urlHash(this.url,diferentiator);
+        this.creationDate = LocalDateTime.now();
     }
 
     public URL(String url, User user) {
         this.url = url;
         this.user = user;
-        this.setHash(urlHash(url, user.getUsername()));
+        this.hash = urlHash(url, user.getUsername());
+        this.creationDate = LocalDateTime.now();
     }
 
     public Statistics getStatistics() {
@@ -100,5 +102,13 @@ public class URL implements Serializable {
 
     public void setActualImage(String actualImage) {
         this.actualImage = actualImage;
+    }
+
+    public LocalDateTime getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(LocalDateTime creationDate) {
+        this.creationDate = creationDate;
     }
 }
