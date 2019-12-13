@@ -1,13 +1,11 @@
 package root.controllers;
 
-import io.jsonwebtoken.security.Keys;
 import org.json.JSONArray;
 import root.Services.*;
 import root.URLShortener.*;
 import spark.Session;
 import net.sf.uadetector.*;
 import net.sf.uadetector.service.UADetectorServiceFactory;
-import io.jsonwebtoken.*;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -220,7 +218,7 @@ public class Information {
                 urlMap.put("WindowsCant",statistics.getWindowsUser());
                 urlMap.put("IOSCant",statistics.getiOSUser());
                 urlMap.put("AndroidCant",statistics.getAndroidUser());
-                urlMap.put("ips",statistics.getIps());
+                urlMap.put("ips",(new IpDevice()).createIpDeviceList(statistics.getIps()));
                 urlMap.put("user",user);
                 return Template.renderFreemarker(urlMap,"/dashboard.ftl");
             }else{
@@ -234,7 +232,7 @@ public class Information {
                             urlMap.put("WindowsCant",statistics.getWindowsUser());
                             urlMap.put("IOSCant",statistics.getiOSUser());
                             urlMap.put("AndroidCant",statistics.getAndroidUser());
-                            urlMap.put("ips",statistics.getIps());
+                            urlMap.put("ips",(new IpDevice()).createIpDeviceListTemp(statistics.getTempIps()));
                             return Template.renderFreemarker(urlMap,"/dashboard.ftl");
                         }
                     }

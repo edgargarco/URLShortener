@@ -1,14 +1,18 @@
 package root.Services;
 
+import root.URLShortener.IpDevice;
 import root.URLShortener.Visit;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class VisitServices extends GenericCRUD<Visit> {
     public static VisitServices instance;
+
+
     public VisitServices() {super(Visit.class); }
 
     public static VisitServices getInstance(){
@@ -85,14 +89,13 @@ public class VisitServices extends GenericCRUD<Visit> {
         return result;
     }
 
-    public List<Object> getIPS(String hash){
+    public List<Visit> getIPS(String hash) {
         EntityManager entityManager = getEntityManager();
-        Query query = entityManager.createQuery("SELECT c FROM Visit c WHERE c.url.hash=:hash" );
-        query.setParameter("hash",hash);
-        List<Object> list = query.getResultList();
+        Query query = entityManager.createQuery("SELECT c FROM Visit c WHERE c.url.hash=:hash");
+        query.setParameter("hash", hash);
+        List<Visit> list = query.getResultList();
         entityManager.close();
         return list;
-
     }
 
     public boolean sanitizeDate(String date){

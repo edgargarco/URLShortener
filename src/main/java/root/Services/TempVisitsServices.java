@@ -1,5 +1,6 @@
 package root.Services;
 
+import root.URLShortener.IpDevice;
 import root.URLShortener.TempVisits;
 import root.URLShortener.Visit;
 
@@ -50,11 +51,11 @@ public class TempVisitsServices extends GenericCRUD<TempVisits> {
         return result;
     }
 
-    public List<Object> getIPS(String hash){
+    public List<TempVisits> getIPS(String hash){
         EntityManager entityManager = getEntityManager();
         Query query = entityManager.createQuery("SELECT c FROM TempVisits c WHERE c.url.hash = :hash " );
         query.setParameter("hash",hash);
-        List<Object> list = query.getResultList();
+        List<TempVisits> list = query.getResultList();
         entityManager.close();
         return list;
 

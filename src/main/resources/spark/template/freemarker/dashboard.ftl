@@ -441,6 +441,7 @@
                             </tr>
                             </thead>
                             <tbody>
+
                             <#if ips??>
                                 <#list ips as ip>
                                     <tr>
@@ -450,6 +451,7 @@
                                     </tr>
                                 </#list>
                             </#if>
+
 
                             </tbody>
                         </table>

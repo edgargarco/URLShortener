@@ -72,6 +72,6 @@ public class TempURL implements Serializable {
         return (hash);
     }
     public Statistics createStatistics(){
-        return (new Statistics(TempVisitsServices.getInstance().getByOs(hash,"Linux"),TempVisitsServices.getInstance().getByOs(hash,"Windows"),TempVisitsServices.getInstance().getByOs(hash,"iOS"),TempVisitsServices.getInstance().getByOs(hash,"Android"),TempVisitsServices.getInstance().getIPS(hash)));
+        return (new Statistics(TempVisitsServices.getInstance().getIPS(hash),TempVisitsServices.getInstance().getByOs(hash,"Linux"),TempVisitsServices.getInstance().getByOs(hash,"Windows"),TempVisitsServices.getInstance().getByOs(hash,"iOS"),TempVisitsServices.getInstance().getByOs(hash,"Android")));
     }
 }

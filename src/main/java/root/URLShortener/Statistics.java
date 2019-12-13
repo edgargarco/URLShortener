@@ -1,6 +1,5 @@
 package root.URLShortener;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Statistics {
@@ -8,15 +7,25 @@ public class Statistics {
     private int windowsUser;
     private int iOSUser;
     private int androidUser;
-    private List<Object> ips = new ArrayList<>();
+    private List<Visit> ips;
+    private List<TempVisits> tempIps;
 
-    public Statistics(int linuxUser, int windowsUser, int iOSUser, int androidUser, List<Object> ips) {
+
+    public Statistics(int linuxUser, int windowsUser, int iOSUser, int androidUser, List<Visit> ips) {
         this.linuxUser = linuxUser;
         this.windowsUser = windowsUser;
         this.iOSUser = iOSUser;
         this.androidUser = androidUser;
         this.ips = ips;
     }
+    public Statistics(List<TempVisits> tempIps,int linuxUser, int windowsUser, int iOSUser, int androidUser) {
+        this.linuxUser = linuxUser;
+        this.windowsUser = windowsUser;
+        this.iOSUser = iOSUser;
+        this.androidUser = androidUser;
+        this.tempIps = tempIps;
+    }
+
 
     public int getLinuxUser() {
         return linuxUser;
@@ -50,11 +59,19 @@ public class Statistics {
         this.androidUser = androidUser;
     }
 
-    public List<Object> getIps() {
+    public List<Visit> getIps() {
         return ips;
     }
 
-    public void setIps(List<Object> ips) {
+    public void setIps(List<Visit> ips) {
         this.ips = ips;
+    }
+
+    public List<TempVisits> getTempIps() {
+        return tempIps;
+    }
+
+    public void setTempIps(List<TempVisits> tempIps) {
+        this.tempIps = tempIps;
     }
 }
