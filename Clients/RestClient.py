@@ -124,7 +124,7 @@ def functionality(command):
         pauseProgram()
 
 #15 seconds to wait for responses
-unirest.timeout(15)
+unirest.timeout(60)
 
 while(command != "4"):
     clearShell()

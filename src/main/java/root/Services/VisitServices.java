@@ -116,12 +116,10 @@ public class VisitServices extends GenericCRUD<Visit> {
 
     public List<Browser> listBrowser(String hash){
         EntityManager entityManager = getEntityManager();
-        Query query = entityManager.createQuery("SELECT c.browser,count(*) FROM Visit c WHERE c.url.hash =:hash GROUP BY c.browser");
-        query.setParameter("hash",hash);
+        Query query = entityManager.createQuery("SELECT new root.URLShortener.Browser(c.browser, count(*)) FROM Visit c WHERE c.url.hash =:hash GROUP BY c.browser");
+        query.setParameter("hash", hash);
         List<Browser> list = query.getResultList();
         entityManager.close();
         return list;
     }
-
-
 }

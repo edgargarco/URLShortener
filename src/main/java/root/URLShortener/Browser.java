@@ -1,28 +1,15 @@
 package root.URLShortener;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import java.io.Serializable;
-
-@Entity
-public class Browser implements Serializable {
-    private int cant;
+public class Browser{
     private String browser;
-    private Integer id;
+    private long cantVisit;
 
-    public Browser(){}
+    public Browser() {
+    }
 
-    public Browser(int cant, String browser) {
-        this.cant = cant;
+    public Browser(String browser, long cantVisit) {
         this.browser = browser;
-    }
-
-    public int getCant() {
-        return cant;
-    }
-
-    public void setCant(int cant) {
-        this.cant = cant;
+        this.cantVisit = cantVisit;
     }
 
     public String getBrowser() {
@@ -33,12 +20,19 @@ public class Browser implements Serializable {
         this.browser = browser;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public long getCantVisit() {
+        return cantVisit;
     }
 
-    @Id
-    public Integer getId() {
-        return id;
+    public void setCantVisit(long cantVisit) {
+        this.cantVisit = cantVisit;
+    }
+
+    @Override
+    public String toString() {
+        return "Browser{" +
+                "browser='" + browser + '\'' +
+                ", cantVisit=" + cantVisit +
+                '}';
     }
 }
