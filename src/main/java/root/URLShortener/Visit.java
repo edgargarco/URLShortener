@@ -16,10 +16,8 @@ import java.util.Date;
 public class Visit implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Expose
     private int id;
     @ManyToOne
-    @JsonBackReference
     private URL url;
     private String browser;
     private String ip;

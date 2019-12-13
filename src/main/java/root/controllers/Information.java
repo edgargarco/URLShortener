@@ -14,7 +14,7 @@ import static spark.Spark.*;
 
 public class Information {
     public final static String KEY = "asd12D1234dfr123@#4Fsdcasdd5g78a";
-    public static final String DOMAIN = "localhost:4567";
+    public static final String DOMAIN = "http://localhost:4567";
     public final static int UNAUTHORIZED = 401;
     public final static int NOT_FOUND = 404;
     public final static int FORBIDDEN = 403;
