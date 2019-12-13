@@ -2,17 +2,25 @@ package root.URLShortener;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlTransient;
 import java.util.List;
 
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Statistics {
     private int linuxUser;
     private int windowsUser;
     private int iOSUser;
     private int androidUser;
+    @XmlTransient
     private List<Visit> ips;
     @JsonIgnore
+    @XmlTransient
     private List<TempVisits> tempIps;
 
+    public Statistics() {
+    }
 
     public Statistics(int linuxUser, int windowsUser, int iOSUser, int androidUser, List<Visit> ips) {
         this.linuxUser = linuxUser;

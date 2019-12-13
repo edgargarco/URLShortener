@@ -19,7 +19,7 @@ public class Information {
     public final static int NOT_FOUND = 404;
     public final static int FORBIDDEN = 403;
 
-    public void informationControllers(){
+    public static void informationControllers(){
 
         get("/listAllUrl",(request, response) -> {
             User user = request.session().attribute("user");
@@ -319,13 +319,13 @@ public class Information {
         });
     }
 
-    public LocalDate dates(String date){
+    public static LocalDate dates(String date){
         String formatDate = date.substring(6,10) + "-"+date.substring(0,2)+"-"+date.substring(3,5);
         LocalDate localDate = LocalDate.parse(formatDate);
         return localDate;
     }
 
-    public Map<String, Object> message(String adv, String status, String errorMessage, String buttonMessage, String returnPath) {
+    public static Map<String, Object> message(String adv, String status, String errorMessage, String buttonMessage, String returnPath) {
         Map<String, Object> map = new HashMap<>();
         map.put("adv", adv);
         map.put("code", status);

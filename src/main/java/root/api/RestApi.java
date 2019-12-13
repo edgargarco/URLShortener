@@ -3,11 +3,7 @@ package root.api;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
-import root.Services.URLServices;
-import root.Services.UserService;
-import root.URLShortener.Statistics;
 import root.URLShortener.URL;
-import root.URLShortener.User;
 import root.controllers.Information;
 
 import java.util.List;
@@ -16,11 +12,10 @@ import static spark.Spark.*;
 import static spark.Spark.halt;
 
 public class RestApi {
-    private final int expiredJWT = 1000;
+    private static final int expiredJWT = 1000;
 
-    public void restApis() {
+    public static void restApis() {
         path("/rest", () -> {
-
             before("/*", (request, response) ->{
                 //Header for the token
                 String header = "Authorization";
@@ -60,41 +55,28 @@ public class RestApi {
 
                 get("/", (request, response) -> {
                     String username = request.queryParamOrDefault("username", "");
-                    User user = UserService.getInstance().find(username.trim());
-                    if (user != null) {
+                    String json = "";
+                    List<URL> urls = Services.getInstance().getUrls(username);
+                    if (urls != null) {
                         ObjectMapper objectMapper = new ObjectMapper();
-                        List<URL> urls = user.urltoGet(user);
-                        urls.forEach((URL url) -> {
-                            URLServices.getInstance().getEntityManager().detach(url);
-                            Statistics statistics = url.createStatistics();
-                            url.setStatistics(statistics);
-                            url.setHash(Information.DOMAIN + "/" + url.getHash());
-                        });
-                        String json = objectMapper.writeValueAsString(urls);
-                        return json;
+                         json = objectMapper.writeValueAsString(urls);
+
                     } else {
-                        return JSONUtils.toJson(new ErrorApi(Information.NOT_FOUND,"Este usuario no existe!"));
+                        json = JSONUtils.toJson(new ErrorApi(Information.NOT_FOUND,"Este usuario no existe!"));
                     }
+                    return json;
                 });
 
-                // /create?username=xxxx&url=xxxx
                 put("/create",  (request, response) -> {
                     String username = request.queryParamOrDefault("username", "");
                     String url = request.queryParamOrDefault("url", "");
                     String json = "";
-                    User user = UserService.getInstance().find(username);
-                    if (user != null) {
-                        URL urlObj = new URL(url, user);
-                        URLServices.getInstance().create(urlObj);
+                    URL urlObj = Services.getInstance().createURL(username, url);
+                    if (urlObj != null) {
                         ObjectMapper objectMapper = new ObjectMapper();
-                        URLServices.getInstance().getEntityManager().detach(urlObj);
-                        Statistics statistics = urlObj.createStatistics();
-                        urlObj.setStatistics(statistics);
-                        urlObj.setHash(Information.DOMAIN + "/" + urlObj.getHash());
-                        urlObj.setActualImage(ActualPage.getInstance().takeScreenAsBase64(urlObj.getUrl()));
                         json = objectMapper.writeValueAsString(urlObj);
                     } else {
-                        json = JSONUtils.toJson(new ErrorApi(Information.NOT_FOUND,"Usuario no existe!"));
+                        json = JSONUtils.toJson(new ErrorApi(Information.NOT_FOUND,"Este Usuario no existe!"));
                     }
                     return json;
                 });

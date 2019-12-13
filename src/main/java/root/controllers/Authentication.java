@@ -23,7 +23,7 @@ import static spark.Spark.*;
 public class Authentication {
     public static final String encryptPass = "admin";
 
-    public void authentication(){
+    public static void authentication(){
         get("/login",(request,response)->{
             if (request.session().attribute("user") == null){
                 return Template.renderFreemarker(null,"/login.ftl");

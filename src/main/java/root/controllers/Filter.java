@@ -6,7 +6,7 @@ import spark.Session;
 
 import static spark.Spark.*;
 public class Filter {
-    public void filters(){
+    public static void filters(){
         before((request, response) -> {
             User user = request.session().attribute("user");
             if (user == null){

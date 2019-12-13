@@ -5,6 +5,11 @@ import org.hibernate.annotations.Type;
 import root.Services.VisitServices;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.adapters.XmlAdapter;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -12,6 +17,7 @@ import java.util.List;
 import java.util.zip.CRC32;
 
 @Entity
+@XmlAccessorType(XmlAccessType.FIELD)
 public class URL implements Serializable {
     @Id
     private String hash;
@@ -19,10 +25,13 @@ public class URL implements Serializable {
     private String url;
     @ManyToOne
     @JsonIgnore
+    @XmlTransient
     private User user;
+    @XmlJavaTypeAdapter(value = LocalDateTimeAdapter.class)
     private LocalDateTime creationDate;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "url",cascade = CascadeType.ALL,orphanRemoval = true)
     @JsonIgnore
+    @XmlTransient
     private List<Visit> visits = new ArrayList<>();
     @Transient
     private Statistics statistics;
@@ -110,5 +119,15 @@ public class URL implements Serializable {
 
     public void setCreationDate(LocalDateTime creationDate) {
         this.creationDate = creationDate;
+    }
+}
+
+class LocalDateTimeAdapter extends XmlAdapter<String, LocalDateTime> {
+    public LocalDateTime unmarshal(String v) throws Exception {
+        return LocalDateTime.parse(v);
+    }
+
+    public String marshal(LocalDateTime v) throws Exception {
+        return v.toString();
     }
 }
