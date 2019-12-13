@@ -46,6 +46,9 @@ dependencies {
     implementation 'io.jsonwebtoken:jjwt-impl:0.10.5'
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.10.5'
 
+    //Unirest
+    compile 'com.konghq:unirest-java:3.3.00'
+
     // https://mvnrepository.com/artifact/net.sf.uadetector/uadetector-resources
     compile group: 'net.sf.uadetector', name: 'uadetector-resources', version: '2014.10'
 }

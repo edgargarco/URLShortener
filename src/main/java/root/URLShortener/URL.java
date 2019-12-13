@@ -26,6 +26,8 @@ public class URL implements Serializable {
     private List<Visit> visits = new ArrayList<>();
     @Transient
     private Statistics statistics;
+    @Transient
+    private String actualImage;
 
     public URL(){
 
@@ -92,4 +94,11 @@ public class URL implements Serializable {
         return (new Statistics(VisitServices.getInstance().getByOs(hash,"Linux"),VisitServices.getInstance().getByOs(hash,"Windows"),VisitServices.getInstance().getByOs(hash,"iOS"),VisitServices.getInstance().getByOs(hash,"Android"),VisitServices.getInstance().getIPS(hash)));
     }
 
+    public String getActualImage() {
+        return actualImage;
+    }
+
+    public void setActualImage(String actualImage) {
+        this.actualImage = actualImage;
+    }
 }

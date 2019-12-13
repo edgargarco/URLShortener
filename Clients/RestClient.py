@@ -1,12 +1,15 @@
 #!/usr/bin/python
 import unirest
 import subprocess as sp
+import os
+from PIL import Image  
 
 DOMAIN = "http://localhost:4567"
 acceptHeader = "application/json"
 authPrefix = "Bearer "
 jwtToken = ""
 command = ""
+img = ""
 
 def pauseProgram():
     programPause = raw_input("\nPress any key to continue...")
@@ -72,6 +75,13 @@ def showUrl(urlJson):
     print("\n" + "-" * 140 + "\n") 
     print("Original URL: " + urlJson["url"])
     print("Shorter URL: " + urlJson["hash"])
+    if urlJson["actualImage"] != None:
+        fh = open("image.jpeg", "wb")
+        fh.write(urlJson["actualImage"].decode('base64'))
+        fh.close()
+        global img                                                                              
+        img = Image.open('image.jpeg')
+        img.show() 
     print("\nEstadisticas\n")
     print("Windows Users: " + str(urlJson["statistics"]["windowsUser"]))
     print("Linux Users: " + str(urlJson["statistics"]["linuxUser"]))
@@ -100,6 +110,8 @@ def functionality(command):
             print("URL's Created")
             showUrl(url)
             pauseProgram()
+            if os.path.exists("image.jpeg"):
+                os.remove("image.jpeg")
     elif command == "3":
         clearShell()
         print("Token = " + jwtToken)
@@ -117,5 +129,4 @@ while(command != "4"):
     print("Please select what you want to do...\n")
     print("1-Get URL's From an User\n2-Create an URL\n3-Check Current Token\n4-Exit\n")
     command = raw_input("Write your command: ")
-    functionality(command)
-    
+    functionality(command) 

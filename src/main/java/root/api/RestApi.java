@@ -91,6 +91,7 @@ public class RestApi {
                         Statistics statistics = urlObj.createStatistics();
                         urlObj.setStatistics(statistics);
                         urlObj.setHash(Information.DOMAIN + "/" + urlObj.getHash());
+                        urlObj.setActualImage(ActualPage.getInstance().takeScreenAsBase64(urlObj.getUrl()));
                         json = objectMapper.writeValueAsString(urlObj);
                     } else {
                         json = JSONUtils.toJson(new ErrorApi(Information.NOT_FOUND,"Usuario no existe!"));
