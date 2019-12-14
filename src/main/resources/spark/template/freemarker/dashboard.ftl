@@ -183,114 +183,195 @@
 
 
 
-                <div class="row">
+                <!-- Content Row -->
 
-                    <!-- Earnings (Monthly) Card Example -->
-                    <div class="col-xl-3 col-lg-4">
-                        <#if demographicsURL?? >
-                            <div class=" mb-4">
-                                <div class="card border-left-primary shadow h-100 py-2">
-                                    <div class="card-body">
-                                        <div class="row no-gutters align-items-center">
 
-                                            <div class="col mr-2">
-                                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Usuarios Linux</div>
-                                                <#if LinuxCant??>
-                                                    <div class="h5 mb-0 font-weight-bold text-gray-800">${LinuxCant}</div>
+                <!-- Start your project here-->
+                <div class="container my-4">
 
-                                                </#if>
 
+
+
+
+                    <!--Carousel Wrapper-->
+                    <div id="multi-item-example" class="carousel slide carousel-multi-item" data-ride="carousel">
+
+                        <!--Controls-->
+                        <div class="controls-top">
+                            <a class="btn-floating" href="#multi-item-example" data-slide="prev"><i class="fa fa-chevron-left"></i></a>
+                            <a class="btn-floating" href="#multi-item-example" data-slide="next"><i class="fa fa-chevron-right"></i></a>
+                        </div>
+                        <!--/.Controls-->
+
+                        <!--Indicators-->
+
+                        <!--/.Indicators-->
+
+                        <!--Slides-->
+                        <div class="carousel-inner" role="listbox">
+
+                            <!--First slide-->
+                            <div class="carousel-item active">
+
+                                <div class="row">
+                                    <div class="col-xl-3 col-lg-4">
+                                        <#if demographicsURL?? >
+                                            <div class=" mb-4">
+                                                <div class="card border-left-primary shadow h-100 py-2">
+                                                    <div class="card-body">
+                                                        <div class="row no-gutters align-items-center">
+
+                                                            <div class="col mr-2">
+                                                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Usuarios Linux</div>
+                                                                <#if LinuxCant??>
+                                                                    <div class="h5 mb-0 font-weight-bold text-gray-800">${LinuxCant}</div>
+
+                                                                </#if>
+
+                                                            </div>
+                                                            <div class="col-auto">
+                                                                <i class="fab fa-linux fa-2x text-gray-300"></i>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class="col-auto">
-                                                <i class="fab fa-linux fa-2x text-gray-300"></i>
+                                        </#if>
+                                    </div>
+
+                                    <div class="col-xl-3 col-lg-4">
+                                        <#if demographicsURL?? >
+                                            <div class=" mb-4">
+                                                <div class="card border-left-primary shadow h-100 py-2">
+                                                    <div class="card-body">
+                                                        <div class="row no-gutters align-items-center">
+
+                                                            <div class="col mr-2">
+                                                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Usuarios Windows</div>
+                                                                <#if WindowsCant??>
+                                                                    <div class="h5 mb-0 font-weight-bold text-gray-800">${WindowsCant}</div>
+
+                                                                </#if>
+
+                                                            </div>
+                                                            <div class="col-auto">
+                                                                <i class="fab fa-windows fa-2x text-gray-300"></i>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
+                                        </#if>
+                                    </div>
+
+                                    <div class="col-xl-3 col-lg-4">
+                                        <#if demographicsURL?? >
+                                            <div class=" mb-4">
+                                                <div class="card border-left-primary shadow h-100 py-2">
+                                                    <div class="card-body">
+                                                        <div class="row no-gutters align-items-center">
+
+                                                            <div class="col mr-2">
+                                                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Usuarios IOS</div>
+                                                                <#if IOSCant??>
+                                                                    <div class="h5 mb-0 font-weight-bold text-gray-800">${IOSCant}</div>
+
+                                                                </#if>
+
+                                                            </div>
+                                                            <div class="col-auto">
+                                                                <i class="fab fa-apple fa-2x text-gray-300"></i>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </#if>
+                                    </div>
+                                    <div class="col-xl-3 col-lg-4">
+                                        <#if demographicsURL?? >
+                                            <div class=" mb-4">
+                                                <div class="card border-left-primary shadow h-100 py-2">
+                                                    <div class="card-body">
+                                                        <div class="row no-gutters align-items-center">
+
+                                                            <div class="col mr-2">
+                                                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Usuarios Android</div>
+                                                                <#if AndroidCant??>
+                                                                    <div class="h5 mb-0 font-weight-bold text-gray-800">${AndroidCant}</div>
+
+                                                                </#if>
+
+                                                            </div>
+                                                            <div class="col-auto">
+                                                                <i class="fab fa-android fa-2x text-gray-300"></i>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </#if>
                                     </div>
                                 </div>
+
                             </div>
-                        </#if>
-                    </div>
+                            <!--/.First slide-->
 
-                    <!-- Earnings (Monthly) Card Example -->
-                    <div class="col-xl-3 col-lg-4">
-                        <#if demographicsURL?? >
-                            <div class=" mb-4">
-                                <div class="card border-left-primary shadow h-100 py-2">
-                                    <div class="card-body">
-                                        <div class="row no-gutters align-items-center">
+                            <!--Second slide-->
+                            <div class="carousel-item">
 
-                                            <div class="col mr-2">
-                                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Usuarios Windows</div>
-                                                <#if WindowsCant??>
-                                                    <div class="h5 mb-0 font-weight-bold text-gray-800">${WindowsCant}</div>
+                                <div class="row">
 
+
+                                    <#if browser?? >
+                                        <#list browser as bro>
+                                            <div class="col-xl-3 col-lg-4">
+                                                <#if demographicsURL?? >
+                                                    <div class=" mb-4">
+                                                        <div class="card border-left-primary shadow h-100 py-2">
+                                                            <div class="card-body">
+                                                                <div class="row no-gutters align-items-center">
+
+                                                                    <div class="col mr-2">
+                                                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">${bro.browser}</div>
+
+                                                                        <div class="h5 mb-0 font-weight-bold text-gray-800">${bro.cantVisit}</div>
+
+                                                                    </div>
+                                                                    <div class="col-auto">
+                                                                        <#if bro.browser == "Chrome">
+                                                                                <i class="fab fa-chrome fa-2x text-gray-300"></i>
+                                                                            <#elseif bro.browser == "Firefox">
+                                                                                <i class="fab fa-firefox fa-2x text-gray-300"></i>
+                                                                            <#elseif bro.browser == "Mobile Safari">
+                                                                                 <i class="fab fa-safari fa-2x text-gray-300"></i>
+                                                                            <#else >
+                                                                                  <i class="fab fa-internet-explorer fa-2x text-gray-300"></i>
+                                                                        </#if>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </#if>
+                                            </div>
+                                        </#list>
+                                    </#if>
 
-                                            </div>
-                                            <div class="col-auto">
-                                                <i class="fab fa-windows fa-2x text-gray-300"></i>
-                                            </div>
-                                        </div>
-                                    </div>
+
+
                                 </div>
+
                             </div>
-                        </#if>
+                            <!--/.Second slide-->
+
+
+
+                        </div>
+                        <!--/.Slides-->
+
                     </div>
-
-
-                    <!-- Earnings (Monthly) Card Example -->
-                    <div class="col-xl-3 col-lg-4">
-                        <#if demographicsURL?? >
-                            <div class=" mb-4">
-                                <div class="card border-left-primary shadow h-100 py-2">
-                                    <div class="card-body">
-                                        <div class="row no-gutters align-items-center">
-
-                                            <div class="col mr-2">
-                                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Usuarios IOS</div>
-                                                <#if IOSCant??>
-                                                    <div class="h5 mb-0 font-weight-bold text-gray-800">${IOSCant}</div>
-
-                                                </#if>
-
-                                            </div>
-                                            <div class="col-auto">
-                                                <i class="fab fa-apple fa-2x text-gray-300"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </#if>
-                    </div>
-
-                    <div class="col-xl-3 col-lg-4">
-                        <#if demographicsURL?? >
-                            <div class=" mb-4">
-                                <div class="card border-left-primary shadow h-100 py-2">
-                                    <div class="card-body">
-                                        <div class="row no-gutters align-items-center">
-
-                                            <div class="col mr-2">
-                                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Usuarios Android</div>
-                                                <#if AndroidCant??>
-                                                    <div class="h5 mb-0 font-weight-bold text-gray-800">${AndroidCant}</div>
-
-                                                </#if>
-
-                                            </div>
-                                            <div class="col-auto">
-                                                <i class="fab fa-android fa-2x text-gray-300"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </#if>
-                    </div>
-                </div>
-
-
+                    <!--/.Carousel Wrapper-->
 
                 <!-- Content Row -->
 

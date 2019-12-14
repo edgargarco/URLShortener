@@ -1,5 +1,6 @@
 package root.Services;
 
+import root.URLShortener.Browser;
 import root.URLShortener.IpDevice;
 import root.URLShortener.TempVisits;
 import root.URLShortener.Visit;
@@ -59,6 +60,15 @@ public class TempVisitsServices extends GenericCRUD<TempVisits> {
         entityManager.close();
         return list;
 
+    }
+
+    public List<Browser> listBrowser(String hash){
+        EntityManager entityManager = getEntityManager();
+        Query query = entityManager.createQuery("SELECT new root.URLShortener.Browser(c.browser, count(*)) FROM TempVisits c WHERE c.url.hash =:hash GROUP BY c.browser");
+        query.setParameter("hash", hash);
+        List<Browser> list = query.getResultList();
+        entityManager.close();
+        return list;
     }
 
 

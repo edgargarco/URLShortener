@@ -220,10 +220,7 @@ public class Information {
                 urlMap.put("AndroidCant",statistics.getAndroidUser());
                 urlMap.put("ips",(new IpDevice()).createIpDeviceList(statistics.getIps()));
                 urlMap.put("user",user);
-                List<Browser> browsers = VisitServices.getInstance().listBrowser(hash);
-                for (int i = 0;i<browsers.size();i++){
-                    System.out.println(browsers.get(i).getBrowser());
-                }
+                urlMap.put("browser",VisitServices.getInstance().listBrowser(hash));
                 return Template.renderFreemarker(urlMap,"/dashboard.ftl");
             }else{
                 List<TempURL> tempURLS = request.session().attribute("urls");
@@ -237,6 +234,8 @@ public class Information {
                             urlMap.put("IOSCant",statistics.getiOSUser());
                             urlMap.put("AndroidCant",statistics.getAndroidUser());
                             urlMap.put("ips",(new IpDevice()).createIpDeviceListTemp(statistics.getTempIps()));
+                            urlMap.put("browser",TempVisitsServices.getInstance().listBrowser(hash));
+
                             return Template.renderFreemarker(urlMap,"/dashboard.ftl");
                         }
                     }

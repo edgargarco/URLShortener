@@ -96,7 +96,7 @@
                     <div class="col-md-12">
 
                         <!-- Heading -->
-                        <h4 class="display-4 font-weight-bold white-text pt-5 mb-2">Some Good Slogan</h4>
+                        <h4 class="display-4 font-weight-bold white-text pt-5 mb-2">Pega tu link Aquí!</h4>
 
                         <!-- Divider -->
                         <hr class="hr-light">
@@ -109,11 +109,14 @@
                                     <button class="btn btn-md btn-outline-default m-0 px-3 py-2 z-depth-0 waves-effect " type="submit" id="shorten-url">Recortar</button>
                                 </div>
                             </div>
-                            <div class="input-group mb-3">
-                                <a href="" id="previewLink"></a>
-                            </div>
+
                         </form>
+
                     </div>
+                    <span class="  " id="previewDiv">
+                        <a href="" id="previewLink"></a>
+                    </span>
+
 
                 </div>
 
