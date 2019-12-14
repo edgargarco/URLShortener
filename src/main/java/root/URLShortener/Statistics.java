@@ -18,25 +18,35 @@ public class Statistics {
     @JsonIgnore
     @XmlTransient
     private List<TempVisits> tempIps;
+    private List<Browser> browsersList;
 
     public Statistics() {
     }
 
-    public Statistics(int linuxUser, int windowsUser, int iOSUser, int androidUser, List<Visit> ips) {
+    public Statistics(int linuxUser, int windowsUser, int iOSUser, int androidUser, List<Visit> ips,List<Browser> browsersList) {
         this.linuxUser = linuxUser;
         this.windowsUser = windowsUser;
         this.iOSUser = iOSUser;
         this.androidUser = androidUser;
         this.ips = ips;
+        this.browsersList = browsersList;
     }
-    public Statistics(List<TempVisits> tempIps,int linuxUser, int windowsUser, int iOSUser, int androidUser) {
+    public Statistics(List<TempVisits> tempIps,int linuxUser, int windowsUser, int iOSUser, int androidUser,List<Browser> browsersList) {
         this.linuxUser = linuxUser;
         this.windowsUser = windowsUser;
         this.iOSUser = iOSUser;
         this.androidUser = androidUser;
         this.tempIps = tempIps;
+        this.browsersList = browsersList;
     }
 
+    public List<Browser> getBrowsersList() {
+        return browsersList;
+    }
+
+    public void setBrowsersList(List<Browser> browsersList) {
+        this.browsersList = browsersList;
+    }
 
     public int getLinuxUser() {
         return linuxUser;

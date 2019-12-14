@@ -102,7 +102,7 @@ public class URL implements Serializable {
     }
 
     public Statistics createStatistics(){
-        return (new Statistics(VisitServices.getInstance().getByOs(hash,"Linux"),VisitServices.getInstance().getByOs(hash,"Windows"),VisitServices.getInstance().getByOs(hash,"iOS"),VisitServices.getInstance().getByOs(hash,"Android"),VisitServices.getInstance().getIPS(hash)));
+        return (new Statistics(VisitServices.getInstance().getByOs(hash,"Linux"),VisitServices.getInstance().getByOs(hash,"Windows"),VisitServices.getInstance().getByOs(hash,"iOS"),VisitServices.getInstance().getByOs(hash,"Android"),VisitServices.getInstance().getIPS(hash),VisitServices.getInstance().listBrowser(hash)));
     }
 
     public String getActualImage() {
