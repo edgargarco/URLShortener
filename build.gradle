@@ -51,6 +51,12 @@ dependencies {
 
     // https://mvnrepository.com/artifact/net.sf.uadetector/uadetector-resources
     compile group: 'net.sf.uadetector', name: 'uadetector-resources', version: '2014.10'
+
+    //Jetty
+    compile group: 'org.eclipse.jetty', name: 'jetty-http-spi', version: '9.4.4.v20170414'
+
+    //Soap Java 11
+    compile 'com.sun.xml.ws:jaxws-ri:2.3.2'
 }
 
 
