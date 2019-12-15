@@ -75,8 +75,10 @@ public class RestApi {
                     if (urlObj != null) {
                         ObjectMapper objectMapper = new ObjectMapper();
                         json = objectMapper.writeValueAsString(urlObj);
+
                     } else {
                         json = JSONUtils.toJson(new ErrorApi(Information.NOT_FOUND,"Este Usuario no existe!"));
+
                     }
                     return json;
                 });

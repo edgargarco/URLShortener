@@ -54,6 +54,7 @@ def createUrl():
     username = raw_input("Enter the username: ")
     url = raw_input("Enter the url: ")
     response = unirest.put(DOMAIN + "/rest/url/create", headers={ "Accept": acceptHeader, "Authorization": authPrefix + jwtToken}, params={ "username": username, "url": url })
+
     if 'code' in response.body and 'message' in response.body:
         checkStatus(response.body)
         return None
@@ -81,8 +82,8 @@ def showUrl(urlJson):
         fh.write(urlJson["actualImage"].decode('base64'))
         fh.close()
         global img                                                                              
-        img = Image.open('image.jpeg')
-        img.show() 
+        img = Image.open(r'image.jpeg')
+        img.show()
     print("\nEstadisticas\n")
     print("Windows Users: " + str(urlJson["statistics"]["windowsUser"]))
     print("Linux Users: " + str(urlJson["statistics"]["linuxUser"]))
