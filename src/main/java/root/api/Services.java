@@ -1,6 +1,5 @@
 package root.api;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import root.Services.URLServices;
 import root.Services.UserService;
 import root.URLShortener.Statistics;

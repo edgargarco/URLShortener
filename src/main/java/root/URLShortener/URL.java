@@ -23,24 +23,22 @@ public class URL implements Serializable {
     private String hash;
     @Type(type = "text")
     private String url;
-    @ManyToOne
-    @JsonIgnore
     @XmlTransient
+    @JsonIgnore
+    @ManyToOne
     private User user;
     @XmlJavaTypeAdapter(value = LocalDateTimeAdapter.class)
     private LocalDateTime creationDate;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "url",cascade = CascadeType.ALL,orphanRemoval = true)
-    @JsonIgnore
     @XmlTransient
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "url",cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Visit> visits = new ArrayList<>();
     @Transient
     private Statistics statistics;
     @Transient
     private String actualImage;
 
-    public URL(){
-
-    }
+    public URL(){ }
 
     public URL(String url,String diferentiator){
         this.url = url;

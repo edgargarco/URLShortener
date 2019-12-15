@@ -1,10 +1,12 @@
 package root.controllers;
+
 import org.jasypt.util.text.BasicTextEncryptor;
 import root.Services.UserService;
 import root.URLShortener.User;
 import spark.Session;
 
 import static spark.Spark.*;
+
 public class Filter {
     public static void filters(){
         before((request, response) -> {

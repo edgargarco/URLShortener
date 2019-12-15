@@ -13,15 +13,15 @@ public class Statistics {
     private int windowsUser;
     private int iOSUser;
     private int androidUser;
-    @XmlTransient
-    private List<Visit> ips;
-    @JsonIgnore
-    @XmlTransient
-    private List<TempVisits> tempIps;
     private List<Browser> browsersList;
+    @XmlTransient
+    @JsonIgnore
+    private List<Visit> ips;
+    @XmlTransient
+    @JsonIgnore
+    private List<TempVisits> tempIps;
 
-    public Statistics() {
-    }
+    public Statistics() { }
 
     public Statistics(int linuxUser, int windowsUser, int iOSUser, int androidUser, List<Visit> ips,List<Browser> browsersList) {
         this.linuxUser = linuxUser;

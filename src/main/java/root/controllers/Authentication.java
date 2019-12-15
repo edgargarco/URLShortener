@@ -13,7 +13,6 @@ import spark.Session;
 import javax.crypto.SecretKey;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;

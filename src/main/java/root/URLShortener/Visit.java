@@ -1,16 +1,10 @@
 package root.URLShortener;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.google.gson.annotations.Expose;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
-import java.util.Date;
 
 @Entity
 public class Visit implements Serializable {
@@ -26,9 +20,8 @@ public class Visit implements Serializable {
     private LocalTime time;
     private String device;
 
-    public  Visit(){
+    public  Visit(){ }
 
-    }
     public Visit(URL url, String browser, String ip, String os, String device) throws ParseException {
         this.url = url;
         this.date = date();
@@ -110,6 +103,4 @@ public class Visit implements Serializable {
     public LocalDate date() throws ParseException {
         return LocalDate.now();
     }
-
-
 }

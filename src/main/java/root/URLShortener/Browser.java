@@ -4,8 +4,7 @@ public class Browser{
     private String browser;
     private long cantVisit;
 
-    public Browser() {
-    }
+    public Browser() { }
 
     public Browser(String browser, long cantVisit) {
         this.browser = browser;

@@ -29,9 +29,7 @@ public class RestApi {
                     jwt = jwt.replace(prefix, "");
                     Claims claims = null;
                     try {
-                        claims = Jwts.parser()
-                                .setSigningKey(Keys.hmacShaKeyFor(Information.KEY.getBytes()))
-                                .parseClaimsJws(jwt).getBody();
+                        claims = Jwts.parser().setSigningKey(Keys.hmacShaKeyFor(Information.KEY.getBytes())).parseClaimsJws(jwt).getBody();
                     }catch (ExpiredJwtException | MalformedJwtException | SignatureException e){ //Excepciones comunes
                         halt(Information.FORBIDDEN, JSONUtils.toJson(new ErrorApi(expiredJWT, e.getMessage())));
                     }
@@ -52,17 +50,15 @@ public class RestApi {
             }));
 
             path("/url", () -> {
-
                 get("/", (request, response) -> {
                     String username = request.queryParamOrDefault("username", "");
                     String json = "";
                     List<URL> urls = Services.getInstance().getUrls(username);
                     if (urls != null) {
                         ObjectMapper objectMapper = new ObjectMapper();
-                         json = objectMapper.writeValueAsString(urls);
-
+                        json = objectMapper.writeValueAsString(urls);
                     } else {
-                        json = JSONUtils.toJson(new ErrorApi(Information.NOT_FOUND,"Este usuario no existe!"));
+                        json = JSONUtils.toJson(new ErrorApi(Information.NOT_FOUND,"This user doesn't exists!"));
                     }
                     return json;
                 });
@@ -75,10 +71,8 @@ public class RestApi {
                     if (urlObj != null) {
                         ObjectMapper objectMapper = new ObjectMapper();
                         json = objectMapper.writeValueAsString(urlObj);
-
                     } else {
-                        json = JSONUtils.toJson(new ErrorApi(Information.NOT_FOUND,"Este Usuario no existe!"));
-
+                        json = JSONUtils.toJson(new ErrorApi(Information.NOT_FOUND,"This user doesn't exists!"));
                     }
                     return json;
                 });

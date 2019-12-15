@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.CRC32;
+
 @Entity
 public class TempURL implements Serializable {
     @Id
@@ -16,13 +17,10 @@ public class TempURL implements Serializable {
     private String url;
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "url", cascade = CascadeType.REMOVE)
     private List<TempVisits> visits = new ArrayList<>();
-
     @Transient
     private Statistics statistics;
 
-    public TempURL(){
-
-    }
+    public TempURL(){ }
 
     public TempURL(String url,String identifier){
         this.url = url;

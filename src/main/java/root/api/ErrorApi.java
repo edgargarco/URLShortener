@@ -4,8 +4,7 @@ public class ErrorApi {
     private int code;
     private String message;
 
-    public ErrorApi() {
-    }
+    public ErrorApi() { }
 
     public ErrorApi(int code, String message) {
         this.code = code;

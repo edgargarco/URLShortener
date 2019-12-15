@@ -1,18 +1,13 @@
 package root.URLShortener;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import root.Services.URLServices;
 
 import javax.persistence.*;
-import javax.persistence.Query;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import java.util.Iterator;
 import java.util.List;
-
-import java.util.Set;
 
 @Entity
 public class User implements Serializable {
@@ -24,10 +19,7 @@ public class User implements Serializable {
     @OneToMany(fetch=FetchType.LAZY,mappedBy = "user", cascade = CascadeType.ALL,orphanRemoval = true)
     private List<URL> urlList = new ArrayList<>();
 
-
-    public User(){
-
-    }
+    public User(){ }
 
     public User(String username, String name, String password) {
         this.username = username;
@@ -87,7 +79,6 @@ public class User implements Serializable {
         return URLServices.getInstance().findAllUrlByHash(user);
     }
 
-
     public void addURL(URL url){
         urlList.add(url);
     }
@@ -102,5 +93,4 @@ public class User implements Serializable {
         }
         return urlAux;
     }
-
 }

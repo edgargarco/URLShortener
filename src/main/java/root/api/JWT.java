@@ -3,8 +3,7 @@ package root.api;
 public class JWT {
     private String token;
 
-    public JWT() {
-    }
+    public JWT() { }
 
     public JWT(String token) {
         this.token = token;

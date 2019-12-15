@@ -6,9 +6,7 @@ public class UserAgent {
     private String browser;
     private String deviceType;
 
-    public UserAgent( ) {
-
-    }
+    public UserAgent() { }
 
     public String getDeviceType() {
         return deviceType;
@@ -43,5 +41,4 @@ public class UserAgent {
         setDeviceType(category.getName());
 
     }
-
 }

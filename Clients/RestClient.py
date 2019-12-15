@@ -12,7 +12,7 @@ command = ""
 img = ""
 
 def pauseProgram():
-    programPause = raw_input("\nPress any key to continue...")
+    programPause = raw_input("\nPress enter to continue...")
 
 def clearShell():
     sp.call("clear", shell = True)
@@ -89,6 +89,8 @@ def showUrl(urlJson):
     print("Linux Users: " + str(urlJson["statistics"]["linuxUser"]))
     print("IOS Users: " + str(urlJson["statistics"]["iOSUser"]))
     print("Android Users: " + str(urlJson["statistics"]["androidUser"]))
+    for browser in urlJson["statistics"]["browsersList"]:
+        print(browser["browser"] + " Users: " + str(browser["cantVisit"]))
     print("Total de Visitas: " + str(urlJson["statistics"]["windowsUser"] + urlJson["statistics"]["linuxUser"] +  urlJson["statistics"]["iOSUser"] + urlJson["statistics"]["androidUser"]))
     print("\n" + "-" * 140 + "\n") 
 

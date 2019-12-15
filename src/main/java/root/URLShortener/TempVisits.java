@@ -5,9 +5,9 @@ import java.io.Serializable;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.LocalTime;
+
 @Entity
 public class TempVisits implements Serializable {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -20,9 +20,8 @@ public class TempVisits implements Serializable {
     private LocalTime time;
     private String device;
 
-    public  TempVisits(){
+    public  TempVisits(){ }
 
-    }
     public TempVisits(TempURL url, String browser, String ip, String os, String device) throws ParseException {
         this.url = url;
         this.date = date();
