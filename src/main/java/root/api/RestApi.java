@@ -3,6 +3,7 @@ package root.api;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import org.apache.commons.validator.routines.UrlValidator;
 import root.URLShortener.URL;
 import root.controllers.Information;
 
@@ -69,12 +70,18 @@ public class RestApi {
                     String username = request.queryParamOrDefault("username", "");
                     String url = request.queryParamOrDefault("url", "");
                     String json = "";
-                    URL urlObj = Services.getInstance().createURL(username, url);
-                    if (urlObj != null) {
-                        ObjectMapper objectMapper = new ObjectMapper();
-                        json = objectMapper.writeValueAsString(urlObj);
+                    UrlValidator urlValidator = new UrlValidator();
+                    if (urlValidator.isValid(url)) {
+                        System.out.println(url);
+                        URL urlObj = Services.getInstance().createURL(username, url);
+                        if (urlObj != null) {
+                            ObjectMapper objectMapper = new ObjectMapper();
+                            json = objectMapper.writeValueAsString(urlObj);
+                        } else {
+                            json = JSONUtils.toJson(new ErrorApi(Information.NOT_FOUND,"This user doesn't exists!"));
+                        }
                     } else {
-                        json = JSONUtils.toJson(new ErrorApi(Information.NOT_FOUND,"This user doesn't exists!"));
+                        json = JSONUtils.toJson(new ErrorApi(1001,"Invalid URL, check the url and its protocol!"));
                     }
                     return json;
                 });

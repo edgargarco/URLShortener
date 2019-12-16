@@ -1,5 +1,6 @@
 package root.controllers;
 
+import org.apache.commons.validator.routines.UrlValidator;
 import org.json.JSONArray;
 import root.Services.*;
 import root.URLShortener.*;
@@ -58,30 +59,35 @@ public class Information {
             String url = request.queryParams("url-to-shorter");
             List<Object> urlList = session.attribute("urls");
             boolean statusList = (urlList == null)?false:true;
-            if (user != null){
-                if (URLServices.getInstance().checkURL(url)){
-                    URL urlAux = new URL(url, user);
-                    URLServices.getInstance().create(urlAux);
-                    if (statusList){
-                        if (!URLServices.getInstance().checkURLExistence(urlList, url)){
+            UrlValidator urlValidator = new UrlValidator();
+            if (urlValidator.isValid(url)) {
+                if (user != null){
+                    if (URLServices.getInstance().checkURL(url)){
+                        URL urlAux = new URL(url, user);
+                        URLServices.getInstance().create(urlAux);
+                        if (statusList){
+                            if (!URLServices.getInstance().checkURLExistence(urlList, url)){
+                                urlList.add(urlAux);
+                            }
+                        } else {
+                            urlList = new ArrayList<>();
                             urlList.add(urlAux);
                         }
-                    } else {
+                    }
+                } else {
+                    TempURL tempURL = new TempURL(url, request.cookies().toString());
+                    TempURLServices.getInstance().create(tempURL);
+                    if (statusList){
+                        if (!URLServices.getInstance().checkURLExistence(urlList, url)){
+                            urlList.add(tempURL);
+                        }
+                    } else{
                         urlList = new ArrayList<>();
-                        urlList.add(urlAux);
+                        urlList.add(tempURL);
                     }
                 }
             } else {
-                TempURL tempURL = new TempURL(url, request.cookies().toString());
-                TempURLServices.getInstance().create(tempURL);
-                if (statusList){
-                    if (!URLServices.getInstance().checkURLExistence(urlList, url)){
-                        urlList.add(tempURL);
-                    }
-                }else{
-                    urlList = new ArrayList<>();
-                    urlList.add(tempURL);
-                }
+                System.out.println("Invalid URL: " + url);
             }
             session.attribute("urls", urlList);
             response.redirect("/");
@@ -212,17 +218,30 @@ public class Information {
             User user = session.attribute("user");
             if (user != null){
                 URL url = URLServices.getInstance().findURLCustomMethod(hash);
-                Statistics statistics = url.createStatistics();
-                urlMap.put("demographicsURL",url);
-                urlMap.put("LinuxCant",statistics.getLinuxUser());
-                urlMap.put("WindowsCant",statistics.getWindowsUser());
-                urlMap.put("IOSCant",statistics.getiOSUser());
-                urlMap.put("AndroidCant",statistics.getAndroidUser());
-                urlMap.put("ips",(new IpDevice()).createIpDeviceList(statistics.getIps()));
-                urlMap.put("user",user);
-                urlMap.put("browser",statistics.getBrowsersList());
+                if (url != null) {
+                    Statistics statistics = url.createStatistics();
+                    urlMap.put("demographicsURL",url);
+                    urlMap.put("LinuxCant",statistics.getLinuxUser());
+                    urlMap.put("WindowsCant",statistics.getWindowsUser());
+                    urlMap.put("IOSCant",statistics.getiOSUser());
+                    urlMap.put("AndroidCant",statistics.getAndroidUser());
+                    urlMap.put("ips",(new IpDevice()).createIpDeviceList(statistics.getIps()));
+                    urlMap.put("user",user);
+                    urlMap.put("browser",statistics.getBrowsersList());
+                } else {
+                    TempURL tempURL = TempURLServices.getInstance().find(hash);
+                    Statistics statistics = tempURL.createStatistics();
+                    urlMap.put("demographicsURL", tempURL);
+                    urlMap.put("LinuxCant",statistics.getLinuxUser());
+                    urlMap.put("WindowsCant",statistics.getWindowsUser());
+                    urlMap.put("IOSCant",statistics.getiOSUser());
+                    urlMap.put("AndroidCant",statistics.getAndroidUser());
+                    urlMap.put("ips",(new IpDevice()).createIpDeviceList(statistics.getIps()));
+                    urlMap.put("user",user);
+                    urlMap.put("browser",statistics.getBrowsersList());
+                }
                 return Template.renderFreemarker(urlMap,"/dashboard.ftl");
-            }else{
+            } else{
                 List<TempURL> tempURLS = request.session().attribute("urls");
                 if (tempURLS != null){
                     for (TempURL tempURL : tempURLS){

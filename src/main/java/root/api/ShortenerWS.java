@@ -1,5 +1,6 @@
 package root.api;
 
+import org.apache.commons.validator.routines.UrlValidator;
 import root.URLShortener.URL;
 
 import javax.jws.WebMethod;
@@ -18,6 +19,11 @@ public class ShortenerWS {
 
     @WebMethod
     public URL createUrl(String username, String url) {
-        return Services.getInstance().createURL(username, url);
+        UrlValidator urlValidator = new UrlValidator();
+        if (urlValidator.isValid(url)) {
+            return Services.getInstance().createURL(username, url);
+        } else {
+            return null;
+        }
     }
 }
