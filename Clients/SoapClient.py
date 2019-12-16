@@ -4,11 +4,7 @@ import subprocess as sp
 import os
 from PIL import Image
 
-
-
-
-
-url = "http://localhost:7777/soap/ShortenerWS?wsdl"
+url = "https://soap.smart-la-vega.technology/soap/ShortenerWS?wsdl"
 client = zeep.Client(url)
 command = ""
 img = ""
@@ -19,37 +15,39 @@ def pauseProgram():
 def clearShell():
     sp.call("clear", shell = True)
 
-def createUrl():
-    clearShell()
-    print("Create a shoter URL\n")
-    username = raw_input("Enter the Username: ")
-    url = raw_input("Enter the Url: ")
-    response = client.service.createUrl(username,url)
+def takeUsername():
+    return raw_input("Enter the username: ")
 
-    if 'code' in response and 'message' in response:
-        checkStatus(response)
+def takeUrl():
+    return raw_input("Enter the Url: ")
+
+def getUrls():
+    clearShell()
+    print("Get URL's From an User\n")
+    username = takeUsername()
+    response = client.service.getUrls(username);
+    if response == None or len(response) == 0:
         return None
     else:
         return response
 
-def checkStatus(data):
-    code = data["code"]
-    message = data["message"]
-    print("Code: " + str(code) + " " + message)
-
-    if code == 1000:
-        print("\nSession expired. You need re-login...")
-        pauseProgram()
+def createUrl():
+    clearShell()
+    print("Create a shoter URL\n")
+    username = takeUsername()
+    url = takeUrl()
+    response = client.service.createUrl(username, url)
+    if response == None:
+        return None
     else:
-        pauseProgram()
+        return response
 
 def showUrl(urlJson):
     print("\n" + "-" * 140 + "\n")
-    print("Original URL: " + urlJson["url"])
-    print("Shorter URL: " + urlJson["hash"])
-    print("Creation Date: " + str(urlJson["creationDate"]))
+    print("Original URL: " + str(urlJson["url"]))
+    print("Shorter URL: " + str(urlJson["hash"]))
+    print("Creation Date: " + str(urlJson["creationDate"]).split("T")[0])
     if urlJson["actualImage"] != None:
-        path = "/home/garco/IdeaProjects/URLShortener/Clients/image.jpeg"
         fh = open("image.jpeg", "wb")
         fh.write(urlJson["actualImage"].decode('base64'))
         fh.close()
@@ -61,22 +59,12 @@ def showUrl(urlJson):
     print("Linux Users: " + str(urlJson["statistics"]["linuxUser"]))
     print("IOS Users: " + str(urlJson["statistics"]["iOSUser"]))
     print("Android Users: " + str(urlJson["statistics"]["androidUser"]))
+    for browser in urlJson["statistics"]["browsersList"]:
+        print(browser["browser"] + " Users: " + str(browser["cantVisit"]))
     print("Total de Visitas: " + str(urlJson["statistics"]["windowsUser"] + urlJson["statistics"]["linuxUser"] +  urlJson["statistics"]["iOSUser"] + urlJson["statistics"]["androidUser"]))
     print("\n" + "-" * 140 + "\n")
 
-def getUrls():
-    clearShell()
-    print("Get URL's From an User\n")
-    username = raw_input("Enter the username: ")
-    response = client.service.getUrls(username);
-    if 'code' in response and 'message' in response:
-        checkStatus(response)
-        return None
-    else:
-        return response
-
 def functionality(command):
-
     if command == "1":
         urls = getUrls()
         if urls != None:
@@ -84,27 +72,31 @@ def functionality(command):
             print("URL's Received")
             for url in urls:
                 showUrl(url)
-            pauseProgram()
+        else:
+            print("\nThis user does not exist or does not have registered URLs...\n")
+        pauseProgram()
     elif command == "2":
         url = createUrl()
         if url != None:
             clearShell()
-            print("URL's Created")
+            print("URL Created")
             showUrl(url)
-            pauseProgram()
             if os.path.exists("image.jpeg"):
                 os.remove("image.jpeg")
-    elif command == "4":
+        else:
+            print("\nSomething when wrong, check the user and the url that want to create...\n")
+        pauseProgram()
+    elif command == "3":
         print("\nStopping services...\nGoodbye...\n")
     else:
         print("\nBad selection...")
         pauseProgram()
 
 
-while(command != "4"):
+while(command != "3"):
     clearShell()
     print("Welcome to your SoapClient for the URL Shortener...\n")
     print("Please select what you want to do...\n")
-    print("1-Get URL's From an User\n2-Create an URL\n4-Exit\n")
+    print("1-Get URL's From an User\n2-Create an URL\n3-Exit\n")
     command = raw_input("Write your command: ")
     functionality(command)
