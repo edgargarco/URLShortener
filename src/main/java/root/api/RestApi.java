@@ -50,6 +50,7 @@ public class RestApi {
             }));
 
             path("/url", () -> {
+                //http://localhost:4567/rest/url/?username=xxxxxxx
                 get("/", (request, response) -> {
                     String username = request.queryParamOrDefault("username", "");
                     String json = "";
@@ -63,6 +64,7 @@ public class RestApi {
                     return json;
                 });
 
+                //http://localhost:4567/rest/url/create?username=xxxxxxxx&url=xxxxxxxx
                 put("/create",  (request, response) -> {
                     String username = request.queryParamOrDefault("username", "");
                     String url = request.queryParamOrDefault("url", "");

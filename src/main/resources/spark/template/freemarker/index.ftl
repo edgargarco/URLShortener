@@ -27,7 +27,7 @@
         <div class="container">
 
             <!-- Navbar brand -->
-            <a class="navbar-brand" href="#">App Name</a>
+            <a class="navbar-brand" href="/">URL <sup>2</sup></a>
 
             <!-- Collapse button -->
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#basicExampleNav"
@@ -40,19 +40,11 @@
 
                 <!-- Links -->
                 <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="#">Home
-                            <span class="sr-only">(current)</span>
-                        </a>
-                    </li>
                     <#if !(user??)>
                         <li class="nav-item">
-                            <a class="nav-link" href="/dashBoard">DashBoard Temporal</a>
+                            <a class="nav-link" href="/dashBoard">Dashboard</a>
                         </li>
                     </#if>
-
-
-
                 </ul>
                 <!-- Links -->
 
@@ -65,7 +57,15 @@
                            <a class="nav-item" style="color: white;" href="/dashBoard"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
                        </div>
                        <div class="ml-4">
-                           <a class="nav-item" style="color: white;" href=""><i class="fas fa-user"></i> ${user.name}</a>
+                           <div class="dropdown">
+                               <a class="nav-item dropdown-toggle" style="color: white;" href="#" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user"></i>  ${user.name} </a>
+                               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                   <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                       <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i> Logout
+                                   </a>
+                               </div>
+                           </div>
+                          <#-- <a class="nav-item" style="color: white;" href=""><i class="fas fa-user"></i> ${user.name}</a>-->
                        </div>
                </#if>
 
@@ -104,7 +104,7 @@
                         <!-- Description -->
                         <form action="/url" method="post">
                            <div class="input-group mb-3">
-                                <input type="text" class="form-control" placeholder="URL a recortar..." aria-label="Recipient's username" aria-describedby="button-addon2" name="url-to-shorter" id="urlInput">
+                                <input type="text" class="form-control" placeholder="URL a recortar..." aria-label="Recipient's username" aria-describedby="button-addon2" name="url-to-shorter" id="urlInput" value="">
                                 <div class="input-group-append">
                                     <button class="btn btn-md btn-outline-default m-0 px-3 py-2 z-depth-0 waves-effect " type="submit" id="shorten-url">Recortar</button>
                                 </div>
@@ -135,7 +135,6 @@
 <!--Main layout-->
 <main class="mt-1">
     <div class="container">
-
         <section>
             <#if (urls??)>
             <div class="card">
@@ -239,12 +238,30 @@
 <!-- Footer -->
 <footer class="page-footer font-small bg-primary pt-4">
 
-    <div class=" text-center py-3">© 2019 Copyright:
-        <a href="https://mdbootstrap.com/education/bootstrap/"> SmartLaVega</a>
+    <div class=" text-center py-3">
+        <span>Copyright &copy; URL <sup>2</sup> 2019</span>
     </div>
     <!-- Copyright -->
 
 </footer>
+
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Seguro que quieres Cerrar sesión?</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">Seleccione "Cerrar sesión" a continuación si está listo para finalizar su sesión actual.</div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
+                <a class="btn btn-primary" href="/closeSession">Cerrar sesión</a>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- Footer -->
 <!--Footer-->
 
@@ -278,15 +295,15 @@
         // for microlink cards
         microlink('.link-previews', {
             size: 'small'
-        })
-    })
+        });
+    });
 </script>
 
 <script>
     document.getElementById('urlInput').addEventListener('input', function (e) {
         var preview = document.getElementById("previewLink");
         preview.href = e.srcElement.value;
-        microlink('#previewLink')
+        microlink('#previewLink');
     });
 </script>
 

@@ -29,10 +29,10 @@ public class Main {
         //Starting RestFul Services
         RestApi.restApis();
 
-        //Starting Soap Server
-        InitSoap.init();
-
         //Application general controllers
         Information.informationControllers();
+
+        //Starting Soap Server
+        InitSoap.init();
     }
 }
