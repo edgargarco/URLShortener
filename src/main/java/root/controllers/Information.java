@@ -322,6 +322,13 @@ public class Information {
                     TempVisits tempVisits = new TempVisits(tempURL,userAgent.getBrowser(),request.ip(),userAgent.getOs(),userAgent.getDeviceType());
                     TempVisitsServices.getInstance().create(tempVisits);
                     urlResponse = tempURL.getUrl();
+                    List<Object> urlList = request.session().attribute("urls");
+                    for (Object aux : urlList) {
+                        if (aux instanceof TempURL && tempURL.getHash().equals(((TempURL) aux).getHash())) {
+                            ((TempURL) aux).addVisits(tempVisits);
+                            break;
+                        }
+                    }
                 } else {
                     //404 NOT FOUND
                     response.status(NOT_FOUND);
